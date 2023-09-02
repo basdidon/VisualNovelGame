@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="DialogueBox" src="project://database/Assets/DialogueBox.uxml?fileID=9197481963319205126&amp;guid=8fd8f3686c7718049a213729428fd798&amp;type=3#DialogueBox" />
+    <ui:VisualElement name="background" style="justify-content: flex-end; flex-grow: 1;">
+        <ui:Instance template="DialogueBox" name="DialogueBox" style="justify-content: space-between; max-height: 30%;" />
+    </ui:VisualElement>
+</ui:UXML>

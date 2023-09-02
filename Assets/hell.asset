@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b70e4daa5b6bc419acf2654a3acbc6, type: 3}
+  m_Name: hell
+  m_EditorClassIdentifier: 
+  <Dialogues>k__BackingField:
+  - <Speaker>k__BackingField: 0
+    textLine:
+    - "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35"
+    - asdasdsafsdf
+    - 
+    <Background>k__BackingField: {fileID: 21300000, guid: 8f00dda5f51582c46804255c76f7605b, type: 3}
+  - <Speaker>k__BackingField: 0
+    textLine:
+    - "\u0E2B\u0E19\u0E49\u0E32 2"
+    - "\u0E1F\u0E2B\u0E01\u0E1F"
+    - "\u0E1F\u0E2B"
+    <Background>k__BackingField: {fileID: 21300000, guid: 189c921af5766f64d8d326af0df716aa, type: 3}
