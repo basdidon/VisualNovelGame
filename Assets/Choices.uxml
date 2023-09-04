@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=0e5489b53769d6f43bb97854cbd4232b&amp;type=3#style" />
+    <ui:VisualElement name="choice-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.5); padding-left: 64px; padding-right: 64px; padding-top: 256px; padding-bottom: 256px;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center;">
+            <ui:Button text="Choice 1" display-tooltip-when-elided="true" name="choice-1-btn" class="choice-btn" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center;">
+            <ui:Button text="Choice 2" display-tooltip-when-elided="true" name="choice-2-btn" class="choice-btn" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center;">
+            <ui:Button text="Choice 3" display-tooltip-when-elided="true" name="choice-3-btn" class="choice-btn" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

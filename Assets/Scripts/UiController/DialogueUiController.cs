@@ -2,61 +2,83 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
-public class DialogueUiController : MonoBehaviour
+public class DialogueUiController
 {
-    VisualElement root;
-    VisualElement backgroundElement;
-    Label speakerNameLabel;
-    Label line1Label;
-    Label line2Label;
-    Label line3Label;
+    VisualElement Root { get; set; }
 
-    [SerializeField] DialoguesData dialoguesData;
-    Queue<Sentence> Sentences { get; set; }
+    Label SpeakerNameLabel { get; set; }
+    Label Line1Label { get; set; }
+    Label Line2Label { get; set; }
+    Label Line3Label { get; set; }
 
-    private void Awake()
+    DialoguesData dialoguesData;
+    public DialoguesData DialoguesData
     {
-        if(TryGetComponent(out UIDocument uiDoc))
+        get => dialoguesData;
+        set
         {
-            root = uiDoc.rootVisualElement;
-            backgroundElement = root.Q("background");
-            speakerNameLabel = root.Q<Label>("speaker-name-txt");
-            line1Label = root.Q<Label>("line-1-txt");
-            line2Label = root.Q<Label>("line-2-txt");
-            line3Label = root.Q<Label>("line-3-txt");
+            dialoguesData = value;
 
-            Sentences = new Queue<Sentence>();
-            foreach(var sentance in dialoguesData.Dialogues)
+            Sentences.Clear();
+            foreach (var sentance in dialoguesData.Dialogues)
             {
                 Sentences.Enqueue(sentance);
             }
-
-            DisplayNextDialogue();
         }
     }
 
-    private void Update()
+    Queue<Sentence> Sentences { get; set; }
+
+    // Input
+    InputAction TapAction { get; set; }
+
+    public DialogueUiController(VisualElement panel, InputAction tapAction)
     {
-        if (Input.anyKeyDown)
+        Root = panel;
+
+        SpeakerNameLabel = Root.Q<Label>("speaker-name-txt");
+        Line1Label = Root.Q<Label>("line-1-txt");
+        Line2Label = Root.Q<Label>("line-2-txt");
+        Line3Label = Root.Q<Label>("line-3-txt");
+
+        Sentences = new Queue<Sentence>();
+
+        TapAction = tapAction;
+        TapAction.performed += delegate
         {
-            Debug.Log("space");
             DisplayNextDialogue();
-        }
+        };
+    }
+
+    public void Display()
+    {
+        Debug.Log("Display");
+        DisplayNextDialogue();
+        Root.AddToClassList("bottomsheet--up");
+        TapAction.Enable();
+    }
+
+    public void Hide()
+    {
+        Root.RemoveFromClassList("bottomsheet--up");
+        TapAction.Disable();
     }
 
     void DisplayNextDialogue()
     {
         if(Sentences.TryDequeue(out Sentence sentence))
         {
-            speakerNameLabel.text = sentence.Speaker.ToString();
-            line1Label.text = sentence.TextLine[0];
-            line2Label.text = sentence.TextLine[1];
-            line3Label.text = sentence.TextLine[2];
-            backgroundElement.style.backgroundImage = new StyleBackground(sentence.Background);
+            SpeakerNameLabel.text = sentence.Speaker.ToString();
+            Line1Label.text = sentence.TextLine[0];
+            Line2Label.text = sentence.TextLine[1];
+            Line3Label.text = sentence.TextLine[2];
+            Root.style.backgroundImage = new StyleBackground(sentence.Background);
         }
         else
         {
+            Hide();
             // end of dialogue
         }
     }

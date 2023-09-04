@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=0e5489b53769d6f43bb97854cbd4232b&amp;type=3#style" />
+    <ui:VisualElement name="bottom-menu-container" style="margin-top: auto; flex-grow: 0;">
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="bottom-menu-btn" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="bottom-menu-btn" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" class="bottom-menu-btn" />
+        <ui:Button display-tooltip-when-elided="true" name="chat-btn" class="bottom-menu-btn" style="background-image: url(&apos;project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=2346436936791262179&amp;guid=a949b2dad7e7b4e4ebebd9ef6c415aa9&amp;type=3#console.infoicon&apos;);" />
+    </ui:VisualElement>
+</ui:UXML>

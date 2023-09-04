@@ -1,6 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="BottomMenu" src="project://database/Assets/BottomMenu.uxml?fileID=9197481963319205126&amp;guid=5c94820575fb15147bc9126e4f3761cb&amp;type=3#BottomMenu" />
     <ui:Template name="DialogueBox" src="project://database/Assets/DialogueBox.uxml?fileID=9197481963319205126&amp;guid=8fd8f3686c7718049a213729428fd798&amp;type=3#DialogueBox" />
-    <ui:VisualElement name="background" style="justify-content: flex-end; flex-grow: 1;">
-        <ui:Instance template="DialogueBox" name="DialogueBox" style="justify-content: space-between; max-height: 30%;" />
+    <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=0e5489b53769d6f43bb97854cbd4232b&amp;type=3#style" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/1080x2280-Background-HD-Wallpaper-377.jpg?fileID=2800000&amp;guid=8f00dda5f51582c46804255c76f7605b&amp;type=3#1080x2280-Background-HD-Wallpaper-377&apos;);">
+        <ui:Instance template="BottomMenu" name="BottomMenu" style="margin-top: auto;" />
+        <ui:Instance template="DialogueBox" name="DialogueBox" class="bottomsheet" />
     </ui:VisualElement>
 </ui:UXML>
