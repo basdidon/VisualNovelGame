@@ -9,9 +9,7 @@ public class DialogueUiController
     VisualElement Root { get; set; }
 
     Label SpeakerNameLabel { get; set; }
-    Label Line1Label { get; set; }
-    Label Line2Label { get; set; }
-    Label Line3Label { get; set; }
+    Label[] LineLabels { get; set; }
 
     DialoguesData dialoguesData;
     public DialoguesData DialoguesData
@@ -30,24 +28,43 @@ public class DialogueUiController
     }
 
     Queue<Sentence> Sentences { get; set; }
+    Sentence Sentence { get; set; }
 
     // Input
     InputAction TapAction { get; set; }
+
+    // text anim
+    bool IsTextAnimationPlaying { get; set; }
+    Coroutine TextAnimationRountine { get; set; }
 
     public DialogueUiController(VisualElement panel, InputAction tapAction)
     {
         Root = panel;
 
         SpeakerNameLabel = Root.Q<Label>("speaker-name-txt");
-        Line1Label = Root.Q<Label>("line-1-txt");
-        Line2Label = Root.Q<Label>("line-2-txt");
-        Line3Label = Root.Q<Label>("line-3-txt");
+        LineLabels = new Label[]{
+            Root.Q<Label>("line-1-txt"),
+            Root.Q<Label>("line-2-txt"),
+            Root.Q<Label>("line-3-txt")
+        };
 
         Sentences = new Queue<Sentence>();
 
         TapAction = tapAction;
         TapAction.performed += delegate
         {
+            if (IsTextAnimationPlaying)
+            {
+                // stop animation
+                UiDocumentController.Instance.StopCoroutine(TextAnimationRountine);
+                // fill lebel with text
+                LineLabels[0].text = Sentence.TextLine[0];
+                LineLabels[1].text = Sentence.TextLine[1];
+                LineLabels[2].text = Sentence.TextLine[2];
+                IsTextAnimationPlaying = false;
+                return;
+            }
+
             DisplayNextDialogue();
         };
     }
@@ -55,8 +72,8 @@ public class DialogueUiController
     public void Display()
     {
         Debug.Log("Display");
-        DisplayNextDialogue();
         Root.AddToClassList("bottomsheet--up");
+        DisplayNextDialogue(1);
         TapAction.Enable();
     }
 
@@ -66,21 +83,48 @@ public class DialogueUiController
         TapAction.Disable();
     }
 
-    void DisplayNextDialogue()
+    void DisplayNextDialogue(float delay = 0)
     {
-        if(Sentences.TryDequeue(out Sentence sentence))
+        if(!Sentences.TryDequeue(out Sentence sentence))
         {
-            SpeakerNameLabel.text = sentence.Speaker.ToString();
-            Line1Label.text = sentence.TextLine[0];
-            Line2Label.text = sentence.TextLine[1];
-            Line3Label.text = sentence.TextLine[2];
-            Root.style.backgroundImage = new StyleBackground(sentence.Background);
+            Hide();
+            return;
+        }
+
+        SpeakerNameLabel.text = sentence.Speaker.ToString();
+
+        LineLabels[0].text = "";
+        LineLabels[1].text = "";
+        LineLabels[2].text = "";
+        Root.style.backgroundImage = new StyleBackground(sentence.Background);
+            
+        Sentence = sentence;
+        TextAnimationRountine = UiDocumentController.Instance.StartCoroutine(DisplayTextRoutine(delay));
+
+    }
+
+    IEnumerator DisplayTextRoutine(float delay)
+    {
+        IsTextAnimationPlaying = true;
+        yield return new WaitForSeconds(delay);
+        yield return DisplayTextLine(0);
+        yield return DisplayTextLine(1);
+        yield return DisplayTextLine(2);
+        IsTextAnimationPlaying = false;
+    }
+
+    IEnumerator DisplayTextLine(int lineIdx,int charIdx = 0)
+    {
+        yield return new WaitForSeconds(0.1f);
+        LineLabels[lineIdx].text = charIdx < Sentence.TextLine[lineIdx].Length ?  Sentence.TextLine[lineIdx][0..(charIdx+1)] : "";
+
+        if (charIdx+1 >= Sentence.TextLine[lineIdx].Length)
+        {
+            yield return null;
         }
         else
         {
-            Hide();
-            // end of dialogue
+            yield return DisplayTextLine(lineIdx, charIdx+1);
         }
     }
-
 }

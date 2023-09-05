@@ -1,18 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=0e5489b53769d6f43bb97854cbd4232b&amp;type=3#style" />
-    <ui:VisualElement style="flex-grow: 1; background-color: rgb(12, 12, 24);">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(12, 12, 24); -unity-font-definition: url(&apos;project://database/Assets/Fonts/FC-Lamoon/FC%20Lamoon%20Light%20ver%201.asset?fileID=11400000&amp;guid=e46e6ae930f7e494c9a8bc4a6b200d19&amp;type=2#FC Lamoon Light ver 1&apos;);">
         <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); border-bottom-width: 4px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
-            <ui:Label tabindex="-1" text="[speaker-name]" display-tooltip-when-elided="true" name="speaker-name-txt" style="color: rgb(255, 255, 255); font-size: 96px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 12px; padding-right: 12px; padding-top: 8px; padding-bottom: 8px; -unity-font-style: bold;" />
+            <ui:Label tabindex="-1" text="[speaker-name]" display-tooltip-when-elided="true" name="speaker-name-txt" style="color: rgb(255, 255, 255); font-size: 124px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 12px; padding-right: 12px; padding-top: 8px; padding-bottom: 8px; -unity-font-style: bold;" />
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); margin-top: 36px;">
             <ui:VisualElement class="dialogue-line" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                <ui:Label tabindex="-1" text="สวัสดี" display-tooltip-when-elided="true" name="line-1-txt" class="dialogue-text" />
+                <ui:Label tabindex="-1" text="Lable" display-tooltip-when-elided="true" name="line-1-txt" class="dialogue-text" />
             </ui:VisualElement>
             <ui:VisualElement class="dialogue-line" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="line-2-txt" class="dialogue-text" />
+                <ui:Label tabindex="-1" text="ก่ากีกี่งู" display-tooltip-when-elided="true" name="line-2-txt" class="dialogue-text" />
             </ui:VisualElement>
             <ui:VisualElement class="dialogue-line" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="line-3-txt" class="dialogue-text" />
+                <ui:Label tabindex="-1" text="ก่ากีกี่งู" display-tooltip-when-elided="true" name="line-3-txt" class="dialogue-text" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

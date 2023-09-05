@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: fa7e80031a315f04c808aa6574d2fcfa
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - MN Kai Thot
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 075caf588bb65914f9bb8dd1e06b6172, type: 3}
+  - {fileID: 12800000, guid: 790bf1bf6ece7a84e869006a98527579, type: 3}
+  - {fileID: 12800000, guid: ca83fd392c1be034888c87bff5ea6ee8, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

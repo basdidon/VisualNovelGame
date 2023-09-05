@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class UiDocumentController : MonoBehaviour
 {
+    public static UiDocumentController Instance { get; private set; }
+
     VisualElement root;
 
     [field: SerializeField] public DialoguesData DialoguesData { get; set; }
@@ -19,6 +21,15 @@ public class UiDocumentController : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+
         if (TryGetComponent(out UIDocument uiDoc))
         {
             root = uiDoc.rootVisualElement;

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: a47eb1c36a0cf2a4884f5c237033e7c4
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - FC Lamoon
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0240a9b4b3f1c914c8a03e390c487032, type: 3}
+  - {fileID: 12800000, guid: a43dd04a3f51e6f4f8a475a5153cff6f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

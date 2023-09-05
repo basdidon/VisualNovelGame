@@ -1,6 +1,6 @@
 .dialogue-text {
     color: rgb(255, 255, 255);
-    font-size: 68px;
+    font-size: 98px;
     -unity-text-align: middle-left;
 }
 
