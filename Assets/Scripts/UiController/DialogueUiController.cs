@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
+using DG.Tweening;
+using System;
+using System.Linq;
 
 public class DialogueUiController
 {
@@ -34,8 +37,12 @@ public class DialogueUiController
     InputAction TapAction { get; set; }
 
     // text anim
-    bool IsTextAnimationPlaying { get; set; }
-    Coroutine TextAnimationRountine { get; set; }
+    readonly float txtAnimSpeed = 2f;
+    Sequence mySequence;
+
+    // Event
+    public delegate void OnCompleted();
+    public event OnCompleted OnDisplayCompletedEvent;
 
     public DialogueUiController(VisualElement panel, InputAction tapAction)
     {
@@ -49,29 +56,26 @@ public class DialogueUiController
         };
 
         Sentences = new Queue<Sentence>();
+        mySequence = DOTween.Sequence();
 
         TapAction = tapAction;
         TapAction.performed += delegate
         {
-            if (IsTextAnimationPlaying)
+            if (mySequence.IsActive() && mySequence.IsPlaying())
             {
-                // stop animation
-                UiDocumentController.Instance.StopCoroutine(TextAnimationRountine);
-                // fill lebel with text
-                LineLabels[0].text = Sentence.TextLine[0];
-                LineLabels[1].text = Sentence.TextLine[1];
-                LineLabels[2].text = Sentence.TextLine[2];
-                IsTextAnimationPlaying = false;
-                return;
+                mySequence.Complete();
             }
-
-            DisplayNextDialogue();
+            else
+            {
+                DisplayNextDialogue();
+            }
         };
+
+
     }
 
     public void Display()
     {
-        Debug.Log("Display");
         Root.AddToClassList("bottomsheet--up");
         DisplayNextDialogue(1);
         TapAction.Enable();
@@ -87,44 +91,27 @@ public class DialogueUiController
     {
         if(!Sentences.TryDequeue(out Sentence sentence))
         {
-            Hide();
+            OnDisplayCompletedEvent?.Invoke();
             return;
         }
-
-        SpeakerNameLabel.text = sentence.Speaker.ToString();
-
-        LineLabels[0].text = "";
-        LineLabels[1].text = "";
-        LineLabels[2].text = "";
-        Root.style.backgroundImage = new StyleBackground(sentence.Background);
             
         Sentence = sentence;
-        TextAnimationRountine = UiDocumentController.Instance.StartCoroutine(DisplayTextRoutine(delay));
 
-    }
+        mySequence = DOTween.Sequence();
+        ﻿﻿﻿﻿﻿mySequence.PrependInterval(delay);
+        var tweens = LineLabels.Select((v, i) => DOTween.To(() => v.text, x => v.text = x, Sentence.TextLine[i], txtAnimSpeed).SetEase(Ease.Linear));
+        
+        foreach(var tween in tweens)
+            mySequence.Append(tween);
 
-    IEnumerator DisplayTextRoutine(float delay)
-    {
-        IsTextAnimationPlaying = true;
-        yield return new WaitForSeconds(delay);
-        yield return DisplayTextLine(0);
-        yield return DisplayTextLine(1);
-        yield return DisplayTextLine(2);
-        IsTextAnimationPlaying = false;
-    }
-
-    IEnumerator DisplayTextLine(int lineIdx,int charIdx = 0)
-    {
-        yield return new WaitForSeconds(0.1f);
-        LineLabels[lineIdx].text = charIdx < Sentence.TextLine[lineIdx].Length ?  Sentence.TextLine[lineIdx][0..(charIdx+1)] : "";
-
-        if (charIdx+1 >= Sentence.TextLine[lineIdx].Length)
+        mySequence.OnPlay(()=> 
         {
-            yield return null;
-        }
-        else
-        {
-            yield return DisplayTextLine(lineIdx, charIdx+1);
-        }
+            SpeakerNameLabel.text = Sentence.Speaker.ToString();
+
+            LineLabels[0].text = string.Empty;
+            LineLabels[1].text = string.Empty;
+            LineLabels[2].text = string.Empty;
+            Root.style.backgroundImage = new StyleBackground(Sentence.Background);
+        });
     }
 }

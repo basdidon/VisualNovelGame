@@ -44,6 +44,7 @@ public class UiDocumentController : MonoBehaviour
                 DialogueUiController controller = (DialogueUiController) DialogueBox.userData;
                 controller.DialoguesData = DialoguesData;
                 controller.Display();
+                controller.OnDisplayCompletedEvent += () => controller.Hide();
             };
         }
     }
