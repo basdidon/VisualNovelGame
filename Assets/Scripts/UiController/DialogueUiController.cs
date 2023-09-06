@@ -7,7 +7,7 @@ using DG.Tweening;
 using System;
 using System.Linq;
 
-public class DialogueUiController
+public class DialogueUiController: IUiController
 {
     VisualElement Root { get; set; }
 
@@ -92,6 +92,8 @@ public class DialogueUiController
         if(!Sentences.TryDequeue(out Sentence sentence))
         {
             OnDisplayCompletedEvent?.Invoke();
+            OnDisplayCompletedEvent = null;       // clear events
+            TapAction.Disable();
             return;
         }
             
