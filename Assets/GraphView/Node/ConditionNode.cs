@@ -4,16 +4,15 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ConditionNode : BaseNode
+public class ConditionNode : DialogueBaseNode
 {
     List<string> Choices { get; set; }
 
     public override void Initialize(Vector2 position)
     {
         base.Initialize(position);
-
+        DialogueName = "Dialogue";
         Choices = new List<string>();
-        NodeType = NodeTypes.DialogueNode;
     }
 
     public override void Draw()

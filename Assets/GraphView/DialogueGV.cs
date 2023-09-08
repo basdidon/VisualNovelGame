@@ -7,20 +7,66 @@ using System.Collections.Generic;
 
 public class DialogueGV : GraphView
 {
+    DialogueTree m_tree;
+    public BaseNode StartNode { get; private set; }
+    readonly string assetPath = "Assets/DialogueLine.asset";
+
     public DialogueGV()
     {
         AddManipulator();
         AddBackground();
         AddStyle();
+
+        // init node
+        StartNode = CreateNode<StartNode>(new Vector2(0, 250));
+        AddElement(StartNode);
+
+        m_tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
+        if (m_tree == null)
+        {
+            m_tree = ScriptableObject.CreateInstance<DialogueTree>();
+            AssetDatabase.CreateAsset(m_tree, assetPath);
+        }
+        else
+        {
+            
+        }
+
+        graphViewChanged += OnGraphViewChange;
     }
 
-    BaseNode CreateNode(BaseNode.NodeTypes nodeType,Vector2 position)
+    public void PopulateView()
     {
-        Type _type = Type.GetType($"{nodeType}");
-        BaseNode node = (BaseNode) Activator.CreateInstance(_type);
+       // m_tree.Dialogues.ForEach()
+
+    }
+
+    BaseNode LoadNode()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    BaseNode CreateNode<T>(Vector2 position) where T:BaseNode
+    {        
+        BaseNode node = Activator.CreateInstance<T>();
         node.Initialize(position);
         node.Draw();
+
+        if (node.GetType().IsSubclassOf(typeof(DialogueBaseNode)))
+        {
+            (node as DialogueBaseNode).DialoguesData = CreateNodeAsset();
+        }
+
         return node;
+    }
+
+    DialogueNodeData CreateNodeAsset()
+    {
+        var nodeData = ScriptableObject.CreateInstance<DialogueNodeData>();
+        AssetDatabase.AddObjectToAsset(nodeData, m_tree);
+        m_tree.Dialogues.Add(nodeData);
+        AssetDatabase.SaveAssets();
+        return nodeData;
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -41,6 +87,7 @@ public class DialogueGV : GraphView
 
         return compartiblePorts;
     }
+
     void AddManipulator()
     {
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
@@ -48,17 +95,77 @@ public class DialogueGV : GraphView
         this.AddManipulator(new SelectionDragger());        // need to add before RectangleSelector()
         this.AddManipulator(new RectangleSelector());
 
-        this.AddManipulator(CreateNodeContextualMenu("Add Dialogue Node", BaseNode.NodeTypes.DialogueNode));
-        this.AddManipulator(CreateNodeContextualMenu("Add Condition Node", BaseNode.NodeTypes.ConditionNode));
+        this.AddManipulator(SaveContextualMenu());
+    }
+    
+    public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+    {
+        base.BuildContextualMenu(evt);
+
+        evt.menu.AppendAction($"Create DialogueNode",
+            actionEvent => AddElement(CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition)));
+        evt.menu.AppendAction($"Create ConditionNode",
+            actionEvent => AddElement(CreateNode<ConditionNode>(actionEvent.eventInfo.localMousePosition)));
     }
 
-    IManipulator CreateNodeContextualMenu(string actionTitle, BaseNode.NodeTypes nodeType)
+    IManipulator SaveContextualMenu()
     {
-        return new ContextualMenuManipulator ( menuEvent => 
+        return new ContextualMenuManipulator(ev =>
+        {
+            ev.menu.AppendAction("Save Graph",actionEvent => SaveGraph());
+        });
+    }
+
+    GraphViewChange OnGraphViewChange(GraphViewChange changes)
+    {
+        Debug.Log("Changed");
+        if (changes.edgesToCreate != null)
+        {
+            foreach (var edge in changes.edgesToCreate)
             {
-                menuEvent.menu.AppendAction(actionTitle, actionEvent => AddElement(CreateNode(nodeType, actionEvent.eventInfo.localMousePosition)));
+                Debug.Log($"{edge.output.node.title} -> {edge.input.node.title}");
+                if (edge.output.node.userData.GetType() == typeof(StartNode))
+                {
+                    m_tree.StartDialogue = (edge.input.node.userData as DialogueBaseNode).DialoguesData;
+                }
             }
-        );
+        }
+
+        if (changes.elementsToRemove != null)
+        {
+            foreach (var element in changes.elementsToRemove)
+            {
+                if (element.GetType() == typeof(Edge))
+                {
+                    Debug.Log("Edge was removed.");
+                }
+                if (element.GetType() == typeof(Node))
+                {
+                    Debug.Log("Node was removed.");
+                }
+            }
+        }
+
+        if (changes.movedElements != null)
+        {
+
+            Debug.Log("something moved");
+
+        }
+
+        return changes;
+    }
+
+    void SaveGraph()
+    {
+        Debug.Log("Save");
+        HashSet<GraphElement> set = new();
+        StartNode.CollectElements(set, (element) => true);
+        Debug.Log(set.Count);
+        foreach(Edge item in set)
+        {
+            Debug.Log((item.input.node.userData as DialogueBaseNode).title);
+        }
     }
 
     void AddBackground()

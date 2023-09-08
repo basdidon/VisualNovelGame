@@ -1,34 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public enum Charecters
-{
-    Sabastian,
-    Emma,
-    Johnny,
-}
-
-[CreateAssetMenu(menuName = "Dialogue")]
-public class DialoguesData : ScriptableObject
-{
-    public Vector2 GraphPosition { get; set; }             // position on graphview
-    public List<DialoguesData> NextDialogue { get; set; }
-
-    // old props
-    [field: SerializeField] public List<Sentence> Dialogues { get; set; }
-
-    void OnValidate()
-    {
-        foreach(var sentance in Dialogues)
-        {
-            sentance.OnValidate();
-        }
-    }
-}
-
-[Serializable]
-public class Sentence
+public class DialogueNodeData : GVNodeData
 {
     public static int StringPerLine => 25;
     public static int MaxLine => 3;
@@ -38,7 +13,7 @@ public class Sentence
     public string[] TextLine => textLine;
     [field: SerializeField] public Sprite Background { get; set; }
 
-    public void OnValidate()
+    void OnValidate()
     {
         for (int i = 0; i < TextLine.Length; i++)
         {
