@@ -15,6 +15,25 @@ MonoBehaviour:
   <StartDialogue>k__BackingField: {fileID: 0}
   Dialogues:
   - {fileID: 9064224496790422562}
+  - {fileID: 8178925109178408890}
+--- !u!114 &8178925109178408890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e22a266b49d193a45b9bf88db3da53d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Speaker>k__BackingField: 0
+  textLine:
+  - 
+  - 
+  - 
+  <Background>k__BackingField: {fileID: 0}
 --- !u!114 &9064224496790422562
 MonoBehaviour:
   m_ObjectHideFlags: 0
