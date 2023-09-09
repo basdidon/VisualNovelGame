@@ -4,16 +4,42 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BaseNode : Node
+public abstract class BaseNode : Node
 {
-    public GVNodeData NodeData { get; set; }
-    public string DialogueName { get; protected set; }
+    public GVNodeData NodeData { get; private set; }
+    public string NodeName { get; protected set; }
 
-    public virtual void Initialize(Vector2 position)
+    protected abstract GVNodeData CreateNodeAsset();
+
+    // recreate
+    protected virtual void Setup(Vector2 position)
     {
-        DialogueName = "[BaseNode]";
-        SetPosition(new Rect(position,Vector2.zero));
+        SetPosition(new Rect(position, Vector2.zero));
         userData = this;
+    }
+
+    // first time create
+    public virtual void Initialize(Vector2 position,DialogueTree dialogueTree)
+    {
+        Setup(position);
+
+        NodeName = "[BaseNode]";
+        NodeData = CreateNodeAsset();
+        NodeData.NodeType = GetType().Name;
+        NodeData.GraphPosition = position;
+        NodeData.name = GetType().Name;
+        // save node asset
+        AssetDatabase.AddObjectToAsset(NodeData, dialogueTree);
+        AssetDatabase.SaveAssets();
+        dialogueTree.Dialogues.Add(NodeData);
+    }
+
+    // load from GVNodeData
+    public void LoadNodeData(GVNodeData nodeData)
+    {
+        Setup(nodeData.GraphPosition);
+
+        NodeData = nodeData;
     }
 
     public virtual void Draw()
@@ -26,11 +52,11 @@ public class BaseNode : Node
     void DrawHeader()
     {
         // textfield
-        TextField dialogueNameTxt = new() { value = DialogueName };
+        TextField dialogueNameTxt = new() { value = NodeName };
         titleContainer.Insert(1, dialogueNameTxt);
         dialogueNameTxt.style.display = DisplayStyle.None;
         // Title
-        title = DialogueName;
+        title = NodeName;
         VisualElement titleLabel = titleContainer.ElementAt(0);
 
         // double click event
@@ -39,11 +65,11 @@ public class BaseNode : Node
             titleLabel.style.display = DisplayStyle.None;
             dialogueNameTxt.style.display = DisplayStyle.Flex;
             dialogueNameTxt.Focus();
-            dialogueNameTxt.value = DialogueName;
+            dialogueNameTxt.value = NodeName;
             dialogueNameTxt.RegisterCallback<FocusOutEvent>(ev =>
             {
-                DialogueName = dialogueNameTxt.value;
-                title = DialogueName;
+                NodeName = dialogueNameTxt.value;
+                title = NodeName;
                 titleLabel.style.display = DisplayStyle.Flex;
                 dialogueNameTxt.style.display = DisplayStyle.None;
             });
@@ -54,15 +80,14 @@ public class BaseNode : Node
     }
 }
 
-public class DialogueBaseNode : BaseNode
+public abstract class DialogueBaseNode : BaseNode
 {
     public int MaxLine { get; protected set; }
     public int MaxTextLength { get; protected set; }
-    public DialogueNodeData DialoguesData { get; set; }
 
-    public override void Initialize(Vector2 position)
+    public override void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
-        base.Initialize(position);
+        base.Initialize(position,dialogueTree);
 
         MaxLine = 3;
         MaxTextLength = 25;

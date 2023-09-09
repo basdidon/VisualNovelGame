@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class DialogueGV : GraphView
@@ -17,56 +18,34 @@ public class DialogueGV : GraphView
         AddBackground();
         AddStyle();
 
-        // init node
-        StartNode = CreateNode<StartNode>(new Vector2(0, 250));
-        AddElement(StartNode);
-
         m_tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
         if (m_tree == null)
         {
             m_tree = ScriptableObject.CreateInstance<DialogueTree>();
             AssetDatabase.CreateAsset(m_tree, assetPath);
+            // init node
+            StartNode = NodeFactory.CreateNode("StartNode",new Vector2(0, 250),m_tree);
+            AddElement(StartNode);
         }
         else
         {
-            
+            Debug.Log("Load");
+            // create nodes
+            m_tree.Dialogues.ForEach((nodeData) => AddElement(NodeFactory.LoadNode(nodeData)));
+            // create edges
+            nodes.ForEach((node) => {
+                if(node is BaseNode baseNode)
+                {
+                    if(baseNode.NodeData is SingleOutputNodeData)
+                    {
+                        node.in
+                        Edge edge = new();
+                        edge.input.ConnectTo()                    }
+                }
+            });
         }
 
         graphViewChanged += OnGraphViewChange;
-    }
-
-    public void PopulateView()
-    {
-       // m_tree.Dialogues.ForEach()
-
-    }
-
-    BaseNode LoadNode()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    BaseNode CreateNode<T>(Vector2 position) where T:BaseNode
-    {        
-        BaseNode node = Activator.CreateInstance<T>();
-        node.Initialize(position);
-        node.Draw();
-
-        if (node.GetType().IsSubclassOf(typeof(DialogueBaseNode)))
-        {
-            (node as DialogueBaseNode).DialoguesData = CreateNodeAsset();
-        }
-
-        return node;
-    }
-
-    DialogueNodeData CreateNodeAsset()
-    {
-        var nodeData = ScriptableObject.CreateInstance<DialogueNodeData>();
-        AssetDatabase.AddObjectToAsset(nodeData, m_tree);
-        m_tree.Dialogues.Add(nodeData);
-        AssetDatabase.SaveAssets();
-        return nodeData;
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -103,9 +82,9 @@ public class DialogueGV : GraphView
         base.BuildContextualMenu(evt);
 
         evt.menu.AppendAction($"Create DialogueNode",
-            actionEvent => AddElement(CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition)));
+            actionEvent => AddElement(NodeFactory.CreateNode("DialogueNode", actionEvent.eventInfo.localMousePosition,m_tree)));
         evt.menu.AppendAction($"Create ConditionNode",
-            actionEvent => AddElement(CreateNode<ConditionNode>(actionEvent.eventInfo.localMousePosition)));
+            actionEvent => AddElement(NodeFactory.CreateNode("ChoicesNode", actionEvent.eventInfo.localMousePosition,m_tree)));
     }
 
     IManipulator SaveContextualMenu()
@@ -123,10 +102,23 @@ public class DialogueGV : GraphView
         {
             foreach (var edge in changes.edgesToCreate)
             {
-                Debug.Log($"{edge.output.node.title} -> {edge.input.node.title}");
-                if (edge.output.node.userData.GetType() == typeof(StartNode))
+                Node InputNode = edge.input.node;
+                Node OutputNode = edge.output.node;
+                Debug.Log($"{OutputNode.title} -> {InputNode.title}");
+
+                if (OutputNode.userData is StartNode startNode)
                 {
-                    m_tree.StartDialogue = (edge.input.node.userData as DialogueBaseNode).DialoguesData;
+                    if(startNode.NodeData is not SingleOutputNodeData startNodeData)
+                        throw new Exception("startNode.NodeData is not SingleOutputNodeData");
+
+                    if (InputNode.userData is not BaseNode inputBaseNode)
+                        throw new Exception("OutputNode.userData is not BaseNode outputBaseNode");
+
+                    if (inputBaseNode.NodeData == null)
+                        throw new Exception("outputBaseNode.NodeData == null");
+
+                    startNodeData.OutputNodeData = inputBaseNode.NodeData;
+                    
                 }
             }
         }
@@ -181,5 +173,26 @@ public class DialogueGV : GraphView
         StyleSheet nodeStyleSheet = (StyleSheet) EditorGUIUtility.Load("NodeStyle.uss");
         styleSheets.Add(GrahpviewStyleSheet);
         styleSheets.Add(nodeStyleSheet);
+    }
+}
+
+public static class NodeFactory
+{
+    public static BaseNode CreateNode(string typeName,Vector2 position,DialogueTree dialogueTree)
+    {
+        BaseNode node = Activator.CreateInstance(Type.GetType(typeName)) as BaseNode;
+        node.Initialize(position,dialogueTree);
+        node.Draw();
+
+        return node;
+    }
+
+    public static BaseNode LoadNode(GVNodeData nodeData)
+    {
+        BaseNode node = Activator.CreateInstance(Type.GetType(nodeData.NodeType)) as BaseNode;
+        node.LoadNodeData(nodeData);
+        node.Draw();
+
+        return node;
     }
 }

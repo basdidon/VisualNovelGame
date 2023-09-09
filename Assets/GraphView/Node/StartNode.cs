@@ -2,13 +2,13 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class StartNode : BaseNode
+public sealed class StartNode : BaseNode
 {
-    public override void Initialize(Vector2 position)
+    public override void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
-        base.Initialize(position);
+        base.Initialize(position,dialogueTree);
         name = "start-node";
-        DialogueName = "StartNode";
+        NodeName = "StartNode";
     }
 
     public override void Draw()
@@ -24,5 +24,10 @@ public class StartNode : BaseNode
         outputContainer.Add(outputPort);
 
         RefreshExpandedState();
+    }
+
+    protected override GVNodeData CreateNodeAsset()
+    {
+        return ScriptableObject.CreateInstance<SingleOutputNodeData>();
     }
 }
