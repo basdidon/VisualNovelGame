@@ -4,15 +4,20 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ConditionNode : DialogueBaseNode
+public sealed class ConditionNode : DialogueBaseNode
 {
-    List<string> Choices { get; set; }
+    List<BaseNode> Choices { get; set; }
 
-    public override void Initialize(Vector2 position)
+    public override void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
-        base.Initialize(position);
-        DialogueName = "Dialogue";
-        Choices = new List<string>();
+        base.Initialize(position,dialogueTree);
+        NodeName = "Dialogue";
+        Choices = new List<BaseNode>();
+    }
+
+    protected override GVNodeData CreateNodeAsset()
+    {
+        throw new System.NotImplementedException();
     }
 
     public override void Draw()
@@ -27,7 +32,7 @@ public class ConditionNode : DialogueBaseNode
         {
             Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
             Button deleteChoiceBtn = new() { text = "X" };
-            TextField choiceTxtField = new() { value = choice } ;
+            TextField choiceTxtField = new() { value = choice.NodeName } ;
 
             choicePort.Add(choiceTxtField);
             choicePort.Add(deleteChoiceBtn);

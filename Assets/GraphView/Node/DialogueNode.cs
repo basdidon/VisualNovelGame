@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class DialogueNode : DialogueBaseNode
 {
-    public override void Initialize(Vector2 position)
-    {
-        base.Initialize(position);
-    }
-
     public override void Draw()
     {
         base.Draw();
@@ -20,5 +15,10 @@ public class DialogueNode : DialogueBaseNode
         outputContainer.Add(outputPort);
 
         RefreshExpandedState();
+    }
+
+    protected override GVNodeData CreateNodeAsset()
+    {
+        return ScriptableObject.CreateInstance<DialogueNodeData>();
     }
 }
