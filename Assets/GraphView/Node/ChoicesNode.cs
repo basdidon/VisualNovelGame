@@ -4,40 +4,47 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public sealed class ConditionNode : DialogueBaseNode
+public class ChoicesNode : GVNodeData
 {
-    List<BaseNode> Choices { get; set; }
+    [field: SerializeField] List<GVNodeData> Children { get; set; }
 
-    public override void Initialize(Vector2 position,DialogueTree dialogueTree)
+    public override void Initialize(Vector2 position, DialogueTree dialogueTree)
     {
-        base.Initialize(position,dialogueTree);
-        NodeName = "Dialogue";
-        Choices = new List<BaseNode>();
+        base.Initialize(position, dialogueTree);
+        Children = new List<GVNodeData>();
     }
 
-    protected override GVNodeData CreateNodeAsset()
+    public override void Draw(Node node)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override void Draw()
-    {
-        base.Draw();
-
         Button addCondition = new() { text = "Add Choice" };
-        mainContainer.Insert(1,addCondition);
+        node.mainContainer.Insert(1, addCondition);
 
         // output port
-        foreach(var choice in Choices)
+        foreach (var child in Children)
         {
-            Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            Port choicePort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
             Button deleteChoiceBtn = new() { text = "X" };
-            TextField choiceTxtField = new() { value = choice.NodeName } ;
+            TextField choiceTxtField = new() { value = child.name };
 
             choicePort.Add(choiceTxtField);
             choicePort.Add(deleteChoiceBtn);
 
-            outputContainer.Add(choicePort);
+            node.outputContainer.Add(choicePort);
         }
+    }
+
+    public override void AddChild(GVNodeData child)
+    {
+        Children.Add(child);
+    }
+
+    public override void RemoveChild(GVNodeData child)
+    {
+        Children.Remove(child);
+    }
+
+    public override IEnumerable<GVNodeData> GetChildren()
+    {
+        return Children;
     }
 }

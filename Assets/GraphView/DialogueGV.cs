@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class DialogueGV : GraphView
 {
     DialogueTree m_tree;
-    public BaseNode StartNode { get; private set; }
+    public GraphViewNode StartNode { get; private set; }
     readonly string assetPath = "Assets/DialogueLine.asset";
 
     public DialogueGV()
@@ -24,7 +24,7 @@ public class DialogueGV : GraphView
             m_tree = ScriptableObject.CreateInstance<DialogueTree>();
             AssetDatabase.CreateAsset(m_tree, assetPath);
             // init node
-            StartNode = NodeFactory.CreateNode("StartNode",new Vector2(0, 250),m_tree);
+            StartNode = NodeFactory.CreateNode<StartNode>(new Vector2(0, 250),m_tree);
             AddElement(StartNode);
         }
         else
@@ -33,16 +33,22 @@ public class DialogueGV : GraphView
             // create nodes
             m_tree.Dialogues.ForEach((nodeData) => AddElement(NodeFactory.LoadNode(nodeData)));
             // create edges
+            /*
             nodes.ForEach((node) => {
-                if(node is BaseNode baseNode)
+                if(node.userData is GVNodeData nodeData)
                 {
-                    if(baseNode.NodeData is SingleOutputNodeData)
+                    foreach(var child in nodeData.GetChildren())
                     {
-                        node.in
-                        Edge edge = new();
-                        edge.input.ConnectTo()                    }
+                        Node childNode = GetNodeByGuid(child.Id);
+                        node.outputContainer
+                        if(childNode != null)
+                        {
+                            Port port = new();
+                            port.ConnectTo
+                        }
+                    }
                 }
-            });
+            });*/
         }
 
         graphViewChanged += OnGraphViewChange;
@@ -80,11 +86,12 @@ public class DialogueGV : GraphView
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
         base.BuildContextualMenu(evt);
-
+        
         evt.menu.AppendAction($"Create DialogueNode",
-            actionEvent => AddElement(NodeFactory.CreateNode("DialogueNode", actionEvent.eventInfo.localMousePosition,m_tree)));
+            actionEvent => AddElement(NodeFactory.CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition,m_tree)));
         evt.menu.AppendAction($"Create ConditionNode",
-            actionEvent => AddElement(NodeFactory.CreateNode("ChoicesNode", actionEvent.eventInfo.localMousePosition,m_tree)));
+            actionEvent => AddElement(NodeFactory.CreateNode<ChoicesNode>(actionEvent.eventInfo.localMousePosition,m_tree)));
+        
     }
 
     IManipulator SaveContextualMenu()
@@ -108,17 +115,19 @@ public class DialogueGV : GraphView
 
                 if (OutputNode.userData is StartNode startNode)
                 {
-                    if(startNode.NodeData is not SingleOutputNodeData startNodeData)
-                        throw new Exception("startNode.NodeData is not SingleOutputNodeData");
-
-                    if (InputNode.userData is not BaseNode inputBaseNode)
+                    if (InputNode.userData is not GVNodeData inputNode)
                         throw new Exception("OutputNode.userData is not BaseNode outputBaseNode");
 
-                    if (inputBaseNode.NodeData == null)
+                    if (inputNode == null)
                         throw new Exception("outputBaseNode.NodeData == null");
 
-                    startNodeData.OutputNodeData = inputBaseNode.NodeData;
+                    Debug.Log("a");
+                    startNode.AddChild(inputNode);
                     
+                }
+                else
+                {
+                    Debug.Log("aaaa");
                 }
             }
         }
@@ -151,13 +160,17 @@ public class DialogueGV : GraphView
     void SaveGraph()
     {
         Debug.Log("Save");
+        /*
         HashSet<GraphElement> set = new();
         StartNode.CollectElements(set, (element) => true);
         Debug.Log(set.Count);
         foreach(Edge item in set)
         {
-            Debug.Log((item.input.node.userData as DialogueBaseNode).title);
+            Debug.Log(item.input.node.title);
         }
+        */
+        Debug.Log(GetPortByGuid("sos").node.title);
+
     }
 
     void AddBackground()
@@ -178,21 +191,16 @@ public class DialogueGV : GraphView
 
 public static class NodeFactory
 {
-    public static BaseNode CreateNode(string typeName,Vector2 position,DialogueTree dialogueTree)
+    public static GraphViewNode CreateNode<T>(Vector2 position,DialogueTree dialogueTree) where T:GVNodeData
     {
-        BaseNode node = Activator.CreateInstance(Type.GetType(typeName)) as BaseNode;
-        node.Initialize(position,dialogueTree);
-        node.Draw();
+        var nodeData = ScriptableObject.CreateInstance<T>();
+        nodeData.Initialize(position,dialogueTree);
 
-        return node;
+        return nodeData.CreateNode() as GraphViewNode;
     }
 
-    public static BaseNode LoadNode(GVNodeData nodeData)
+    public static GraphViewNode LoadNode(GVNodeData nodeData)
     {
-        BaseNode node = Activator.CreateInstance(Type.GetType(nodeData.NodeType)) as BaseNode;
-        node.LoadNodeData(nodeData);
-        node.Draw();
-
-        return node;
+        return nodeData.CreateNode() as GraphViewNode;
     }
 }

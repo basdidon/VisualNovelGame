@@ -4,12 +4,12 @@
 		color : #000;
 }
 
-DialogueNode -> #node-border
+#DialogueNode -> #node-border
 {
 	background-color : #c7ea46;
 }
 
-ConditionNode -> #node-border
+#ConditionNode -> #node-border
 {
 	background-color : #ffd800;
 }
