@@ -9,6 +9,18 @@ public class StartNode : GVNodeData
 {
     [field: SerializeField] GVNodeData Child { get; set; }
 
+    string outputPortGuid;
+    public override string[] OutputPortGuids
+    {
+        get => new string[] { outputPortGuid };
+    }
+
+    public override void Initialize(Vector2 position, DialogueTree dialogueTree)
+    {
+        base.Initialize(position, dialogueTree);
+        outputPortGuid = Guid.NewGuid().ToString();
+    }
+
     public override Node CreateNode()
     {
         var node = base.CreateNode();

@@ -9,6 +9,10 @@ public abstract class GVNodeData : ScriptableObject
     [field: SerializeField] public string Id { get; private set; }
     [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
+    // Port
+    public string InputPortGuid { get; private set; }
+    public abstract string[] OutputPortGuids { get; }
+
     public virtual void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
         Id = $"{Guid.NewGuid()}";
@@ -35,9 +39,4 @@ public abstract class GVNodeData : ScriptableObject
     public abstract void AddChild(GVNodeData child);
     public abstract void RemoveChild(GVNodeData child);
     public abstract IEnumerable<GVNodeData> GetChildren();
-
-    // Port
-
-
-
 }

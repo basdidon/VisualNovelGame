@@ -8,6 +8,8 @@ public class ChoicesNode : GVNodeData
 {
     [field: SerializeField] List<GVNodeData> Children { get; set; }
 
+    public override string[] OutputPortGuids => throw new System.NotImplementedException();
+
     public override void Initialize(Vector2 position, DialogueTree dialogueTree)
     {
         base.Initialize(position, dialogueTree);
