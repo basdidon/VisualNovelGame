@@ -3,12 +3,12 @@
     "maps": [
         {
             "name": "Player",
-            "id": "60c4aa22-bef4-4093-8b89-37dc6045395b",
+            "id": "082313b7-997d-405b-8297-1bc5549b0fed",
             "actions": [
                 {
                     "name": "Tap",
                     "type": "Button",
-                    "id": "71b134e6-e86a-48a8-961b-1e31ce236db5",
+                    "id": "7a45df3f-7b00-4447-81fc-01a09185ed2b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -18,8 +18,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "96e9c2cd-6d16-43ed-aafd-38d05db13639",
-                    "path": "<Touchscreen>/Press",
+                    "id": "97cf50c3-30a7-4bc0-898a-b469ad0a606a",
+                    "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -30,17 +30,5 @@
             ]
         }
     ],
-    "controlSchemes": [
-        {
-            "name": "Mobile",
-            "bindingGroup": "Mobile",
-            "devices": [
-                {
-                    "devicePath": "<Touchscreen>",
-                    "isOptional": false,
-                    "isOR": false
-                }
-            ]
-        }
-    ]
+    "controlSchemes": []
 }

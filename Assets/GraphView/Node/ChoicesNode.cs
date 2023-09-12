@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System;
 
 public class ChoicesNode : GVNodeData
 {
     [field: SerializeField] List<GVNodeData> Children { get; set; }
 
-    public override string[] OutputPortGuids => throw new System.NotImplementedException();
+    [SerializeField] string inputPortGuid;
+    public override string InputPortGuid => inputPortGuid;
+    [SerializeField] List<string> outputPortGuids;
+    public override string[] OutputPortGuids => outputPortGuids.ToArray();
 
     public override void Initialize(Vector2 position, DialogueTree dialogueTree)
     {

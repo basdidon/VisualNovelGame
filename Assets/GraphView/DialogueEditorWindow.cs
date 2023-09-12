@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
-using UnityEditor.UIElements;
 
 public class DialogueEditorWindow : EditorWindow
 {
@@ -16,26 +13,10 @@ public class DialogueEditorWindow : EditorWindow
         editorWindow.titleContent = new GUIContent("Dialogue Graphview");
     }
 
-    private void OnEnable()
+    public void LoadFromFile(string path)
     {
-        AddGraphview();
-    }
-
-    void AddGraphview()
-    {
-        graphView = new();
+        graphView = new(path);
         graphView.StretchToParentSize();
         rootVisualElement.Add(graphView);
     }
-    /*
-    private void OnSelectionChange()
-    {
-        DialogueTree tree = Selection.activeObject as DialogueTree;
-        if(tree != null)
-        {
-            SerializedObject so = new(tree);
-            rootVisualElement.Bind(so);
-            
-        }
-    }*/
 }

@@ -9,16 +9,14 @@ public class StartNode : GVNodeData
 {
     [field: SerializeField] GVNodeData Child { get; set; }
 
-    string outputPortGuid;
-    public override string[] OutputPortGuids
-    {
-        get => new string[] { outputPortGuid };
-    }
+    // Port
+    public override string InputPortGuid => string.Empty;
+    [SerializeField] string outputPortGuid;
+    public override string[] OutputPortGuids => new string[] { outputPortGuid };
 
     public override void Initialize(Vector2 position, DialogueTree dialogueTree)
     {
         base.Initialize(position, dialogueTree);
-        outputPortGuid = Guid.NewGuid().ToString();
     }
 
     public override Node CreateNode()
@@ -49,7 +47,8 @@ public class StartNode : GVNodeData
         node.titleButtonContainer.style.display = DisplayStyle.None;
         // output port
         Port outputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
-        outputPort.viewDataKey = "sos";
+        outputPortGuid ??= outputPort.viewDataKey;
+        outputPort.viewDataKey = outputPortGuid;
         outputPort.portName = "Output";
         node.outputContainer.Add(outputPort);
 

@@ -8,47 +8,44 @@ using System.Collections.Generic;
 
 public class DialogueGV : GraphView
 {
-    DialogueTree m_tree;
+    DialogueTree Tree { get; }
     public GraphViewNode StartNode { get; private set; }
-    readonly string assetPath = "Assets/DialogueLine.asset";
+    public string AssetPath { get; }//= "Assets/DialogueLine.asset";
 
-    public DialogueGV()
+    public DialogueGV(string assetPath)
     {
         AddManipulator();
         AddBackground();
         AddStyle();
 
-        m_tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
-        if (m_tree == null)
+        AssetPath = assetPath;
+        Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(AssetPath);
+
+        if(Tree.Nodes.Count == 0)
         {
-            m_tree = ScriptableObject.CreateInstance<DialogueTree>();
-            AssetDatabase.CreateAsset(m_tree, assetPath);
-            // init node
-            StartNode = NodeFactory.CreateNode<StartNode>(new Vector2(0, 250),m_tree);
+            StartNode = NodeFactory.CreateNode<StartNode>(new Vector2(0, 250), Tree);
             AddElement(StartNode);
         }
         else
         {
             Debug.Log("Load");
             // create nodes
-            m_tree.Dialogues.ForEach((nodeData) => AddElement(NodeFactory.LoadNode(nodeData)));
+            Tree.Nodes.ForEach((nodeData) => AddElement(NodeFactory.LoadNode(nodeData)));
             // create edges
-            /*
-            nodes.ForEach((node) => {
-                if(node.userData is GVNodeData nodeData)
-                {
-                    foreach(var child in nodeData.GetChildren())
-                    {
-                        Node childNode = GetNodeByGuid(child.Id);
-                        node.outputContainer
-                        if(childNode != null)
-                        {
-                            Port port = new();
-                            port.ConnectTo
-                        }
-                    }
-                }
-            });*/
+            Tree.Edges.ForEach((edgeData) =>
+            {
+                Port outputPort = GetPortByGuid(edgeData.From);
+                Port inputPort = GetPortByGuid(edgeData.To);
+
+                if (outputPort == null)
+                    throw new NullReferenceException("outputPort not found");
+                if (inputPort == null)
+                    throw new NullReferenceException("inputPort not found");
+
+                Edge edge = outputPort.ConnectTo(inputPort);
+                edge.viewDataKey = edgeData.Id;
+                AddElement(edge);
+            });
         }
 
         graphViewChanged += OnGraphViewChange;
@@ -88,9 +85,9 @@ public class DialogueGV : GraphView
         base.BuildContextualMenu(evt);
         
         evt.menu.AppendAction($"Create DialogueNode",
-            actionEvent => AddElement(NodeFactory.CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition,m_tree)));
+            actionEvent => AddElement(NodeFactory.CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition,Tree)));
         evt.menu.AppendAction($"Create ConditionNode",
-            actionEvent => AddElement(NodeFactory.CreateNode<ChoicesNode>(actionEvent.eventInfo.localMousePosition,m_tree)));
+            actionEvent => AddElement(NodeFactory.CreateNode<ChoicesNode>(actionEvent.eventInfo.localMousePosition,Tree)));
         
     }
 
@@ -111,24 +108,21 @@ public class DialogueGV : GraphView
             {
                 Node InputNode = edge.input.node;
                 Node OutputNode = edge.output.node;
+
                 Debug.Log($"{OutputNode.title} -> {InputNode.title}");
 
-                if (OutputNode.userData is StartNode startNode)
-                {
-                    if (InputNode.userData is not GVNodeData inputNode)
-                        throw new Exception("OutputNode.userData is not BaseNode outputBaseNode");
+                if (OutputNode.userData is not GVNodeData outputNode)
+                    throw new Exception("OutputNode.userData is not GVNodeData outputNode");
 
-                    if (inputNode == null)
-                        throw new Exception("outputBaseNode.NodeData == null");
+                if (InputNode.userData is not GVNodeData inputNode)
+                    throw new Exception("InputNode.userData is not GVNodeData inputNode");
 
-                    Debug.Log("a");
-                    startNode.AddChild(inputNode);
+                if (inputNode == null)
+                    throw new Exception("inputNode == null");
+
+                Tree.Edges.Add(new EdgeData(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey));
+                outputNode.AddChild(inputNode);
                     
-                }
-                else
-                {
-                    Debug.Log("aaaa");
-                }
             }
         }
 
@@ -136,13 +130,19 @@ public class DialogueGV : GraphView
         {
             foreach (var element in changes.elementsToRemove)
             {
-                if (element.GetType() == typeof(Edge))
+                if (element is Edge edge)
                 {
                     Debug.Log("Edge was removed.");
+                    EdgeData toRemoveEdgeData = Tree.Edges.FirstOrDefault(_edge => _edge.Id == edge.viewDataKey);
+                    Tree.Edges.Remove(toRemoveEdgeData);
                 }
-                if (element.GetType() == typeof(Node))
+                else if (element is Node node)
                 {
                     Debug.Log("Node was removed.");
+                    GVNodeData toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
+                    Tree.Nodes.Remove(toRemoveNode);
+                    AssetDatabase.RemoveObjectFromAsset(toRemoveNode);
+                    AssetDatabase.SaveAssets();
                 }
             }
         }
@@ -189,18 +189,3 @@ public class DialogueGV : GraphView
     }
 }
 
-public static class NodeFactory
-{
-    public static GraphViewNode CreateNode<T>(Vector2 position,DialogueTree dialogueTree) where T:GVNodeData
-    {
-        var nodeData = ScriptableObject.CreateInstance<T>();
-        nodeData.Initialize(position,dialogueTree);
-
-        return nodeData.CreateNode() as GraphViewNode;
-    }
-
-    public static GraphViewNode LoadNode(GVNodeData nodeData)
-    {
-        return nodeData.CreateNode() as GraphViewNode;
-    }
-}

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-16025739764292138
+--- !u!114 &-3444709956426472028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
   m_Name: StartNode
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 809f733c-8612-44fa-914d-6c519fdc32fa
+  <Id>k__BackingField: 1597517a-2fca-4fa0-add5-3f9c565f9b54
   <GraphPosition>k__BackingField: {x: 0, y: 250}
   <Child>k__BackingField: {fileID: 0}
+  outputPortGuid: 0aba5d7c-7dd9-46ca-ae06-ec5fd26353e9
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25,12 +26,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c37504b9650c4424d99fa6c7058fd250, type: 3}
-  m_Name: DialogueLine
+  m_Name: New Dialogue Tree
   m_EditorClassIdentifier: 
-  Dialogues:
-  - {fileID: -16025739764292138}
-  - {fileID: 1294472619284509160}
---- !u!114 &1294472619284509160
+  Nodes:
+  - {fileID: -3444709956426472028}
+  Edges: []
+--- !u!114 &5922585488891397732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,21 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: b8e10354-6770-4902-a0a7-e06864c92637
-  <GraphPosition>k__BackingField: {x: 514, y: 339}
+  <Id>k__BackingField: 4bccf377-079a-43a9-a837-909aa87a27de
+  <GraphPosition>k__BackingField: {x: 415, y: 109}
+  inputPortGuid: 
+  outputPortGuid: 
+  <TextLine>k__BackingField: []
   <Child>k__BackingField: {fileID: 0}
---- !u!114 &5527687258343087899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
-  m_Name: ChoicesNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: 212781aa-4ff2-4692-99df-aced1458c8fb
-  <GraphPosition>k__BackingField: {x: 853, y: 253}
-  <Children>k__BackingField: []

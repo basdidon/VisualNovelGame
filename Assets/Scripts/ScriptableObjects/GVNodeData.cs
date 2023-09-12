@@ -10,7 +10,7 @@ public abstract class GVNodeData : ScriptableObject
     [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
     // Port
-    public string InputPortGuid { get; private set; }
+    public abstract string InputPortGuid { get; }
     public abstract string[] OutputPortGuids { get; }
 
     public virtual void Initialize(Vector2 position,DialogueTree dialogueTree)
@@ -21,7 +21,7 @@ public abstract class GVNodeData : ScriptableObject
         // save node asset
         AssetDatabase.AddObjectToAsset(this, dialogueTree);
         AssetDatabase.SaveAssets();
-        dialogueTree.Dialogues.Add(this);
+        dialogueTree.Nodes.Add(this);
     }
 
     public virtual Node CreateNode()

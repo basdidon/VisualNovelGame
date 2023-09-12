@@ -41,6 +41,10 @@ public class Bobo : Charecter
                     ChoicesPickerUC.Hide();
                     DialogueUC.DialoguesData = SpecialDialogue;
                     DialogueUC.Display();
+                    DialogueUC.OnDisplayCompletedEvent += () =>
+                     {
+                         DialogueUC.Hide();
+                     };
                 }));
             }
 
