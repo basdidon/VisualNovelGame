@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <DialoguesData>k__BackingField: {fileID: 11400000, guid: 8eb49761b94043d44bc3712abdc76d96, type: 2}
+  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 08b2b5733a7677f4fb82929ade69d469, type: 2}
   <TapInputAction>k__BackingField: {fileID: 1027717850900299178, guid: ffaadf679290887408afd991aeac8720, type: 3}
 --- !u!114 &1033439912
 MonoBehaviour:

@@ -14,27 +14,12 @@ public class DialogueUiController: IUiController
     Label SpeakerNameLabel { get; set; }
     Label[] LineLabels { get; set; }
 
-    DialoguesData dialoguesData;
-    public DialoguesData DialoguesData
-    {
-        get => dialoguesData;
-        set
-        {
-            dialoguesData = value;
-
-            Sentences.Clear();
-            foreach (var sentance in dialoguesData.Dialogues)
-            {
-                Sentences.Enqueue(sentance);
-            }
-        }
-    }
-
-    Queue<Sentence> Sentences { get; set; }
-    Sentence Sentence { get; set; }
+    DialogueNode DialogueNode { get; set; }
 
     // Input
     InputAction TapAction { get; set; }
+
+    public bool IsDisplay => Root.style.display == DisplayStyle.Flex;
 
     // text anim
     readonly float txtAnimSpeed = 2f;
@@ -55,7 +40,7 @@ public class DialogueUiController: IUiController
             Root.Q<Label>("line-3-txt")
         };
 
-        Sentences = new Queue<Sentence>();
+        //Sentences = new Queue<Sentence>();
         mySequence = DOTween.Sequence();
 
         TapAction = tapAction;
@@ -67,17 +52,25 @@ public class DialogueUiController: IUiController
             }
             else
             {
-                DisplayNextDialogue();
+                OnDisplayCompletedEvent?.Invoke();
             }
         };
+    }
 
-
+    public void DisplayDialogue(DialogueNode dialogueNode,OnCompleted onCompleted)
+    {
+        DialogueNode = dialogueNode;
+        OnDisplayCompletedEvent += onCompleted;
+        Display();
     }
 
     public void Display()
     {
         Root.AddToClassList("bottomsheet--up");
-        DisplayNextDialogue(1);
+        if (IsDisplay)
+            DisplayNextDialogue();
+        else
+            DisplayNextDialogue(1);
         TapAction.Enable();
     }
 
@@ -89,31 +82,22 @@ public class DialogueUiController: IUiController
 
     void DisplayNextDialogue(float delay = 0)
     {
-        if(!Sentences.TryDequeue(out Sentence sentence))
-        {
-            OnDisplayCompletedEvent?.Invoke();
-            OnDisplayCompletedEvent = null;       // clear events
-            TapAction.Disable();
-            return;
-        }
-            
-        Sentence = sentence;
-
         mySequence = DOTween.Sequence();
         ﻿﻿﻿﻿﻿mySequence.PrependInterval(delay);
-        var tweens = LineLabels.Select((v, i) => DOTween.To(() => v.text, x => v.text = x, Sentence.TextLine[i], txtAnimSpeed).SetEase(Ease.Linear));
+        var tweens = LineLabels.Select((v, i) => DOTween.To(() => v.text, x => v.text = x, DialogueNode.TextLine[i], txtAnimSpeed).SetEase(Ease.Linear));
         
         foreach(var tween in tweens)
             mySequence.Append(tween);
 
-        mySequence.OnPlay(()=> 
+
+        mySequence.OnPlay(()=>
         {
-            SpeakerNameLabel.text = Sentence.Speaker.ToString();
+            SpeakerNameLabel.text = "SomeOne";
 
             LineLabels[0].text = string.Empty;
             LineLabels[1].text = string.Empty;
             LineLabels[2].text = string.Empty;
-            Root.style.backgroundImage = new StyleBackground(Sentence.Background);
+            //Root.style.backgroundImage = new StyleBackground(Sentence.Background);
         });
     }
 }

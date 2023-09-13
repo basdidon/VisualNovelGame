@@ -21,8 +21,6 @@ public class DialogueNode : GVNodeData
 
     public override void Initialize(Vector2 position, DialogueTree dialogueTree)
     {
-        Debug.Log("aaaa");
-
         base.Initialize(position, dialogueTree);
 
         TextLine = new string[MaxLine];
@@ -117,6 +115,29 @@ public class DialogueNode : GVNodeData
         {
             Array.Resize(ref _textLine, MaxLine);
             return;
+        }
+    }
+
+    public override void Execute()
+    {
+        DialogueUC.DisplayDialogue(this, OnDialogueDisplayCompleteHandle);
+        /*
+        DialogueUC.DialogueNode = this;
+        DialogueUC.OnDisplayCompletedEvent += OnDialogueDisplayCompleteHandle;
+        DialogueUC.Display();*/
+    }
+
+    void OnDialogueDisplayCompleteHandle()
+    {
+        DialogueUC.OnDisplayCompletedEvent -= OnDialogueDisplayCompleteHandle;
+        if (Child is null)
+        {
+            DialogueUC.Hide();
+        }
+        else
+        {
+            Debug.Log($"{Child.GetType()} : {(Child as DialogueNode).TextLine[0]}");
+            Child.Execute();
         }
     }
 }

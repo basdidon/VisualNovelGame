@@ -8,9 +8,8 @@ using System.Collections.Generic;
 
 public class DialogueGV : GraphView
 {
-    DialogueTree Tree { get; }
+    DialogueTree Tree { get; set; }
     public GraphViewNode StartNode { get; private set; }
-    public string AssetPath { get; }//= "Assets/DialogueLine.asset";
 
     public DialogueGV(string assetPath)
     {
@@ -18,37 +17,40 @@ public class DialogueGV : GraphView
         AddBackground();
         AddStyle();
 
-        AssetPath = assetPath;
-        Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(AssetPath);
-
-        if(Tree.Nodes.Count == 0)
-        {
-            StartNode = NodeFactory.CreateNode<StartNode>(new Vector2(0, 250), Tree);
-            AddElement(StartNode);
-        }
-        else
-        {
-            Debug.Log("Load");
-            // create nodes
-            Tree.Nodes.ForEach((nodeData) => AddElement(NodeFactory.LoadNode(nodeData)));
-            // create edges
-            Tree.Edges.ForEach((edgeData) =>
-            {
-                Port outputPort = GetPortByGuid(edgeData.From);
-                Port inputPort = GetPortByGuid(edgeData.To);
-
-                if (outputPort == null)
-                    throw new NullReferenceException("outputPort not found");
-                if (inputPort == null)
-                    throw new NullReferenceException("inputPort not found");
-
-                Edge edge = outputPort.ConnectTo(inputPort);
-                edge.viewDataKey = edgeData.Id;
-                AddElement(edge);
-            });
-        }
+        LoadAsset(assetPath);
 
         graphViewChanged += OnGraphViewChange;
+    }
+
+    void LoadAsset(string assetPath)
+    {
+        Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
+
+        Debug.Log($"Load {assetPath}");
+        foreach (var obj in AssetDatabase.LoadAllAssetsAtPath(assetPath))
+        {
+            if (obj is DialogueTree dialogueTree)
+                Tree = dialogueTree;
+            else if (obj is GVNodeData nodeData)
+                AddElement(NodeFactory.LoadNode(nodeData));
+            else
+                throw new Exception($"Unexpected asset type. {obj.GetType()}");
+        }
+        // create edges
+        Tree.Edges.ForEach((edgeData) =>
+        {
+            Port outputPort = GetPortByGuid(edgeData.From);
+            Port inputPort = GetPortByGuid(edgeData.To);
+
+            if (outputPort == null)
+                throw new NullReferenceException("outputPort not found");
+            if (inputPort == null)
+                throw new NullReferenceException("inputPort not found");
+
+            Edge edge = outputPort.ConnectTo(inputPort);
+            edge.viewDataKey = edgeData.Id;
+            AddElement(edge);
+        });
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -88,7 +90,6 @@ public class DialogueGV : GraphView
             actionEvent => AddElement(NodeFactory.CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition,Tree)));
         evt.menu.AppendAction($"Create ConditionNode",
             actionEvent => AddElement(NodeFactory.CreateNode<ChoicesNode>(actionEvent.eventInfo.localMousePosition,Tree)));
-        
     }
 
     IManipulator SaveContextualMenu()
@@ -149,9 +150,13 @@ public class DialogueGV : GraphView
 
         if (changes.movedElements != null)
         {
-
-            Debug.Log("something moved");
-
+            foreach(var element in changes.movedElements)
+            {
+                if(element.userData is GVNodeData nodeData)
+                {
+                    nodeData.GraphPosition = element.GetPosition().position;
+                }
+            }
         }
 
         return changes;

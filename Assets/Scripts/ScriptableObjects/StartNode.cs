@@ -54,4 +54,17 @@ public class StartNode : GVNodeData
 
         node.RefreshExpandedState();
     }
+
+    public override void Execute()
+    {
+        Debug.Log("StartNode was executed.");
+        if(Child is not null)
+        {
+            Child.Execute();
+        }
+        else
+        {
+            Debug.Log("StartNode dosen't connect to anything.");
+        }
+    }
 }

@@ -53,4 +53,9 @@ public class ChoicesNode : GVNodeData
     {
         return Children;
     }
+
+    public override void Execute()
+    {
+        throw new NotImplementedException();
+    }
 }

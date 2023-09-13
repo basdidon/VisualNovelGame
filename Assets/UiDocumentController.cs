@@ -12,6 +12,7 @@ public class UiDocumentController : MonoBehaviour
     VisualElement root;
 
     [field: SerializeField] public DialoguesData DialoguesData { get; set; }
+    [field: SerializeField] public DialogueTree DialogueTree { get; set; }
 
     // VisualElements
     Button ChatButton { get; set; }
@@ -53,7 +54,8 @@ public class UiDocumentController : MonoBehaviour
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
-                Charecter_1.Talk();
+                DialogueTree.Execute();
+                //Charecter_1.Talk();
                
             };
 

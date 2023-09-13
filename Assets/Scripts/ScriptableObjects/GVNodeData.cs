@@ -13,6 +13,11 @@ public abstract class GVNodeData : ScriptableObject
     public abstract string InputPortGuid { get; }
     public abstract string[] OutputPortGuids { get; }
 
+    // Ui Controller
+    public UiDocumentController UDC => UiDocumentController.Instance;
+    public DialogueUiController DialogueUC => UDC.DialogueUiController;
+    public ChoicesPickerUiController ChoicesPickerUC => UDC.ChoicesPickerUiController;
+
     public virtual void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
         Id = $"{Guid.NewGuid()}";
@@ -39,4 +44,5 @@ public abstract class GVNodeData : ScriptableObject
     public abstract void AddChild(GVNodeData child);
     public abstract void RemoveChild(GVNodeData child);
     public abstract IEnumerable<GVNodeData> GetChildren();
+    public abstract void Execute();
 }

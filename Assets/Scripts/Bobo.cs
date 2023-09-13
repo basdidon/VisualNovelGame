@@ -17,6 +17,7 @@ public class Bobo : Charecter
 
     public override void Talk()
     {
+        /*
         TalkCount++;
         DialogueUC.DialoguesData = HelloDialogue;
         DialogueUC.Display();
@@ -50,6 +51,6 @@ public class Bobo : Charecter
 
             ChoicesPickerUC.SetChoices(choices.ToArray());
             ChoicesPickerUC.Display();
-        };
+        };*/
     }
 }

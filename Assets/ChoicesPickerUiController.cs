@@ -9,6 +9,7 @@ public interface IUiController
 {
     public void Display();
     public void Hide();
+    public bool IsDisplay { get; }
 }
 
 public class Choice
@@ -26,6 +27,8 @@ public class Choice
 public class ChoicesPickerUiController : IUiController
 {
     VisualElement Root { get; set; }
+
+    public bool IsDisplay => Root.style.display == DisplayStyle.Flex;
 
     public ChoicesPickerUiController(VisualElement root)
     {

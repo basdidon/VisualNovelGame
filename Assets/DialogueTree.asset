@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8061066878469612378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
+  m_Name: StartNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: d6e42f01-019a-4387-9849-56189f288db2
+  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  <Child>k__BackingField: {fileID: 7687472090225995295}
+  outputPortGuid: 17681768-856c-416a-93cd-95416da201cc
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c37504b9650c4424d99fa6c7058fd250, type: 3}
+  m_Name: DialogueTree
+  m_EditorClassIdentifier: 
+  <Nodes>k__BackingField:
+  - {fileID: -8061066878469612378}
+  - {fileID: 7687472090225995295}
+  <Edges>k__BackingField:
+  - <From>k__BackingField: 17681768-856c-416a-93cd-95416da201cc
+    <To>k__BackingField: b3702e6e-b163-4a20-a123-786177a29157
+    <Id>k__BackingField: cee777f4-5480-46d2-ac68-84711639fc5d
+--- !u!114 &7656770287107900115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 9decc556-9ba1-4fe9-9c82-681a49c165c9
+  <GraphPosition>k__BackingField: {x: 457, y: 166}
+  inputPortGuid: 
+  outputPortGuid: 
+  <TextLine>k__BackingField: []
+  <Child>k__BackingField: {fileID: 0}
+--- !u!114 &7687472090225995295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 152dd08a-18a8-4b9d-9294-a59302f892fa
+  <GraphPosition>k__BackingField: {x: 444, y: 0}
+  inputPortGuid: b3702e6e-b163-4a20-a123-786177a29157
+  outputPortGuid: 16d6cf02-acd1-4486-83b7-f78dd98df397
+  <TextLine>k__BackingField:
+  - 
+  - 
+  - 
+  <Child>k__BackingField: {fileID: 0}
