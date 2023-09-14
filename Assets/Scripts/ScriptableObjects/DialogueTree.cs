@@ -8,7 +8,6 @@ using UnityEditor.Callbacks;
 using System.IO;
 using System.Reflection;
 
-//[CreateAssetMenu(menuName = "DialoguesTree")]
 public class DialogueTree: ScriptableObject
 {
     [field: SerializeField] public List<GVNodeData> Nodes { get; private set; } = new();
@@ -37,7 +36,8 @@ public class DialogueTree: ScriptableObject
         var currentDirectory = GetCurrentProjectBrowserDirectory();
         Debug.Log(AssetDatabase.GenerateUniqueAssetPath($"{currentDirectory}/DialogueTree.asset"));
         AssetDatabase.CreateAsset(tree, AssetDatabase.GenerateUniqueAssetPath($"{currentDirectory}/DialogueTree.asset"));
-
+        EditorUtility.SetDirty(tree);
+        AssetDatabase.SaveAssets();
         NodeFactory.CreateNode<StartNode>(Vector2.zero,tree);
     }
 

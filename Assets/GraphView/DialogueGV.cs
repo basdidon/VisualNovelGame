@@ -37,6 +37,7 @@ public class DialogueGV : GraphView
                 throw new Exception($"Unexpected asset type. {obj.GetType()}");
         }
         // create edges
+        
         Tree.Edges.ForEach((edgeData) =>
         {
             Port outputPort = GetPortByGuid(edgeData.From);
@@ -123,7 +124,8 @@ public class DialogueGV : GraphView
 
                 Tree.Edges.Add(new EdgeData(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey));
                 outputNode.AddChild(inputNode);
-                    
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
         }
 
@@ -143,7 +145,7 @@ public class DialogueGV : GraphView
                     GVNodeData toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
                     Tree.Nodes.Remove(toRemoveNode);
                     AssetDatabase.RemoveObjectFromAsset(toRemoveNode);
-                    AssetDatabase.SaveAssets();
+                    //AssetDatabase.SaveAssets();
                 }
             }
         }

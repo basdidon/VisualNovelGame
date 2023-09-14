@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,7 @@ public class DialogueNode : GVNodeData
     public int MaxLine => 3;
     public int MaxTextLength => 25;
 
+    public int a = 10;
     [SerializeField] string inputPortGuid;
     public override string InputPortGuid => inputPortGuid;
     [SerializeField] string outputPortGuid;
@@ -28,6 +30,19 @@ public class DialogueNode : GVNodeData
         {
             TextLine[i] = string.Empty;
         }
+
+        inputPortGuid = Guid.NewGuid().ToString();
+        outputPortGuid = Guid.NewGuid().ToString();
+        //AssetDatabase.SaveAssetIfDirty(this);
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log("DialogueNode Init");
+        /*
+        string path = AssetDatabase.GetAssetPath(this);
+        DialogueNode nodeData = AssetDatabase.LoadAssetAtPath<DialogueNode>(path);
+        Debug.Log($"{nodeData.InputPortGuid} vs {inputPortGuid}");
+        Debug.Log($"{nodeData.OutputPortGuids[0]} vs {outputPortGuid}");*/
     }
 
     void ValidateTextLine(InputEvent ev,int lineIdx)
@@ -44,14 +59,12 @@ public class DialogueNode : GVNodeData
     {
         // output port
         Port outputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
-        outputPortGuid ??= outputPort.viewDataKey;
         outputPort.viewDataKey = outputPortGuid;
         outputPort.portName = "Output";
         node.outputContainer.Add(outputPort);
 
         // input port
         Port inputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(bool));
-        inputPortGuid ??= inputPort.viewDataKey;
         inputPort.viewDataKey = inputPortGuid;
         inputPort.portName = "input";
         node.inputContainer.Add(inputPort);
@@ -64,9 +77,10 @@ public class DialogueNode : GVNodeData
         {
             VisualElement container = new();
             Label lineLabel = new() { text = $"line_{lineIdx+1}" };
-            TextField lineTxt = new()
+            TextField lineTxt = new();
+            if(TextLine != null && lineIdx < TextLine.Length)
             {
-                value = TextLine[lineIdx] ?? string.Empty,
+                lineTxt.value = TextLine[lineIdx];
             };
             lineTxt.RegisterCallback<InputEvent>((ev)=>ValidateTextLine(ev,lineIdx));
 
@@ -99,7 +113,7 @@ public class DialogueNode : GVNodeData
     {
         return new GVNodeData[] { Child };
     }
-
+    
     void OnValidate()
     {
         for (int i = 0; i < TextLine.Length; i++)
@@ -109,13 +123,14 @@ public class DialogueNode : GVNodeData
                 TextLine[i] = TextLine[i].Substring(0, MaxTextLength);
             }
         }
-
+        /*
         string[] _textLine = TextLine;              // can't pass property into ref parmeter, so i changed it to field
         if (TextLine.Length != MaxLine)
         {
             Array.Resize(ref _textLine, MaxLine);
             return;
-        }
+        }*/
+        AssetDatabase.SaveAssetIfDirty(this);
     }
 
     public override void Execute()

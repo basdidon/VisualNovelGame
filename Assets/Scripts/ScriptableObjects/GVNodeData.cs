@@ -18,19 +18,29 @@ public abstract class GVNodeData : ScriptableObject
     public DialogueUiController DialogueUC => UDC.DialogueUiController;
     public ChoicesPickerUiController ChoicesPickerUC => UDC.ChoicesPickerUiController;
 
+    // debug
+    [field:SerializeField] public int beforeSave { get; private set; }
+    [field:SerializeField] public int beforeSave2 { get; private set; }
+    [field:SerializeField] public int afterSave { get; private set; }
+
     public virtual void Initialize(Vector2 position,DialogueTree dialogueTree)
     {
         Id = $"{Guid.NewGuid()}";
         GraphPosition = position;
         name = GetType().Name;
+        dialogueTree.Nodes.Add(this);
         // save node asset
         AssetDatabase.AddObjectToAsset(this, dialogueTree);
-        AssetDatabase.SaveAssets();
-        dialogueTree.Nodes.Add(this);
+        EditorUtility.SetDirty(this);
+        beforeSave = 9999;
+        beforeSave2 = 9999;
+        afterSave = 9999;
+        AssetDatabase.SaveAssetIfDirty(this);
     }
 
     public virtual Node CreateNode()
     {
+        Debug.Log("Create Node");
         var node = Activator.CreateInstance<GraphViewNode>();
         node.Initialize(this);
 
