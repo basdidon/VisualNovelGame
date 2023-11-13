@@ -58,4 +58,9 @@ public class ChoicesNode : GVNodeData
     {
         throw new NotImplementedException();
     }
+
+    public override void Next()
+    {
+        throw new NotImplementedException();
+    }
 }

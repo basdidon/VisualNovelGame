@@ -49,12 +49,18 @@ public class UiDocumentController : MonoBehaviour
             ChatButton = root.Q<Button>("chat-btn");
             DialogueBox = root.Q("DialogueBox");
 
+            if (DialogueBox == null)
+                Debug.Log("asdafs");
+            if (TapInputAction.action == null)
+                Debug.Log("asfakgjhsja");
+
             DialogueUiController = new DialogueUiController(DialogueBox, TapInputAction.action);
             DialogueBox.userData = DialogueUiController;
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
-                DialogueTree.Execute();
+                DialogueManager.Instance.StartDialogue();
+                //DialogueTree.Execute();
                 //Charecter_1.Talk();
                
             };

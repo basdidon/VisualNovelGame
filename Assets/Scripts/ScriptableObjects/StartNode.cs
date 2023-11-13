@@ -62,11 +62,16 @@ public class StartNode : GVNodeData
         Debug.Log("StartNode was executed.");
         if(Child is not null)
         {
-            Child.Execute();
+            Next();
         }
         else
         {
             Debug.Log("StartNode dosen't connect to anything.");
         }
+    }
+
+    public override void Next()
+    {
+        DialogueManager.Instance.CurrentNode = Child;
     }
 }

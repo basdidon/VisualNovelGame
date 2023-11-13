@@ -11,7 +11,6 @@ public class DialogueNode : GVNodeData
     public int MaxLine => 3;
     public int MaxTextLength => 25;
 
-    public int a = 10;
     [SerializeField] string inputPortGuid;
     public override string InputPortGuid => inputPortGuid;
     [SerializeField] string outputPortGuid;
@@ -33,16 +32,9 @@ public class DialogueNode : GVNodeData
 
         inputPortGuid = Guid.NewGuid().ToString();
         outputPortGuid = Guid.NewGuid().ToString();
-        //AssetDatabase.SaveAssetIfDirty(this);
         EditorUtility.SetDirty(this);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log("DialogueNode Init");
-        /*
-        string path = AssetDatabase.GetAssetPath(this);
-        DialogueNode nodeData = AssetDatabase.LoadAssetAtPath<DialogueNode>(path);
-        Debug.Log($"{nodeData.InputPortGuid} vs {inputPortGuid}");
-        Debug.Log($"{nodeData.OutputPortGuids[0]} vs {outputPortGuid}");*/
     }
 
     void ValidateTextLine(InputEvent ev,int lineIdx)
@@ -129,19 +121,28 @@ public class DialogueNode : GVNodeData
         {
             Array.Resize(ref _textLine, MaxLine);
             return;
-        }*/
-        AssetDatabase.SaveAssetIfDirty(this);
+        }
+        */
+        EditorUtility.SetDirty(this);
+        //AssetDatabase.SaveAssetIfDirty(this);
+        AssetDatabase.SaveAssets();
     }
 
     public override void Execute()
     {
-        DialogueUC.DisplayDialogue(this, OnDialogueDisplayCompleteHandle);
+       // DialogueUC.DisplayDialogue(this, OnDialogueDisplayCompleteHandle);
         /*
         DialogueUC.DialogueNode = this;
         DialogueUC.OnDisplayCompletedEvent += OnDialogueDisplayCompleteHandle;
         DialogueUC.Display();*/
     }
 
+    public override void Next()
+    {
+        DialogueManager.Instance.CurrentNode = Child;
+    }
+
+    /*
     void OnDialogueDisplayCompleteHandle()
     {
         DialogueUC.OnDisplayCompletedEvent -= OnDialogueDisplayCompleteHandle;
@@ -154,5 +155,5 @@ public class DialogueNode : GVNodeData
             Debug.Log($"{Child.GetType()} : {(Child as DialogueNode).TextLine[0]}");
             Child.Execute();
         }
-    }
+    }*/
 }

@@ -5,6 +5,7 @@ using UnityEditor;
 public class DialogueEditorWindow : EditorWindow
 {
     DialogueGV graphView;
+
     [MenuItem("Window/Dialogue/Dialogue GraphView")]
     public static void Open()
     {
@@ -18,5 +19,12 @@ public class DialogueEditorWindow : EditorWindow
         graphView = new(path);
         graphView.StretchToParentSize();
         rootVisualElement.Add(graphView);
+    }
+
+    private void OnDestroy()
+    {
+        EditorUtility.SetDirty(graphView.Tree);
+        AssetDatabase.SaveAssetIfDirty(graphView.Tree);
+        Debug.Log("saved, i think");
     }
 }

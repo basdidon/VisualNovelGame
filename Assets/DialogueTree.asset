@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8544162684455840491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 7414ae48-ddb0-4a94-92dd-812a22264bf8
+  <GraphPosition>k__BackingField: {x: 658, y: 128}
+  inputPortGuid: a1487d89-8a2a-423d-9298-020aebaede63
+  outputPortGuid: 60e3b5ba-89e0-4fc0-8ab7-325ec67de572
+  <TextLine>k__BackingField:
+  - a
+  - 
+  - 
+  <Child>k__BackingField: {fileID: 6660267185830406899}
 --- !u!114 &-5214980262395997372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,36 +35,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 194241cb-a032-4f5b-bf54-385a42aff2aa
   <GraphPosition>k__BackingField: {x: 0, y: 0}
-  <beforeSave>k__BackingField: 9999
-  <beforeSave2>k__BackingField: 9999
-  <afterSave>k__BackingField: 9999
-  <Child>k__BackingField: {fileID: 0}
+  <Child>k__BackingField: {fileID: 1028080080495804692}
   outputPortGuid: 54c80825-0a0d-4720-b8c6-466465807431
---- !u!114 &-1416708478383191054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
-  m_Name: DialogueNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: f3831593-8a55-4ff6-9f8f-0e6ec65287ec
-  <GraphPosition>k__BackingField: {x: 931, y: 329}
-  <beforeSave>k__BackingField: 9999
-  <beforeSave2>k__BackingField: 9999
-  <afterSave>k__BackingField: 9999
-  a: 10
-  inputPortGuid: 10cbc297-0e9c-49e2-ae72-1763ecb21024
-  outputPortGuid: 3d7cce3b-54cf-441e-90c2-c16aa414bc42
-  <TextLine>k__BackingField:
-  - 
-  - 
-  - 
-  <Child>k__BackingField: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,8 +52,18 @@ MonoBehaviour:
   <Nodes>k__BackingField:
   - {fileID: -5214980262395997372}
   - {fileID: 1028080080495804692}
-  - {fileID: -1416708478383191054}
-  <Edges>k__BackingField: []
+  - {fileID: -8544162684455840491}
+  - {fileID: 6660267185830406899}
+  <Edges>k__BackingField:
+  - <From>k__BackingField: 54c80825-0a0d-4720-b8c6-466465807431
+    <To>k__BackingField: 6e4127de-9c3d-4183-80d8-8c79bfe432b3
+    <Id>k__BackingField: 08186624-ef7b-4265-b044-e9e24b12b538
+  - <From>k__BackingField: a692632b-477a-4eaf-bd61-91d97101f657
+    <To>k__BackingField: a1487d89-8a2a-423d-9298-020aebaede63
+    <Id>k__BackingField: ba1da5f4-5323-42ac-9899-ac496195f6e9
+  - <From>k__BackingField: 60e3b5ba-89e0-4fc0-8ab7-325ec67de572
+    <To>k__BackingField: 412f180e-7d1a-499e-8742-35a01cb05e7d
+    <Id>k__BackingField: f884983b-5fab-4b7c-a055-0c8d309c0cdc
 --- !u!114 &1028080080495804692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,15 +77,32 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 6a7a390d-21e2-40ec-88f4-dbf3faca9195
-  <GraphPosition>k__BackingField: {x: 576, y: 238}
-  <beforeSave>k__BackingField: 9999
-  <beforeSave2>k__BackingField: 9999
-  <afterSave>k__BackingField: 9999
-  a: 10
+  <GraphPosition>k__BackingField: {x: 319, y: 128}
   inputPortGuid: 6e4127de-9c3d-4183-80d8-8c79bfe432b3
   outputPortGuid: a692632b-477a-4eaf-bd61-91d97101f657
   <TextLine>k__BackingField:
-  - 
+  - ',cfkncg'
+  - dgksgksk
+  - fdjsk
+  <Child>k__BackingField: {fileID: -8544162684455840491}
+--- !u!114 &6660267185830406899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 3b38c3c9-96f3-4098-a78f-9f4bf0030a26
+  <GraphPosition>k__BackingField: {x: 987, y: 90}
+  inputPortGuid: 412f180e-7d1a-499e-8742-35a01cb05e7d
+  outputPortGuid: 4223fbd8-0a91-4a65-8df4-20c2ddbd0627
+  <TextLine>k__BackingField:
+  - ssfkjajfk
   - 
   - 
   <Child>k__BackingField: {fileID: 0}

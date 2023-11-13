@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public class DialogueGV : GraphView
 {
-    DialogueTree Tree { get; set; }
+    public DialogueTree Tree { get; private set; }
     public GraphViewNode StartNode { get; private set; }
 
     public DialogueGV(string assetPath)
@@ -122,9 +122,11 @@ public class DialogueGV : GraphView
                 if (inputNode == null)
                     throw new Exception("inputNode == null");
 
-                Tree.Edges.Add(new EdgeData(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey));
+                EdgeData edgeData = new EdgeData(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey);
+                Tree.Edges.Add(edgeData);
                 outputNode.AddChild(inputNode);
-                AssetDatabase.SaveAssets();
+                EditorUtility.SetDirty(Tree);
+                AssetDatabase.SaveAssetIfDirty(Tree);
                 AssetDatabase.Refresh();
             }
         }
@@ -167,6 +169,9 @@ public class DialogueGV : GraphView
     void SaveGraph()
     {
         Debug.Log("Save");
+        
+        EditorUtility.SetDirty(Tree);
+        AssetDatabase.SaveAssets();
         /*
         HashSet<GraphElement> set = new();
         StartNode.CollectElements(set, (element) => true);

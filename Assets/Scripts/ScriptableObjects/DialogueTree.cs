@@ -13,14 +13,11 @@ public class DialogueTree: ScriptableObject
     [field: SerializeField] public List<GVNodeData> Nodes { get; private set; } = new();
     [field: SerializeField] public List<EdgeData> Edges { get; private set; } = new();
 
-    public void Execute()
-    {
-        var startNode = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this))
+    public GVNodeData StartNode => AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this))
             .OfType<StartNode>()
             .First();
-        startNode.Execute();
-    }
 
+    #if UNITY_EDITOR
     public static string GetCurrentProjectBrowserDirectory()
     {
         Type projectWindowUtilType = typeof(ProjectWindowUtil);
@@ -64,6 +61,7 @@ public class DialogueTree: ScriptableObject
 
         return true;
     }
+    #endif
 }
 
 [Serializable]
