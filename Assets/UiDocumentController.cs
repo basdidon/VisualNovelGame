@@ -11,7 +11,6 @@ public class UiDocumentController : MonoBehaviour
 
     VisualElement root;
 
-    [field: SerializeField] public DialoguesData DialoguesData { get; set; }
     [field: SerializeField] public DialogueTree DialogueTree { get; set; }
 
     // VisualElements

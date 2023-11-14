@@ -31,6 +31,7 @@ public class ChoicesPickerUiController : IUiController
             Display();
             SetChoices(choices,callback);
         };
+        DialogueManager.Instance.OnFinish += Hide;
     }
 
     public void SetChoices(string[] choices,DialogueManager.OnCompleted<int> onSelected)

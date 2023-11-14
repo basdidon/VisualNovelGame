@@ -85,10 +85,8 @@ namespace Graphview.NodeData
             Debug.Log($"you choose : {choiceIdx}");
             if (choiceIdx >= 0 && choiceIdx < choices.Count)
             {
-                if (choiceIdx < Children.Count)
-                {
-                    DialogueManager.Instance.CurrentNode = Children[choiceIdx];
-                }
+                DialogueManager.Instance.CurrentNode = choices[choiceIdx].Child;
+                
             }
         }
 

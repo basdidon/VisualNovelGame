@@ -28,6 +28,7 @@ public class DialogueManager : MonoBehaviour
             }
             else if(CurrentNode == null)
             {
+                Debug.Log("finist");
                 OnFinish?.Invoke();
             }
         }

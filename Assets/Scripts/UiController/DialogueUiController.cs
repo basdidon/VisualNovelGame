@@ -55,6 +55,7 @@ public class DialogueUiController: IUiController
         };
 
         DialogueManager.Instance.OnNewDialogue += OnNewDialogueHandle;
+        DialogueManager.Instance.OnSelectChoices += (_,_)=> Hide();
         DialogueManager.Instance.OnFinish += Hide;
     }
 
