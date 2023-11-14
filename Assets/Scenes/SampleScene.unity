@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814483ccf7130f242bb459f464c75e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 08b2b5733a7677f4fb82929ade69d469, type: 2}
+  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 5778443f7d078f64c869759b46c35027, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

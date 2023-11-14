@@ -5,6 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Graphview.NodeData;
 
 public class DialogueGV : GraphView
 {
@@ -38,7 +39,7 @@ public class DialogueGV : GraphView
         }
         // create edges
         
-        Tree.Edges.ForEach((edgeData) =>
+        foreach(var edgeData in Tree.Edges)
         {
             Port outputPort = GetPortByGuid(edgeData.From);
             Port inputPort = GetPortByGuid(edgeData.To);
@@ -51,7 +52,7 @@ public class DialogueGV : GraphView
             Edge edge = outputPort.ConnectTo(inputPort);
             edge.viewDataKey = edgeData.Id;
             AddElement(edge);
-        });
+        }
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -122,12 +123,8 @@ public class DialogueGV : GraphView
                 if (inputNode == null)
                     throw new Exception("inputNode == null");
 
-                EdgeData edgeData = new EdgeData(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey);
-                Tree.Edges.Add(edgeData);
-                outputNode.AddChild(inputNode);
-                EditorUtility.SetDirty(Tree);
-                AssetDatabase.SaveAssetIfDirty(Tree);
-                AssetDatabase.Refresh();
+                EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey);
+                Tree.AddEdge(edgeData);
             }
         }
 
@@ -139,7 +136,7 @@ public class DialogueGV : GraphView
                 {
                     Debug.Log("Edge was removed.");
                     EdgeData toRemoveEdgeData = Tree.Edges.FirstOrDefault(_edge => _edge.Id == edge.viewDataKey);
-                    Tree.Edges.Remove(toRemoveEdgeData);
+                    Tree.RemoveEdge(toRemoveEdgeData);
                 }
                 else if (element is Node node)
                 {
@@ -172,15 +169,6 @@ public class DialogueGV : GraphView
         
         EditorUtility.SetDirty(Tree);
         AssetDatabase.SaveAssets();
-        /*
-        HashSet<GraphElement> set = new();
-        StartNode.CollectElements(set, (element) => true);
-        Debug.Log(set.Count);
-        foreach(Edge item in set)
-        {
-            Debug.Log(item.input.node.title);
-        }
-        */
         Debug.Log(GetPortByGuid("sos").node.title);
 
     }

@@ -49,11 +49,6 @@ public class UiDocumentController : MonoBehaviour
             ChatButton = root.Q<Button>("chat-btn");
             DialogueBox = root.Q("DialogueBox");
 
-            if (DialogueBox == null)
-                Debug.Log("asdafs");
-            if (TapInputAction.action == null)
-                Debug.Log("asfakgjhsja");
-
             DialogueUiController = new DialogueUiController(DialogueBox, TapInputAction.action);
             DialogueBox.userData = DialogueUiController;
 

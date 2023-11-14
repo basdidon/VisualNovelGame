@@ -12,18 +12,6 @@ public interface IUiController
     public bool IsDisplay { get; }
 }
 
-public class Choice
-{
-    public string Text { get; private set; }
-    public Action Callback { get; private set; }
-
-    public Choice(string _text, Action callback)
-    {
-        Text = _text;
-        Callback = callback;
-    }
-}
-
 public class ChoicesPickerUiController : IUiController
 {
     VisualElement Root { get; set; }
@@ -33,9 +21,19 @@ public class ChoicesPickerUiController : IUiController
     public ChoicesPickerUiController(VisualElement root)
     {
         Root = root;
+
+        DialogueManager.Instance.OnNewDialogue += (_,_) =>
+        {
+            Hide();
+        };
+        DialogueManager.Instance.OnSelectChoices += (choices,callback) =>
+        {
+            Display();
+            SetChoices(choices,callback);
+        };
     }
 
-    public void SetChoices(Choice[] choices)
+    public void SetChoices(string[] choices,DialogueManager.OnCompleted<int> onSelected)
     {
         // clear old choices
         while (Root[0].childCount > 0)
@@ -49,8 +47,8 @@ public class ChoicesPickerUiController : IUiController
             Button btn = new();
             btn.AddToClassList("choice-btn");       // style
             Root[0].Add(btn);                       // add to root
-            btn.text = choices[i].Text;
-            btn.clicked += choices[i].Callback;
+            btn.text = choices[i];
+            btn.clicked += () => onSelected(btn.parent.IndexOf(btn));
         }
     }
 

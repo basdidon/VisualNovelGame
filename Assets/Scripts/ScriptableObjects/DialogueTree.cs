@@ -5,17 +5,71 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
-using System.IO;
 using System.Reflection;
+using Graphview.NodeData;
 
 public class DialogueTree: ScriptableObject
 {
     [field: SerializeField] public List<GVNodeData> Nodes { get; private set; } = new();
-    [field: SerializeField] public List<EdgeData> Edges { get; private set; } = new();
+    [SerializeField] List<EdgeData> edges = new();
+    public IReadOnlyList<EdgeData> Edges => edges;
 
-    public GVNodeData StartNode => AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this))
+    public StartNode StartNode => AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this))
             .OfType<StartNode>()
             .First();
+
+    public void AddEdge(EdgeData edge)
+    {
+        Debug.Log("add edge 1");
+
+        var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
+        var toIdx = Nodes.FindIndex(node => node.InputPortGuid == edge.To);
+
+        Debug.Log($"{fromIdx} -> {toIdx}");
+
+        if (fromIdx >= 0 && toIdx >= 0)
+        {
+
+            Debug.Log("add edge 2");
+            edges.Add(edge);
+
+            if (Nodes[fromIdx] is ChoicesNode choicesNode)
+            {
+                choicesNode.Connect(edge.From, Nodes[toIdx]);
+            }
+
+            Nodes[fromIdx].AddChild(Nodes[toIdx]);
+        }
+
+        SaveChanges();
+    }
+
+    public void RemoveEdge(EdgeData edge)
+    {
+        var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
+        var toIdx = Nodes.FindIndex(node => node.InputPortGuid == edge.To);
+
+        if (fromIdx >= 0 && toIdx >= 0)
+        {
+            edges.Remove(edge);
+
+            if (Nodes[fromIdx] is ChoicesNode choicesNode)
+            {
+                choicesNode.Disconnect(edge.From);
+            }
+
+            Nodes[fromIdx].RemoveChild(Nodes[toIdx]);
+        }
+
+        SaveChanges();
+    }
+
+    public void SaveChanges()
+    {
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssetIfDirty(this);
+        AssetDatabase.Refresh();
+    }
 
     #if UNITY_EDITOR
     public static string GetCurrentProjectBrowserDirectory()
@@ -38,20 +92,23 @@ public class DialogueTree: ScriptableObject
         NodeFactory.CreateNode<StartNode>(Vector2.zero,tree);
     }
 
-    [OnOpenAsset(1)]
+    [OnOpenAsset(0)]
     public static bool OpenDialogueEditorWindow(int instanceID, int line)
     {
-        bool windowIsOpen = EditorWindow.HasOpenInstances<DialogueEditorWindow>();
-        if (!windowIsOpen)
-            EditorWindow.CreateWindow<DialogueEditorWindow>();
-        else
-            EditorWindow.FocusWindowIfItsOpen<DialogueEditorWindow>();
+        if (EditorUtility.InstanceIDToObject(instanceID) is DialogueTree)
+        {
+            bool windowIsOpen = EditorWindow.HasOpenInstances<DialogueEditorWindow>();
+            if (!windowIsOpen)
+                EditorWindow.CreateWindow<DialogueEditorWindow>();
+            else
+                EditorWindow.FocusWindowIfItsOpen<DialogueEditorWindow>();
+        }
 
         // Window should now be open, proceed to next step to open file
         return false;
     }
 
-    [OnOpenAsset(2)]
+    [OnOpenAsset(1)]
     public static bool OpenDialogueGraphView(int instanceID, int line)
     {
         var window = EditorWindow.GetWindow<DialogueEditorWindow>();
@@ -67,9 +124,9 @@ public class DialogueTree: ScriptableObject
 [Serializable]
 public class EdgeData
 {
+    [field: SerializeField] public string Id { get; private set; }
     [field: SerializeField] public string From { get; private set; }
     [field: SerializeField] public string To { get; private set; }
-    [field: SerializeField] public string Id { get; private set; }
 
     public EdgeData(string from,string to,string id)
     {

@@ -14,9 +14,6 @@ public class DialogueUiController: IUiController
     Label SpeakerNameLabel { get; set; }
     Label[] LineLabels { get; set; }
 
-
-    DialogueNode DialogueNode { get; set; }
-
     // Input
     InputAction TapAction { get; set; }
 
@@ -52,7 +49,6 @@ public class DialogueUiController: IUiController
             }
             else
             {
-
                 //DialogueManager.Instance.Next();
                 OnDisplayCompletedEvent?.Invoke();
             }
