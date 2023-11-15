@@ -24,7 +24,12 @@ public class DialogueManager : MonoBehaviour
             }
             else if(CurrentNode is ChoicesNode choicesNode)
             {
-                OnSelectChoices?.Invoke(choicesNode.Choices,choicesNode.OnCompleted);
+                ChoicesNodeOutput output = new() { 
+                    SpeakerName = choicesNode.SpeakerName,
+                    QuestionText = choicesNode.QuestionText,
+                    ChoicesText = choicesNode.Choices
+                };
+                OnSelectChoices?.Invoke(output,choicesNode.OnCompleted);
             }
             else if(CurrentNode == null)
             {
@@ -57,6 +62,6 @@ public class DialogueManager : MonoBehaviour
     public delegate void OnCompleted<T>(T obj);
 
     public event Action<string[], OnCompleted> OnNewDialogue;
-    public event Action<string[], OnCompleted<int>> OnSelectChoices;
+    public event Action<ChoicesNodeOutput, OnCompleted<int>> OnSelectChoices;
     public event Action OnFinish;
 }

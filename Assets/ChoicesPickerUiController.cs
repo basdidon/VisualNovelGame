@@ -29,7 +29,7 @@ public class ChoicesPickerUiController : IUiController
         DialogueManager.Instance.OnSelectChoices += (choices,callback) =>
         {
             Display();
-            SetChoices(choices,callback);
+            SetChoices(choices.ChoicesText,callback);
         };
         DialogueManager.Instance.OnFinish += Hide;
     }
@@ -39,7 +39,7 @@ public class ChoicesPickerUiController : IUiController
         // clear old choices
         while (Root[0].childCount > 0)
         {
-            Debug.Log("Remove()");
+            //Debug.Log("Remove()");
             Root[0].RemoveAt(0);
         }
 
@@ -49,7 +49,10 @@ public class ChoicesPickerUiController : IUiController
             btn.AddToClassList("choice-btn");       // style
             Root[0].Add(btn);                       // add to root
             btn.text = choices[i];
-            btn.clicked += () => onSelected(btn.parent.IndexOf(btn));
+            btn.clicked += () => {
+                onSelected?.Invoke(btn.parent.IndexOf(btn));
+                Debug.Log(btn.parent.IndexOf(btn));
+            };
         }
     }
 

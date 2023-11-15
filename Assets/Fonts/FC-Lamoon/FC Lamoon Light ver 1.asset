@@ -63,6 +63,24 @@ MonoBehaviour:
   m_Version: 1.1.0
   m_Material: {fileID: 6262236635908016411}
   m_SourceFontFileGUID: 35c6bdfb8d9d90847af16b98fbff9b9b
+  m_fontAssetCreationEditorSettings:
+    sourceFontFileGUID: a43dd04a3f51e6f4f8a475a5153cff6f
+    faceIndex: 0
+    pointSizeSamplingMode: 0
+    pointSize: 64
+    padding: 5
+    paddingMode: 2
+    packingMode: 0
+    atlasWidth: 512
+    atlasHeight: 512
+    characterSetSelectionMode: 1
+    characterSequence: 32 - 126, 160 - 255, 8192 - 8303, 8364, 8482, 9633
+    referencedFontAssetGUID: 6a84ad8da673c1d49b18b6fc04d37ab5
+    referencedTextAssetGUID: 
+    fontStyle: 0
+    fontStyleModifier: 0
+    renderMode: 4165
+    includeFontFeatures: 0
   m_SourceFontFile: {fileID: 0}
   m_SourceFontFilePath: 
   m_AtlasPopulationMode: 2
@@ -4141,6 +4159,14 @@ MonoBehaviour:
     m_Unicode: 8482
     m_GlyphIndex: 123
     m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 3592
+    m_GlyphIndex: 138
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 3658
+    m_GlyphIndex: 204
+    m_Scale: 1
   m_AtlasTextures:
   - {fileID: -3853352959457934828}
   m_AtlasTextureIndex: 0
@@ -5485,24 +5511,6 @@ MonoBehaviour:
     m_MarkToBaseAdjustmentRecords: []
     m_MarkToMarkAdjustmentRecords: []
   m_FallbackFontAssetTable: []
-  m_fontAssetCreationEditorSettings:
-    sourceFontFileGUID: a43dd04a3f51e6f4f8a475a5153cff6f
-    faceIndex: 0
-    pointSizeSamplingMode: 0
-    pointSize: 64
-    padding: 5
-    paddingMode: 2
-    packingMode: 0
-    atlasWidth: 512
-    atlasHeight: 512
-    characterSetSelectionMode: 1
-    characterSequence: 32 - 126, 160 - 255, 8192 - 8303, 8364, 8482, 9633
-    referencedFontAssetGUID: 6a84ad8da673c1d49b18b6fc04d37ab5
-    referencedTextAssetGUID: 
-    fontStyle: 0
-    fontStyleModifier: 0
-    renderMode: 4165
-    includeFontFeatures: 0
   m_FontWeightTable:
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}

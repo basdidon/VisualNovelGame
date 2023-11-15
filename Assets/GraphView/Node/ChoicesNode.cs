@@ -14,6 +14,9 @@ namespace Graphview.NodeData
 
         public override string[] OutputPortGuids => choices.Select(choice => choice.OutputPortGuid).ToArray();
 
+        public string SpeakerName { get; set; }
+        public string QuestionText { get; set; }
+
         [SerializeField] List<Choice> choices;
         public string[] Choices => choices.Select(choice => choice.Name).ToArray();
 
@@ -29,6 +32,18 @@ namespace Graphview.NodeData
             Button addCondition = new() { text = "Add Choice" };
             addCondition.clicked += () => OnAddChoice(node);
             node.mainContainer.Insert(1, addCondition);
+
+            SpeakerName ??= "???";
+            QuestionText ??= string.Empty;
+
+            TextField speakerTxtField = new() { value = SpeakerName };
+            TextField questionTxtField = new() { value = QuestionText };
+
+            node.mainContainer.Insert(1, speakerTxtField);
+            node.mainContainer.Insert(2, questionTxtField);
+
+            speakerTxtField.RegisterCallback<InputEvent>(ev => SpeakerName = ev.newData);
+            questionTxtField.RegisterCallback<InputEvent>(ev => QuestionText = ev.newData);
 
             DrawInputPort(node);
 
@@ -131,5 +146,12 @@ namespace Graphview.NodeData
             }
 
         }
+    }
+
+    public struct ChoicesNodeOutput
+    {
+        public string SpeakerName { get; set; }
+        public string QuestionText { get; set; }
+        public string[] ChoicesText { get; set; }
     }
 }

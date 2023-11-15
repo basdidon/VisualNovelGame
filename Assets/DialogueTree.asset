@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: a7ed866b-070e-46ba-aca7-4879483e3bb6
-  <GraphPosition>k__BackingField: {x: 353, y: -30}
+  <GraphPosition>k__BackingField: {x: 349, y: -10}
   outputPortGuid: 9d2d0c32-a398-4499-b246-c4113010b636
   <TextLine>k__BackingField:
   - "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35\u0E08\u0E49\u0E32 \u0E09\u0E31\u0E19\u0E0A\u0E37\u0E48\u0E2D\u0E27\u0E48\u0E32"
@@ -33,7 +33,7 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: b3863254-0e4f-4abd-bf23-1df5a6ede73d
-  <GraphPosition>k__BackingField: {x: 646, y: -38}
+  <GraphPosition>k__BackingField: {x: 622, y: 179}
   outputPortGuid: 594369a1-8e96-4fd2-9ae7-f8fe7ae2a07f
   <TextLine>k__BackingField:
   - aswd
@@ -53,16 +53,18 @@ MonoBehaviour:
   m_Name: ChoicesNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: eed0fa38-072f-4f0f-b099-d3bd0606ad8e
-  <GraphPosition>k__BackingField: {x: 996, y: -27}
-  <Children>k__BackingField: []
+  <GraphPosition>k__BackingField: {x: 349, y: 453}
+  <Children>k__BackingField:
+  - {fileID: -1941877331721576661}
+  - {fileID: -1941877331721576661}
   choices:
   - <Name>k__BackingField: "\u0E2B\u0E4A\u0E30 \u0E2D\u0E30\u0E44\u0E23\u0E19\u0E30"
     <OutputPortGuid>k__BackingField: df9f51bf-57e1-475a-8e8d-93f5bed3c7f4
-    <Child>k__BackingField: {fileID: 0}
+    <Child>k__BackingField: {fileID: -1941877331721576661}
   - <Name>k__BackingField: "\u0E02\u0E2D\u0E2D\u0E35\u0E01\u0E23\u0E2D\u0E1A"
     <OutputPortGuid>k__BackingField: 64b85b91-3017-4c32-8b76-ca26ef6fe029
-    <Child>k__BackingField: {fileID: 0}
-  - <Name>k__BackingField: (Leave)
+    <Child>k__BackingField: {fileID: -1941877331721576661}
+  - <Name>k__BackingField: "\u0E07\u0E31\u0E49\u0E19\u0E42\u0E2D\u0E40\u0E04\u0E1A\u0E32\u0E22"
     <OutputPortGuid>k__BackingField: 46fcb842-b8c8-41b2-a274-636179e49748
     <Child>k__BackingField: {fileID: 0}
 --- !u!114 &11400000
@@ -92,6 +94,12 @@ MonoBehaviour:
   - <Id>k__BackingField: c356b522-04dc-42f3-ac58-ccce384d9030
     <From>k__BackingField: 594369a1-8e96-4fd2-9ae7-f8fe7ae2a07f
     <To>k__BackingField: eed0fa38-072f-4f0f-b099-d3bd0606ad8e
+  - <Id>k__BackingField: 42908b5d-6b2a-43e7-ba7a-d7afd891ccda
+    <From>k__BackingField: df9f51bf-57e1-475a-8e8d-93f5bed3c7f4
+    <To>k__BackingField: a7ed866b-070e-46ba-aca7-4879483e3bb6
+  - <Id>k__BackingField: 92cb51ef-33db-4b8e-912b-c882658de679
+    <From>k__BackingField: 64b85b91-3017-4c32-8b76-ca26ef6fe029
+    <To>k__BackingField: a7ed866b-070e-46ba-aca7-4879483e3bb6
 --- !u!114 &6269353458428391429
 MonoBehaviour:
   m_ObjectHideFlags: 0
