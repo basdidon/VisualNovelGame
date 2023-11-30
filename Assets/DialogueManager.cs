@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Graphview.NodeData;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -17,12 +18,22 @@ public class DialogueManager : MonoBehaviour
         {
             currentNode = value;
 
-            if (currentNode is DialogueNode dialogueNode)
+            if (CurrentNode is DialogueNode dialogueNode)
             {
-                OnNewDialogue?.Invoke(dialogueNode.TextLine,dialogueNode.Next);
+                OnNewDialogue?.Invoke(dialogueNode.TextLine,dialogueNode.OnCompleted);
+            }
+            else if(CurrentNode is ChoicesNode choicesNode)
+            {
+                ChoicesNodeOutput output = new() { 
+                    SpeakerName = choicesNode.SpeakerName,
+                    QuestionText = choicesNode.QuestionText,
+                    ChoicesText = choicesNode.Choices
+                };
+                OnSelectChoices?.Invoke(output,choicesNode.OnCompleted);
             }
             else if(CurrentNode == null)
             {
+                Debug.Log("finist");
                 OnFinish?.Invoke();
             }
         }
@@ -42,26 +53,15 @@ public class DialogueManager : MonoBehaviour
         currentNode = DialogueTree.StartNode;
     }
 
-
-    void Next()
-    {
-        if (CurrentNode == null)
-            return;
-        CurrentNode.Next();
-    }
-
     public void StartDialogue()
     {
-        CurrentNode = DialogueTree.StartNode;
-        Next();
+        DialogueTree.StartNode.Next();
     }
 
-    public event Action OnNodeCompleted;
     public delegate void OnCompleted();
-
+    public delegate void OnCompleted<T>(T obj);
 
     public event Action<string[], OnCompleted> OnNewDialogue;
-    public event Action<string[]> OnSelectChoices;
+    public event Action<ChoicesNodeOutput, OnCompleted<int>> OnSelectChoices;
     public event Action OnFinish;
-
 }

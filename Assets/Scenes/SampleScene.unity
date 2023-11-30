@@ -263,7 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdd986decf041141a6f2e2e3d24e25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialoguesData>k__BackingField: {fileID: 11400000, guid: 8eb49761b94043d44bc3712abdc76d96, type: 2}
   <DialogueTree>k__BackingField: {fileID: 11400000, guid: 08b2b5733a7677f4fb82929ade69d469, type: 2}
   <TapInputAction>k__BackingField: {fileID: 1027717850900299178, guid: ffaadf679290887408afd991aeac8720, type: 3}
 --- !u!114 &1033439912
@@ -339,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814483ccf7130f242bb459f464c75e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 08b2b5733a7677f4fb82929ade69d469, type: 2}
+  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 8bc252285b901414699a5ac3e1b74188, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

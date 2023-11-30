@@ -11,7 +11,6 @@ public class UiDocumentController : MonoBehaviour
 
     VisualElement root;
 
-    [field: SerializeField] public DialoguesData DialoguesData { get; set; }
     [field: SerializeField] public DialogueTree DialogueTree { get; set; }
 
     // VisualElements
@@ -48,11 +47,6 @@ public class UiDocumentController : MonoBehaviour
 
             ChatButton = root.Q<Button>("chat-btn");
             DialogueBox = root.Q("DialogueBox");
-
-            if (DialogueBox == null)
-                Debug.Log("asdafs");
-            if (TapInputAction.action == null)
-                Debug.Log("asfakgjhsja");
 
             DialogueUiController = new DialogueUiController(DialogueBox, TapInputAction.action);
             DialogueBox.userData = DialogueUiController;

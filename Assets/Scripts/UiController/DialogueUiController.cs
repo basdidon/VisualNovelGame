@@ -14,9 +14,6 @@ public class DialogueUiController: IUiController
     Label SpeakerNameLabel { get; set; }
     Label[] LineLabels { get; set; }
 
-
-    DialogueNode DialogueNode { get; set; }
-
     // Input
     InputAction TapAction { get; set; }
 
@@ -52,13 +49,20 @@ public class DialogueUiController: IUiController
             }
             else
             {
-
-                //DialogueManager.Instance.Next();
                 OnDisplayCompletedEvent?.Invoke();
             }
         };
 
         DialogueManager.Instance.OnNewDialogue += OnNewDialogueHandle;
+        DialogueManager.Instance.OnSelectChoices += (choiceOutput,_)=> {
+            Display();
+
+            TapAction.Disable();
+            SpeakerNameLabel.text = choiceOutput.SpeakerName;
+            LineLabels[0].text = choiceOutput.QuestionText;
+            LineLabels[1].text = string.Empty;
+            LineLabels[2].text = string.Empty;
+        };
         DialogueManager.Instance.OnFinish += Hide;
     }
 
@@ -85,7 +89,13 @@ public class DialogueUiController: IUiController
     private void OnNewDialogueHandle(string[] textLine,DialogueManager.OnCompleted onCompleted)
     {
         Display();
+        
+        for(int i = 0; i < LineLabels.Length; i++)
+        {
+            LineLabels[i].text = textLine[i] ?? string.Empty;
+        }
 
+        /*
         mySequence = DOTween.Sequence();
 
         var tweens = LineLabels.Select((v, i) => DOTween.To(() => v.text, x => v.text = x, textLine[i], textLine[i].Length > 0 ? txtAnimSpeed * textLine[i].Length : 0).SetEase(Ease.Linear));
@@ -97,13 +107,15 @@ public class DialogueUiController: IUiController
 
         mySequence.OnPlay(() =>
         {
-            SpeakerNameLabel.text = "SomeOnae";
+            Debug.Log("on play");
+            SpeakerNameLabel.text = "SomeOne";
 
             LineLabels[0].text = string.Empty;
             LineLabels[1].text = string.Empty;
             LineLabels[2].text = string.Empty;
         });
 
+        */  
         OnDisplayCompletedEvent += onCompleted;
     }
 }
