@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4951388398563449966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
+  m_Name: StartNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: eaeb231e-7786-498b-abad-ecd9e158c776
+  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  <Child>k__BackingField: {fileID: 7822097525924201497}
+  outputPortGuid: 587710b4-adf6-49c5-bbb5-e24ad1b542a7
+--- !u!114 &-3060693447695507654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 524a5f03-9e11-405f-b631-a09545454e3e
+  <GraphPosition>k__BackingField: {x: 784, y: 161}
+  outputPortGuid: c8af63cb-7da1-4eb0-b409-6b1bcddf323f
+  <TextLine>k__BackingField:
+  - test 2
+  - 
+  - 
+  <Child>k__BackingField: {fileID: 0}
+--- !u!114 &-537906459564072167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
+  m_Name: ChoicesNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 51d430ce-1b67-4da8-8b1c-b59f546f1705
+  <GraphPosition>k__BackingField: {x: 487, y: 174}
+  <Children>k__BackingField:
+  - {fileID: -3060693447695507654}
+  - {fileID: 6479075330163827288}
+  choices:
+  - <Name>k__BackingField: 1
+    <OutputPortGuid>k__BackingField: cb0f9e6c-7cad-47f6-868c-bf3d66cecf62
+    <Child>k__BackingField: {fileID: -3060693447695507654}
+  - <Name>k__BackingField: 2
+    <OutputPortGuid>k__BackingField: 8957f5fd-aacb-4b05-9572-aa90c79f6d00
+    <Child>k__BackingField: {fileID: 6479075330163827288}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c37504b9650c4424d99fa6c7058fd250, type: 3}
+  m_Name: DialogueTree 1
+  m_EditorClassIdentifier: 
+  <Nodes>k__BackingField:
+  - {fileID: -4951388398563449966}
+  - {fileID: 7822097525924201497}
+  - {fileID: -3060693447695507654}
+  - {fileID: -537906459564072167}
+  - {fileID: 6479075330163827288}
+  edges:
+  - <Id>k__BackingField: 1596d8c6-a7f7-4471-ad12-cbfb4660b6c3
+    <From>k__BackingField: 587710b4-adf6-49c5-bbb5-e24ad1b542a7
+    <To>k__BackingField: 417cbb8b-d9dc-4a06-a957-acb25b22cfc7
+  - <Id>k__BackingField: e25bc49e-26f5-44b7-814f-8b863cfa5730
+    <From>k__BackingField: f082de20-f90f-41ba-95ff-bab8e8de841e
+    <To>k__BackingField: 51d430ce-1b67-4da8-8b1c-b59f546f1705
+  - <Id>k__BackingField: 5726414c-051f-44ec-8956-2e157e104f5a
+    <From>k__BackingField: cb0f9e6c-7cad-47f6-868c-bf3d66cecf62
+    <To>k__BackingField: 524a5f03-9e11-405f-b631-a09545454e3e
+  - <Id>k__BackingField: 7c44b129-de04-4c8c-ae29-566f417c9aeb
+    <From>k__BackingField: 8957f5fd-aacb-4b05-9572-aa90c79f6d00
+    <To>k__BackingField: a08e966b-98b1-423c-87fa-8505e05e9111
+--- !u!114 &6479075330163827288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: a08e966b-98b1-423c-87fa-8505e05e9111
+  <GraphPosition>k__BackingField: {x: 784, y: 412}
+  outputPortGuid: ac438796-f1a2-44e2-b644-59109817341e
+  <TextLine>k__BackingField:
+  - 
+  - 
+  - 
+  <Child>k__BackingField: {fileID: 0}
+--- !u!114 &7822097525924201497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 417cbb8b-d9dc-4a06-a957-acb25b22cfc7
+  <GraphPosition>k__BackingField: {x: 210, y: 128}
+  outputPortGuid: f082de20-f90f-41ba-95ff-bab8e8de841e
+  <TextLine>k__BackingField:
+  - test
+  - 
+  - 
+  <Child>k__BackingField: {fileID: -537906459564072167}
