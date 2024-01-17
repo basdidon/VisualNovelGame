@@ -111,6 +111,7 @@ public class DialogueTree: ScriptableObject
     [OnOpenAsset(1)]
     public static bool OpenDialogueGraphView(int instanceID, int line)
     {
+        Debug.Log("open");
         var window = EditorWindow.GetWindow<DialogueEditorWindow>();
 
         string assetPath = AssetDatabase.GetAssetPath(instanceID);
