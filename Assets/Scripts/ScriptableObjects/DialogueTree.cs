@@ -95,30 +95,34 @@ public class DialogueTree: ScriptableObject
     [OnOpenAsset(0)]
     public static bool OpenDialogueEditorWindow(int instanceID, int line)
     {
-        if (EditorUtility.InstanceIDToObject(instanceID) is DialogueTree)
+        Debug.Log("open1");
+        if (EditorUtility.InstanceIDToObject(instanceID).GetType() == typeof(DialogueTree))
         {
+            Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(DialogueTree)}");
             bool windowIsOpen = EditorWindow.HasOpenInstances<DialogueEditorWindow>();
             if (!windowIsOpen)
                 EditorWindow.CreateWindow<DialogueEditorWindow>();
             else
                 EditorWindow.FocusWindowIfItsOpen<DialogueEditorWindow>();
+
+            var window = EditorWindow.GetWindow<DialogueEditorWindow>();
+
+            string assetPath = AssetDatabase.GetAssetPath(instanceID);
+            window.LoadFromFile(assetPath);
         }
 
         // Window should now be open, proceed to next step to open file
         return false;
     }
-
+    /*
     [OnOpenAsset(1)]
     public static bool OpenDialogueGraphView(int instanceID, int line)
     {
         Debug.Log("open");
-        var window = EditorWindow.GetWindow<DialogueEditorWindow>();
 
-        string assetPath = AssetDatabase.GetAssetPath(instanceID);
-        window.LoadFromFile(assetPath);
-
+        
         return true;
-    }
+    }*/
     #endif
 }
 
