@@ -34,16 +34,15 @@ namespace Graphview.NodeData
 
         public virtual Node CreateNode()
         {
-            var node = Activator.CreateInstance<GraphViewNode>();
-            node.Initialize(this);
+            var nodeView = Activator.CreateInstance<GraphViewNode>();
+            nodeView.Initialize(this);
 
-            Draw(node);
+            Draw(nodeView);
 
-            return node;
+            return nodeView;
         }
 
         public abstract void Draw(Node node);
-
 
         public abstract void AddChild(GVNodeData child);
         public abstract void RemoveChild(GVNodeData child);

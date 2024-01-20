@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: a08e966b-98b1-423c-87fa-8505e05e9111
-  <GraphPosition>k__BackingField: {x: 802, y: 412}
+  <GraphPosition>k__BackingField: {x: 801, y: 412}
   outputPortGuid: ac438796-f1a2-44e2-b644-59109817341e
   <TextLine>k__BackingField:
   - "\u0E27\u0E49\u0E32\u0E27 \u0E04\u0E38\u0E13\u0E40\u0E25\u0E37\u0E2D\u0E01 2"

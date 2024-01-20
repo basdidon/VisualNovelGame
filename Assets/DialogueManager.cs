@@ -55,7 +55,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
-        DialogueTree.StartNode.Next();
+        DialogueTree.StartNode.Execute();
     }
 
     public delegate void OnCompleted();
