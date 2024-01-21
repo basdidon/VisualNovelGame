@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,8 +17,9 @@ namespace Graphview.NodeData
         [SerializeField] string outputPortGuid;
         public override string[] OutputPortGuids => new string[] { outputPortGuid };
 
-        public Charecters Speaker { get; set; }
+        public Characters Speaker { get; set; }
 
+        public CharacterData CharacterData { get; set; }
         [field: SerializeField] public string[] TextLine { get; set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
@@ -58,12 +60,18 @@ namespace Graphview.NodeData
 
             // Custom extension
             VisualElement customVisualElement = new();
+
+            // CharacterData ObjectField
+            ObjectField characterDataObjectField = new() { objectType = typeof(CharacterData) };
+            customVisualElement.Add(characterDataObjectField);
+
+            // Foldout Textline
             Foldout txtFoldout = new() { text = "text" };
 
             foreach (var lineIdx in Enumerable.Range(0, MaxLine))
             {
                 VisualElement container = new();
-                Label lineLabel = new() { text = $"line_{lineIdx + 1}" };
+                Label lineLabel = new() { text = $"[{lineIdx + 1}]" };
                 TextField lineTxt = new();
                 if (TextLine != null && lineIdx < TextLine.Length)
                 {

@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-public enum Charecters
+ 
+public enum Characters
 {
     Sabastian,
     Emma,
     Johnny,
 }
 
-[CreateAssetMenu(menuName = "Dialogue")]
+//[CreateAssetMenu(menuName = "Dialogue")]
 public class DialoguesData : ScriptableObject
 {
     public Vector2 GraphPosition { get; set; }             // position on graphview
@@ -33,7 +33,7 @@ public class Sentence
     public static int StringPerLine => 25;
     public static int MaxLine => 3;
 
-    [field: SerializeField] public Charecters Speaker { get; set; }
+    [field: SerializeField] public Characters Speaker { get; set; }
     [SerializeField] string[] textLine = new string[MaxLine];
     public string[] TextLine => textLine;
     [field: SerializeField] public Sprite Background { get; set; }

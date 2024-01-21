@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Test
 {
     [DlClass]
-    public class DialogueCharecter : MonoBehaviour
+    public class DialogueCharacter : MonoBehaviour
     {
         [DlValue]
         [field:SerializeField] 

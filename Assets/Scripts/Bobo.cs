@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bobo : Charecter
+public class Bobo : Character
 {
     DialoguesData HelloDialogue { get; set; }
     DialoguesData SpecialDialogue { get; set; }
