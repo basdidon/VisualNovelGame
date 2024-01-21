@@ -15,11 +15,6 @@ namespace Graphview.NodeData
         public string InputPortGuid => Id;
         public abstract string[] OutputPortGuids { get; }
 
-        // Ui Controller
-        public UiDocumentController UDC => UiDocumentController.Instance;
-        public DialogueUiController DialogueUC => UDC.DialogueUiController;
-        public ChoicesPickerUiController ChoicesPickerUC => UDC.ChoicesPickerUiController;
-
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             Id = $"{Guid.NewGuid()}";

@@ -57,19 +57,5 @@ namespace Graphview.NodeData
 
             node.RefreshExpandedState();
         }
-
-        public void Execute()
-        {
-            Debug.Log("StartNode was executed.");
-
-            if (Child is null)
-            {
-                Debug.LogWarning("StartNode dosen't connect to anything.");
-            }
-            else 
-            { 
-                DialogueManager.Instance.CurrentNode = Child;
-            }
-        }
     }
 }

@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
 
 public interface IUiController
 {
@@ -21,20 +17,21 @@ public class ChoicesPickerUiController : IUiController
     public ChoicesPickerUiController(VisualElement root)
     {
         Root = root;
-
-        DialogueManager.Instance.OnNewDialogue += (_,_) =>
+        /*
+        DialogueManager.Instance.OnNewDialogue += (_) =>
         {
             Hide();
         };
-        DialogueManager.Instance.OnSelectChoices += (choices,callback) =>
+        DialogueManager.Instance.OnSelectChoices += (choices) =>
         {
             Display();
-            SetChoices(choices.ChoicesText,callback);
+            SetChoices(choices.ChoicesText);
         };
         DialogueManager.Instance.OnFinish += Hide;
+        */
     }
 
-    public void SetChoices(string[] choices,DialogueManager.OnCompleted<int> onSelected)
+    public void SetChoices(string[] choices)
     {
         // clear old choices
         while (Root[0].childCount > 0)
@@ -50,8 +47,7 @@ public class ChoicesPickerUiController : IUiController
             Root[0].Add(btn);                       // add to root
             btn.text = choices[i];
             btn.clicked += () => {
-                onSelected?.Invoke(btn.parent.IndexOf(btn));
-                Debug.Log(btn.parent.IndexOf(btn));
+                DialogueManager.Instance.ExecuteNextNode(btn.parent.IndexOf(btn));
             };
         }
     }

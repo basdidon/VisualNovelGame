@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: ChoicesNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 51d430ce-1b67-4da8-8b1c-b59f546f1705
-  <GraphPosition>k__BackingField: {x: 504, y: 412}
+  <GraphPosition>k__BackingField: {x: 487, y: 434}
   <Children>k__BackingField:
   - {fileID: -3060693447695507654}
   - {fileID: 6479075330163827288}

@@ -94,7 +94,7 @@ namespace Graphview.NodeData
         {
             return Children;
         }
-
+        /*
         public void OnCompleted(int choiceIdx)
         {
             Debug.Log($"you choose : {choiceIdx}");
@@ -104,7 +104,7 @@ namespace Graphview.NodeData
                 
             }
         }
-
+        */
         void OnAddChoice(Node node)
         {
             Choice choice = new();

@@ -111,10 +111,5 @@ namespace Graphview.NodeData
                 }
             }
         }
-
-        public void OnCompleted()
-        {
-            DialogueManager.Instance.CurrentNode = Child;
-        }
     }
 }

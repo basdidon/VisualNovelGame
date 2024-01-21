@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
@@ -10,8 +7,6 @@ public class UiDocumentController : MonoBehaviour
     public static UiDocumentController Instance { get; private set; }
 
     VisualElement root;
-
-    [field: SerializeField] public DialogueTree DialogueTree { get; set; }
 
     // VisualElements
     Button ChatButton { get; set; }
@@ -23,10 +18,8 @@ public class UiDocumentController : MonoBehaviour
     public ChoicesPickerUiController ChoicesPickerUiController { get; private set; }
 
     // Input
-    [field:SerializeField] public InputActionReference TapInputAction { get; set; }
-
-    // Charecters
-    Charecter Charecter_1 { get; set; }
+    [field:SerializeField] InputActionReference TapInputAction { get; set; }
+    public InputAction TapAction => TapInputAction.action;
 
     private void Awake()
     {
@@ -39,8 +32,6 @@ public class UiDocumentController : MonoBehaviour
             Instance = this;
         }
 
-        Charecter_1 = new Bobo();
-
         if (TryGetComponent(out UIDocument uiDoc))
         {
             root = uiDoc.rootVisualElement;
@@ -48,15 +39,12 @@ public class UiDocumentController : MonoBehaviour
             ChatButton = root.Q<Button>("chat-btn");
             DialogueBox = root.Q("DialogueBox");
 
-            DialogueUiController = new DialogueUiController(DialogueBox, TapInputAction.action);
+            DialogueUiController = new DialogueUiController(DialogueBox);
             DialogueBox.userData = DialogueUiController;
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
                 DialogueManager.Instance.StartDialogue();
-                //DialogueTree.Execute();
-                //Charecter_1.Talk();
-               
             };
 
             // ChoicesPicker
@@ -64,22 +52,38 @@ public class UiDocumentController : MonoBehaviour
             ChoicesPickerUiController = new ChoicesPickerUiController(ChoicesPicker);
             ChoicesPicker.userData = ChoicesPickerUiController;
             ChoicesPickerUiController.Hide();
+
+            // input
+            TapAction.performed += (_) =>
+            {
+                DialogueUiController.Next();
+            };
+
+            // Dialogue Event
+            DialogueManager.Instance.OnNewDialogue += (textline) =>
+            {
+                TapAction.Enable();
+
+                DialogueUiController.SetDialogue("[SpeakerName]",textline);
+                ChoicesPickerUiController.Hide();
+            };
+
+            DialogueManager.Instance.OnSelectChoices += (choiceOutput) => {
+                TapAction.Disable();
+
+                DialogueUiController.SetDialogue(choiceOutput.SpeakerName, new string[] { choiceOutput.QuestionText });
+
+                ChoicesPickerUiController.SetChoices(choiceOutput.ChoicesText);
+                ChoicesPickerUiController.Display();
+            };
+
+            DialogueManager.Instance.OnFinish += () =>
+            {
+                TapAction.Disable();
+
+                DialogueUiController.Hide();
+                ChoicesPickerUiController.Hide();
+            };
         }
     }
-
-    /*
-    public void DisplayDialogueBox(DialoguesData data,DialogueUiController.OnCompleted OnCompleted = null)
-    {
-        DialogueUiController controller = (DialogueUiController) DialogueBox.userData;
-        controller.DialoguesData = data;
-        controller.Display();
-        controller.OnDisplayCompletedEvent += OnCompleted;
-    }
-
-    public void DisplayChoicesPicker(Choice[] choices)
-    {
-        ChoicesPickerUiController controller = (ChoicesPickerUiController) ChoicesPicker.userData;
-        controller.SetChoices(choices);
-        controller.Display();
-    }*/
 }
