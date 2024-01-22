@@ -19,7 +19,7 @@ namespace Graphview.NodeData
 
         public Characters Speaker { get; set; }
 
-        public CharacterData CharacterData { get; set; }
+        [field: SerializeField] public CharacterData CharacterData { get; set; }
         [field: SerializeField] public string[] TextLine { get; set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
@@ -62,8 +62,12 @@ namespace Graphview.NodeData
             VisualElement customVisualElement = new();
 
             // CharacterData ObjectField
-            ObjectField characterDataObjectField = new() { objectType = typeof(CharacterData) };
-            customVisualElement.Add(characterDataObjectField);
+            ObjectField characterDataObjectField = new() { 
+                objectType = typeof(CharacterData), 
+                value = CharacterData 
+            };
+            characterDataObjectField.RegisterValueChangedCallback(e =>CharacterData =(CharacterData) e.newValue);
+            node.mainContainer.Insert(1,characterDataObjectField);
 
             // Foldout Textline
             Foldout txtFoldout = new() { text = "text" };
@@ -71,18 +75,16 @@ namespace Graphview.NodeData
             foreach (var lineIdx in Enumerable.Range(0, MaxLine))
             {
                 VisualElement container = new();
-                Label lineLabel = new() { text = $"[{lineIdx + 1}]" };
-                TextField lineTxt = new();
-                if (TextLine != null && lineIdx < TextLine.Length)
-                {
-                    lineTxt.value = TextLine[lineIdx];
+                TextField lineTxt = new() { 
+                    label = $"[{lineIdx + 1}]",
+                    value = TextLine.ElementAtOrDefault(lineIdx) ?? string.Empty 
                 };
                 lineTxt.RegisterCallback<InputEvent>((ev) => ValidateTextLine(ev, lineIdx));
+                Label lineLabel = lineTxt.labelElement;
+                lineLabel.style.color = new StyleColor(Color.black);
+                lineLabel.style.minWidth = new StyleLength(StyleKeyword.Auto);
 
-                container.Add(lineLabel);
                 container.Add(lineTxt);
-                container.AddToClassList("line-container");
-
                 txtFoldout.Add(container);
             }
 

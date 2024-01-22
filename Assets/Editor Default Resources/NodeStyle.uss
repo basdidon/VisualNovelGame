@@ -28,7 +28,7 @@ Toggle -> VisualElement -> .unity-text-element {
 
 .line-container -> .unity-text-element {
 	-unity-font-style: bold;
-	min-width : 50px;
+	min-width : 20px;
 }
 
 .line-container -> TextField {

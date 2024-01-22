@@ -31,7 +31,7 @@ public class DialogueManager : MonoBehaviour
         ExecuteNextNode();
     }
 
-    public event Action<string[]> OnNewDialogue;
+    public event Action<string,string[]> OnNewDialogue;
     public event Action<ChoicesNodeOutput> OnSelectChoices;
     public event Action OnFinish;
 
@@ -48,7 +48,10 @@ public class DialogueManager : MonoBehaviour
 
         if (CurrentNode is DialogueNode dialogueNode)
         {
-            OnNewDialogue?.Invoke(dialogueNode.TextLine);
+            OnNewDialogue?.Invoke(
+                dialogueNode.CharacterData != null ? dialogueNode.CharacterData.Name : null ?? "[Unknown]",
+                dialogueNode.TextLine
+            );
         }
         else if (CurrentNode is ChoicesNode choicesNode)
         {

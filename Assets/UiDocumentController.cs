@@ -60,11 +60,11 @@ public class UiDocumentController : MonoBehaviour
             };
 
             // Dialogue Event
-            DialogueManager.Instance.OnNewDialogue += (textline) =>
+            DialogueManager.Instance.OnNewDialogue += (speakerName,textline) =>
             {
                 TapAction.Enable();
 
-                DialogueUiController.SetDialogue("[SpeakerName]",textline);
+                DialogueUiController.SetDialogue(speakerName,textline);
                 ChoicesPickerUiController.Hide();
             };
 
