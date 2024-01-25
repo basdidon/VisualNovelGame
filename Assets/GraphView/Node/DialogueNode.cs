@@ -27,8 +27,8 @@ namespace Graphview.NodeData
     {
         [field: SerializeField] public CharacterData CharacterData { get; set; }
         [field: SerializeField, TextArea]
-        public string DialogueText { get;set; }
-         
+        public string DialogueText { get; set; }
+        
         public DialogueRecord GetData => new(CharacterData, DialogueText);
 
         public override void Execute()
@@ -80,7 +80,7 @@ namespace Graphview.NodeData
                 DrawInputPort();
 
                 // output port
-                Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
+                Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
                 outputPort.viewDataKey = nodeData.OutputPortGuids[0];
                 outputPort.portName = "Output";
                 outputContainer.Add(outputPort);

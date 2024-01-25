@@ -33,6 +33,10 @@ namespace Graphview.NodeView
             Debug.Log($"Load {assetPath}");
             foreach (var obj in AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath)) // load all sub assets
             {
+                if(obj == null)
+                    continue;
+                
+                
                 if (obj is GVNodeData nodeData)
                 {
                     AddElement(NodeFactory.LoadNode(nodeData));
@@ -70,6 +74,8 @@ namespace Graphview.NodeView
                     return;
                 if (startPort.direction == port.direction)          // can't connect to same dir
                     return;
+                if (startPort.portType != port.portType)
+                    return;
 
                 compartiblePorts.Add(port);
             });
@@ -87,14 +93,17 @@ namespace Graphview.NodeView
             this.AddManipulator(SaveContextualMenu());
         }
 
+        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:GVNodeData
+            =>  AddElement(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree).GetNodeView());
+        
+
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             base.BuildContextualMenu(evt);
 
-            evt.menu.AppendAction($"Create DialogueNode",
-                actionEvent => AddElement(NodeFactory.CreateNode<DialogueNode>(actionEvent.eventInfo.localMousePosition, Tree).GetNodeView()));
-            evt.menu.AppendAction($"Create ConditionNode",
-                actionEvent => AddElement(NodeFactory.CreateNode<ChoicesNode>(actionEvent.eventInfo.localMousePosition, Tree).GetNodeView()));
+            evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
+            evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
+            evt.menu.AppendAction("Create LogicNode/Boolean", CreateActionEvent<BooleanNode>);
         }
 
         IManipulator SaveContextualMenu()

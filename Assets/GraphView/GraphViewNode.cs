@@ -26,7 +26,7 @@ namespace Graphview.NodeView
         public void DrawInputPort()
         {
             // input port
-            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(bool));
+            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ExecutionFlow));
             inputPort.viewDataKey = NodeData.InputPortGuid;
             inputPort.portName = "input";
             inputContainer.Add(inputPort);

@@ -50,7 +50,7 @@ namespace Graphview.NodeData
         {
             titleButtonContainer.style.display = DisplayStyle.None;
             // output port
-            Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
             outputPort.viewDataKey = nodeData.OutputPortGuids[0];
             outputPort.portName = "Output";
             outputContainer.Add(outputPort);

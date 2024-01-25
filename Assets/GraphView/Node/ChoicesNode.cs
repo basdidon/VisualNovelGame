@@ -161,7 +161,7 @@ namespace Graphview.NodeData
 
         void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice)
         {
-            Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
             choicePort.portName = string.Empty;
             choicePort.viewDataKey = choice.OutputPortGuid;
             Button deleteChoiceBtn = new() { text = "X" };
