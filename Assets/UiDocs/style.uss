@@ -2,14 +2,16 @@
     color: rgb(255, 255, 255);
     font-size: 98px;
     -unity-text-align: middle-left;
+    flex-grow: 1;
+    -unity-paragraph-spacing: 24px;
 }
 
-.dialogue-line {
+.dialogue-container {
     justify-content: center;
-    margin-left: 24px;
-    margin-right: 24px;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .choice-btn {
@@ -78,4 +80,7 @@
 
 .bottomsheet--up {
     translate: 0 0;
+}
+
+.dialogue-speaker {
 }

@@ -1,14 +1,9 @@
 using UnityEngine;
-using Basdidon.Dialogue;
 
 [CreateAssetMenu(menuName = "Dialogues/Character")]
-public class CharacterData : DialogueCharacterBase
+public class CharacterData:ScriptableObject
 {
+    public string Name => name;
     [SerializeField] Sprite sprite;
-    public override Sprite Sprite => sprite;
-
-    private void OnDestroy()
-    {
-        Debug.Log("boom");
-    }
+    public Sprite Sprite => sprite;
 }

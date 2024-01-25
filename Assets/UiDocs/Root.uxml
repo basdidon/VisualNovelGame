@@ -6,6 +6,6 @@
     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/1080x2280-Background-HD-Wallpaper-377.jpg?fileID=2800000&amp;guid=8f00dda5f51582c46804255c76f7605b&amp;type=3#1080x2280-Background-HD-Wallpaper-377&apos;);">
         <ui:Instance template="ChoicesPicker" name="ChoicesPicker" style="height: 70%;" />
         <ui:Instance template="BottomMenu" name="BottomMenu" style="margin-top: auto;" />
-        <ui:Instance template="DialogueBox" name="DialogueBox" class="bottomsheet" />
+        <ui:Instance template="DialogueBox" name="DialogueBox" class="bottomsheet" style="height: 650px;" />
     </ui:VisualElement>
 </ui:UXML>

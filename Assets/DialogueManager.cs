@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
@@ -9,9 +7,16 @@ public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
 
-    [field: SerializeField] public DialogueTree DialogueTree { get; set; }
-
-    public GVNodeData CurrentNode{ get; private set; }
+    GVNodeData currentNode;
+    public GVNodeData CurrentNode{ 
+        get => currentNode;
+        private set 
+        {
+            currentNode = value;
+            if(CurrentNode != null)
+                CurrentNode.Execute();
+        }
+    }
 
     private void Awake()
     {
@@ -25,15 +30,27 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue()
+    public void StartDialogue(DialogueTree dialogueTree)
     {
-        CurrentNode = DialogueTree.StartNode;
+        CurrentNode = dialogueTree.StartNode;
         ExecuteNextNode();
     }
 
-    public event Action<string,string[]> OnNewDialogue;
-    public event Action<ChoicesNodeOutput> OnSelectChoices;
+    // event for ui
+    public event Action<DialogueRecord> OnNewDialogue;
+    public event Action<ChoicesRecord> OnSelectChoices;
     public event Action OnFinish;
+
+    // forNodeinvoke
+    internal void OnNewDialogueEventInvoke(DialogueRecord record)
+    {
+        OnNewDialogue?.Invoke(record);
+    }
+
+    internal void OnSelectChoicesEvent(ChoicesRecord choicesRecord)
+    {
+        OnSelectChoices?.Invoke(choicesRecord);
+    }
 
     public void ExecuteNextNode(int idx = 0)
     {
@@ -44,24 +61,6 @@ public class DialogueManager : MonoBehaviour
             Debug.Log("finish");
             OnFinish?.Invoke();
             return;
-        }
-
-        if (CurrentNode is DialogueNode dialogueNode)
-        {
-            OnNewDialogue?.Invoke(
-                dialogueNode.CharacterData != null ? dialogueNode.CharacterData.Name : null ?? "[Unknown]",
-                dialogueNode.TextLine
-            );
-        }
-        else if (CurrentNode is ChoicesNode choicesNode)
-        {
-            ChoicesNodeOutput output = new()
-            {
-                SpeakerName = choicesNode.SpeakerName,
-                QuestionText = choicesNode.QuestionText,
-                ChoicesText = choicesNode.Choices
-            };
-            OnSelectChoices?.Invoke(output);
         }
     }
 }

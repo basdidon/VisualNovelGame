@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
-using System.Linq;
 using System;
-
+using System.Linq;
+using System.Reflection;
+using System.Collections.Generic;
+/*
 namespace Basdidon.Dialogue
 {
     public abstract class DialogueCharacterBase : ScriptableObject
@@ -72,7 +71,6 @@ namespace Basdidon.Dialogue
     [CustomEditor(typeof(DialogueDatabase))]
     public class DialogueDatabaseEditor: Editor
     {
-        
         public override VisualElement CreateInspectorGUI()
         {
             var container = new VisualElement();
@@ -130,7 +128,6 @@ namespace Basdidon.Dialogue
             return container;
         }
         
-
         public static IEnumerable<Type> GetSubClassOf(Type type)
         {
             // Get all types in the assembly
@@ -142,9 +139,7 @@ namespace Basdidon.Dialogue
 
             return derivedTypes;
         }
-
     }
-
-
 }
 
+*/

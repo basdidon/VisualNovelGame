@@ -1,3 +1,4 @@
+using Graphview.NodeView;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,13 +24,6 @@ namespace Graphview.NodeData
             //AssetDatabase.SaveAssets();
         }
 
-        public override Node CreateNode()
-        {
-            var node = base.CreateNode();
-            node.capabilities -= Capabilities.Deletable; // by defualt node can be delete,so i remove deletable
-            return node;
-        }
-
         public override void AddChild(GVNodeData child)
         {
             Child = child;
@@ -46,16 +40,22 @@ namespace Graphview.NodeData
             return new GVNodeData[] { Child };
         }
 
-        public override void Draw(Node node)
-        {
-            node.titleButtonContainer.style.display = DisplayStyle.None;
-            // output port
-            Port outputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
-            outputPort.viewDataKey = outputPortGuid;
-            outputPort.portName = "Output";
-            node.outputContainer.Add(outputPort);
+        public override void Execute(){}
+    }
 
-            node.RefreshExpandedState();
+    [CustomGraphViewNode(typeof(StartNode))]
+    public class CustomStartGraphViewNode : GraphViewNode
+    {
+        public override void OnDrawNodeView(GVNodeData nodeData)
+        {
+            titleButtonContainer.style.display = DisplayStyle.None;
+            // output port
+            Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            outputPort.viewDataKey = nodeData.OutputPortGuids[0];
+            outputPort.portName = "Output";
+            outputContainer.Add(outputPort);
+
+            RefreshExpandedState();
         }
     }
 }

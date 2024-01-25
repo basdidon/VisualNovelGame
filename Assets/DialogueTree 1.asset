@@ -13,13 +13,10 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: ecc56e45-a0e1-4156-bb10-69a72e8b73e7
-  <GraphPosition>k__BackingField: {x: 867, y: 742}
-  outputPortGuid: ef2c9d69-e840-4812-b1d4-e792e12cd647
+  <GraphPosition>k__BackingField: {x: 1006, y: 400}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
-  <TextLine>k__BackingField:
-  - "\u0E41\u0E01\u0E15\u0E49\u0E2D\u0E07\u0E40\u0E25\u0E37\u0E2D\u0E01"
-  - 
-  - 
+  <DialogueText>k__BackingField: "\u0E41\u0E01\u0E15\u0E49\u0E2D\u0E07\u0E40\u0E25\u0E37\u0E2D\u0E01"
+  outputPortGuid: ef2c9d69-e840-4812-b1d4-e792e12cd647
   <Child>k__BackingField: {fileID: -537906459564072167}
 --- !u!114 &-4951388398563449966
 MonoBehaviour:
@@ -34,7 +31,7 @@ MonoBehaviour:
   m_Name: StartNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: eaeb231e-7786-498b-abad-ecd9e158c776
-  <GraphPosition>k__BackingField: {x: -40, y: 51}
+  <GraphPosition>k__BackingField: {x: -175, y: 220}
   <Child>k__BackingField: {fileID: 7822097525924201497}
   outputPortGuid: 587710b4-adf6-49c5-bbb5-e24ad1b542a7
 --- !u!114 &-3060693447695507654
@@ -50,13 +47,10 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 524a5f03-9e11-405f-b631-a09545454e3e
-  <GraphPosition>k__BackingField: {x: 850, y: 152}
-  outputPortGuid: c8af63cb-7da1-4eb0-b409-6b1bcddf323f
+  <GraphPosition>k__BackingField: {x: 1006, y: -3}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
-  <TextLine>k__BackingField:
-  - "\u0E27\u0E49\u0E32\u0E27 \u0E04\u0E38\u0E13\u0E40\u0E25\u0E37\u0E2D\u0E01 1"
-  - 
-  - 
+  <DialogueText>k__BackingField: "\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E44\u0E14\u0E49\u0E14\u0E35"
+  outputPortGuid: c8af63cb-7da1-4eb0-b409-6b1bcddf323f
   <Child>k__BackingField: {fileID: 0}
 --- !u!114 &-537906459564072167
 MonoBehaviour:
@@ -71,11 +65,9 @@ MonoBehaviour:
   m_Name: ChoicesNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 51d430ce-1b67-4da8-8b1c-b59f546f1705
-  <GraphPosition>k__BackingField: {x: 506, y: 431}
-  <Children>k__BackingField:
-  - {fileID: -3060693447695507654}
-  - {fileID: 6479075330163827288}
-  - {fileID: -8804838942201889516}
+  <GraphPosition>k__BackingField: {x: 631, y: 169}
+  <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
+  <QuestionText>k__BackingField: "\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E17\u0E35\u0E48\u0E0A\u0E2D\u0E1A\u0E0B\u0E30"
   choices:
   - <Name>k__BackingField: 1
     <OutputPortGuid>k__BackingField: cb0f9e6c-7cad-47f6-868c-bf3d66cecf62
@@ -86,6 +78,10 @@ MonoBehaviour:
   - <Name>k__BackingField: "\u0E09\u0E31\u0E19\u0E44\u0E21\u0E48\u0E40\u0E25\u0E37\u0E2D\u0E01"
     <OutputPortGuid>k__BackingField: 72bcacd1-d9c4-4ab1-a11a-fccfdc451bfd
     <Child>k__BackingField: {fileID: -8804838942201889516}
+  <Children>k__BackingField:
+  - {fileID: -3060693447695507654}
+  - {fileID: 6479075330163827288}
+  - {fileID: -8804838942201889516}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,13 +133,11 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: a08e966b-98b1-423c-87fa-8505e05e9111
-  <GraphPosition>k__BackingField: {x: 867, y: 412}
-  outputPortGuid: ac438796-f1a2-44e2-b644-59109817341e
+  <GraphPosition>k__BackingField: {x: 1006, y: 204}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
-  <TextLine>k__BackingField:
-  - "\u0E27\u0E49\u0E32\u0E27 \u0E04\u0E38\u0E13\u0E40\u0E25\u0E37\u0E2D\u0E01 2"
-  - 
-  - 
+  <DialogueText>k__BackingField: "\u0E27\u0E49\u0E32\u0E27 \u0E04\u0E38\u0E13\u0E40\u0E25\u0E37\u0E2D\u0E01
+    2"
+  outputPortGuid: ac438796-f1a2-44e2-b644-59109817341e
   <Child>k__BackingField: {fileID: 0}
 --- !u!114 &7822097525924201497
 MonoBehaviour:
@@ -159,10 +153,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 417cbb8b-d9dc-4a06-a957-acb25b22cfc7
   <GraphPosition>k__BackingField: {x: 231, y: 204}
-  outputPortGuid: f082de20-f90f-41ba-95ff-bab8e8de841e
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
-  <TextLine>k__BackingField:
-  - "\u0E40\u0E25\u0E37\u0E2D\u0E01 1 \u0E2B\u0E23\u0E37\u0E2D 2"
-  - 
-  - 
+  <DialogueText>k__BackingField: "\u0E19\u0E32\u0E22\u0E0A\u0E2D\u0E1A\u0E40\u0E25\u0E02\u0E44\u0E2B\u0E19\u0E21\u0E32\u0E01\u0E01\u0E27\u0E48\u0E32\u0E01\u0E31\u0E19\n\u0E23\u0E30\u0E2B\u0E27\u0E48\u0E32\u0E07
+    1 \u0E01\u0E31\u0E1A 2\n[ \u0E17\u0E14\u0E2A\u0E2D\u0E1A\u0E1A\u0E23\u0E23\u0E17\u0E31\u0E14\u0E17\u0E35\u0E48
+    3 ]"
+  outputPortGuid: f082de20-f90f-41ba-95ff-bab8e8de841e
   <Child>k__BackingField: {fileID: -537906459564072167}

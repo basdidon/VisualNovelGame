@@ -9,91 +9,49 @@ using UnityEngine.UIElements;
 
 namespace Graphview.NodeData
 {
+    using NodeView;
+
+    public record DialogueRecord
+    {
+        public CharacterData CharacterData { get; }
+        public string DialogueText { get; }
+
+        public DialogueRecord(CharacterData characterData,string dialogueText)
+        {
+            CharacterData = characterData;
+            DialogueText = dialogueText;
+        }
+    }
+
     public class DialogueNode : GVNodeData
     {
-        public int MaxLine => 3;
-        public int MaxTextLength => 25;
+        [field: SerializeField] public CharacterData CharacterData { get; set; }
+        [field: SerializeField, TextArea]
+        public string DialogueText { get;set; }
+         
+        public DialogueRecord GetData => new(CharacterData, DialogueText);
+
+        public override void Execute()
+        {
+            DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
+        }
 
         [SerializeField] string outputPortGuid;
         public override string[] OutputPortGuids => new string[] { outputPortGuid };
-
-        public Characters Speaker { get; set; }
-
-        [field: SerializeField] public CharacterData CharacterData { get; set; }
-        [field: SerializeField] public string[] TextLine { get; set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
 
-            TextLine = new string[MaxLine];
-            for (int i = 0; i < MaxLine; i++)
-            {
-                TextLine[i] = string.Empty;
-            }
+            DialogueText = string.Empty;
 
             outputPortGuid = Guid.NewGuid().ToString();
             EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssetIfDirty(this);
             AssetDatabase.Refresh();
         }
 
-        void ValidateTextLine(InputEvent ev, int lineIdx)
-        {
-            TextField txtField = ev.currentTarget as TextField;
-            if (ev.newData.Length > MaxTextLength)
-                txtField.value = ev.newData.Substring(0, MaxTextLength);
-            TextLine[lineIdx] = txtField.value;
-        }
-
         [field: SerializeField] GVNodeData Child { get; set; }
-
-        public override void Draw(Node node)
-        {
-            DrawInputPort(node);
-
-            // output port
-            Port outputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
-            outputPort.viewDataKey = outputPortGuid;
-            outputPort.portName = "Output";
-            node.outputContainer.Add(outputPort);
-
-            // Custom extension
-            VisualElement customVisualElement = new();
-
-            // CharacterData ObjectField
-            ObjectField characterDataObjectField = new() { 
-                objectType = typeof(CharacterData), 
-                value = CharacterData 
-            };
-            characterDataObjectField.RegisterValueChangedCallback(e =>CharacterData =(CharacterData) e.newValue);
-            node.mainContainer.Insert(1,characterDataObjectField);
-
-            // Foldout Textline
-            Foldout txtFoldout = new() { text = "text" };
-
-            foreach (var lineIdx in Enumerable.Range(0, MaxLine))
-            {
-                VisualElement container = new();
-                TextField lineTxt = new() { 
-                    label = $"[{lineIdx + 1}]",
-                    value = TextLine.ElementAtOrDefault(lineIdx) ?? string.Empty 
-                };
-                lineTxt.RegisterCallback<InputEvent>((ev) => ValidateTextLine(ev, lineIdx));
-                Label lineLabel = lineTxt.labelElement;
-                lineLabel.style.color = new StyleColor(Color.black);
-                lineLabel.style.minWidth = new StyleLength(StyleKeyword.Auto);
-
-                container.Add(lineTxt);
-                txtFoldout.Add(container);
-            }
-
-            customVisualElement.Add(txtFoldout);
-            node.extensionContainer.Add(customVisualElement);
-
-            // start with expanded state
-            node.RefreshExpandedState();
-        }
 
         public override void AddChild(GVNodeData child)
         {
@@ -110,15 +68,46 @@ namespace Graphview.NodeData
         {
             return new GVNodeData[] { Child };
         }
+    }
 
-        void OnValidate()
+    [CustomGraphViewNode(typeof(DialogueNode))]
+    public class CustomDialogueGraphViewNode : GraphViewNode
+    {
+        public override void OnDrawNodeView(GVNodeData nodeData)
         {
-            for (int i = 0; i < TextLine.Length; i++)
+            if (nodeData is DialogueNode dialogueNode)
             {
-                if (TextLine[i].Length > MaxTextLength)
+                DrawInputPort();
+
+                // output port
+                Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
+                outputPort.viewDataKey = nodeData.OutputPortGuids[0];
+                outputPort.portName = "Output";
+                outputContainer.Add(outputPort);
+
+                // CharacterData ObjectField
+                ObjectField characterDataObjectField = new()
                 {
-                    TextLine[i] = TextLine[i].Substring(0, MaxTextLength);
-                }
+                    objectType = typeof(CharacterData),
+                    value = dialogueNode.CharacterData,
+                };
+                characterDataObjectField.RegisterValueChangedCallback(e => dialogueNode.CharacterData = (CharacterData)e.newValue);
+                
+                mainContainer.Insert(1, characterDataObjectField);
+                // Custom extension
+                VisualElement customVisualElement = new();
+                var textArea = new TextField()
+                {
+                    value = dialogueNode.DialogueText,
+                    multiline = true,
+                };
+                textArea.RegisterValueChangedCallback((e) => dialogueNode.DialogueText = e.newValue);
+                customVisualElement.Add(textArea);
+                
+                extensionContainer.Add(customVisualElement);
+
+                // start with expanded state
+                RefreshExpandedState();
             }
         }
     }

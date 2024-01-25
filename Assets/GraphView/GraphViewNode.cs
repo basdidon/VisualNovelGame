@@ -5,45 +5,61 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Graphview.NodeData;
 
-public class GraphViewNode : Node
+namespace Graphview.NodeView
 {
-    public GVNodeData NodeData { get; private set; }
-
-    public void Initialize(GVNodeData nodeData)
+    public abstract class GraphViewNode : Node
     {
-        NodeData = nodeData;
-        SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
-        viewDataKey = nodeData.Id;
-        userData = nodeData;
-        title = name = nodeData.GetType().Name;
-        DrawHeader();
-    }
+        public GVNodeData NodeData { get; private set; }
 
-    void DrawHeader()
-    {
-        // textfield
-        TextField dialogueNameTxt = new() { value = title };
-        titleContainer.Insert(1, dialogueNameTxt);
-        dialogueNameTxt.style.display = DisplayStyle.None;
-        // Title
-        VisualElement titleLabel = titleContainer.ElementAt(0);
-
-        // double click event
-        var clickable = new Clickable(ev =>
+        public void Initialize(GVNodeData nodeData)
         {
-            titleLabel.style.display = DisplayStyle.None;
-            dialogueNameTxt.style.display = DisplayStyle.Flex;
-            dialogueNameTxt.Focus();
-            dialogueNameTxt.value = title;
-            dialogueNameTxt.RegisterCallback<FocusOutEvent>(ev =>
+            NodeData = nodeData;
+            SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
+            viewDataKey = nodeData.Id;
+            userData = nodeData;
+            title = name = nodeData.GetType().Name;
+            DrawHeader();
+        }
+
+        public abstract void OnDrawNodeView(GVNodeData nodeData);
+
+        public void DrawInputPort()
+        {
+            // input port
+            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(bool));
+            inputPort.viewDataKey = NodeData.InputPortGuid;
+            inputPort.portName = "input";
+            inputContainer.Add(inputPort);
+        }
+
+        void DrawHeader()
+        {
+            // textfield
+            TextField dialogueNameTxt = new() { value = title };
+            titleContainer.Insert(1, dialogueNameTxt);
+            dialogueNameTxt.style.display = DisplayStyle.None;
+            // Title
+            VisualElement titleLabel = titleContainer.ElementAt(0);
+
+            // double click event
+            var clickable = new Clickable(ev =>
             {
-                title = dialogueNameTxt.value;
-                titleLabel.style.display = DisplayStyle.Flex;
-                dialogueNameTxt.style.display = DisplayStyle.None;
+                titleLabel.style.display = DisplayStyle.None;
+                dialogueNameTxt.style.display = DisplayStyle.Flex;
+                dialogueNameTxt.Focus();
+                dialogueNameTxt.value = title;
+                dialogueNameTxt.RegisterCallback<FocusOutEvent>(ev =>
+                {
+                    title = dialogueNameTxt.value;
+                    titleLabel.style.display = DisplayStyle.Flex;
+                    dialogueNameTxt.style.display = DisplayStyle.None;
+                });
             });
-        });
-        clickable.activators.Clear();
-        clickable.activators.Add(new ManipulatorActivationFilter() { button = MouseButton.LeftMouse, clickCount = 2 });  // double click
-        titleLabel.AddManipulator(clickable);
+            clickable.activators.Clear();
+            clickable.activators.Add(new ManipulatorActivationFilter() { button = MouseButton.LeftMouse, clickCount = 2 });  // double click
+            titleLabel.AddManipulator(clickable);
+        }
+
+
     }
 }

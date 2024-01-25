@@ -1,11 +1,12 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 
 namespace Graphview.NodeData
 {
+    using NodeView;
+
     public abstract class GVNodeData : ScriptableObject
     {
         [field: SerializeField] public string Id { get; private set; }
@@ -27,29 +28,15 @@ namespace Graphview.NodeData
             AssetDatabase.SaveAssetIfDirty(this);
         }
 
-        public virtual Node CreateNode()
+        public GraphViewNode GetNodeView()
         {
-            var nodeView = Activator.CreateInstance<GraphViewNode>();
-            nodeView.Initialize(this);
-
-            Draw(nodeView);
-
-            return nodeView;
+            return NodeFactory.GetNodeView(this);
         }
-
-        public abstract void Draw(Node node);
 
         public abstract void AddChild(GVNodeData child);
         public abstract void RemoveChild(GVNodeData child);
         public abstract IEnumerable<GVNodeData> GetChildren();
 
-        public virtual void DrawInputPort(Node node)
-        {
-            // input port
-            Port inputPort = node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(bool));
-            inputPort.viewDataKey = InputPortGuid;
-            inputPort.portName = "input";
-            node.inputContainer.Add(inputPort);
-        }
+        public abstract void Execute();
     }
 }

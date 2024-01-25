@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using DG.Tweening;
-using System.Linq;
 
 public class DialogueUiController: IUiController
 {
@@ -55,11 +54,13 @@ public class DialogueUiController: IUiController
         }
     }
 
-    public void SetDialogue(string speakerName,string[] textLine)
+    public void SetDialogue(string speakerName,string dialogue)
     {
         Display();
 
         SpeakerNameLabel.text = speakerName;
+        LineLabels[0].text = dialogue ?? string.Empty;
+        /*
         for(int i = 0; i < LineLabels.Length; i++)
         {
             LineLabels[i].text = textLine.ElementAtOrDefault(i) ?? string.Empty;

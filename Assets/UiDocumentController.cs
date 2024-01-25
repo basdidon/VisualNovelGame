@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
+using Graphview.NodeData;
 
 public class UiDocumentController : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class UiDocumentController : MonoBehaviour
     // UiController
     public DialogueUiController DialogueUiController { get; private set; }
     public ChoicesPickerUiController ChoicesPickerUiController { get; private set; }
+
+    // debug dialogue tree
+    [field: SerializeField] public DialogueTree DialogueTree { get; set; }
 
     // Input
     [field:SerializeField] InputActionReference TapInputAction { get; set; }
@@ -44,7 +48,7 @@ public class UiDocumentController : MonoBehaviour
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
-                DialogueManager.Instance.StartDialogue();
+                DialogueManager.Instance.StartDialogue(DialogueTree);
             };
 
             // ChoicesPicker
@@ -60,20 +64,20 @@ public class UiDocumentController : MonoBehaviour
             };
 
             // Dialogue Event
-            DialogueManager.Instance.OnNewDialogue += (speakerName,textline) =>
+            DialogueManager.Instance.OnNewDialogue += (ctx) =>
             {
                 TapAction.Enable();
 
-                DialogueUiController.SetDialogue(speakerName,textline);
+                DialogueUiController.SetDialogue(ctx.CharacterData.Name,ctx.DialogueText);
                 ChoicesPickerUiController.Hide();
             };
 
-            DialogueManager.Instance.OnSelectChoices += (choiceOutput) => {
+            DialogueManager.Instance.OnSelectChoices += (ctx) => {
                 TapAction.Disable();
 
-                DialogueUiController.SetDialogue(choiceOutput.SpeakerName, new string[] { choiceOutput.QuestionText });
+                DialogueUiController.SetDialogue(ctx.DialogueRecord.CharacterData.Name,ctx.DialogueRecord.DialogueText);
 
-                ChoicesPickerUiController.SetChoices(choiceOutput.ChoicesText);
+                ChoicesPickerUiController.SetChoices(ctx.ChoicesText);
                 ChoicesPickerUiController.Display();
             };
 

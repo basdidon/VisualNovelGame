@@ -5,79 +5,76 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System;
 using System.Linq;
+using UnityEditor.UIElements;
+using Graphview.NodeView;
 
 namespace Graphview.NodeData
 {
-    public class ChoicesNode : GVNodeData
+    public record ChoicesRecord
     {
-        [field: SerializeField] List<GVNodeData> Children { get; set; }
+        public DialogueRecord DialogueRecord { get; }
+        public string[] ChoicesText { get; }
 
-        public override string[] OutputPortGuids => choices.Select(choice => choice.OutputPortGuid).ToArray();
+        public ChoicesRecord(DialogueRecord dialogueRecord, string[] choicesText)
+        {
+            DialogueRecord = dialogueRecord;
+            ChoicesText = choicesText;
+        }
 
-        public string SpeakerName { get; set; }
+        public ChoicesRecord(CharacterData characterData, string dialogueText, string[] choicesText)
+        {
+            DialogueRecord = new(characterData,dialogueText);
+            ChoicesText = choicesText;
+        }
+    }
+
+    public partial class ChoicesNode : GVNodeData
+    {
+        [field: SerializeField] public CharacterData CharacterData { get; set; }
+        [field: SerializeField, TextArea]
         public string QuestionText { get; set; }
 
         [SerializeField] List<Choice> choices;
-        public string[] Choices => choices.Select(choice => choice.Name).ToArray();
+        public IReadOnlyList<Choice> Choices => choices;
+
+        public void AddChoice(Choice choice)
+        {
+            choices.Add(choice);
+        }
+
+        public void RemoveChoice(Choice choice)
+        {
+            choices.Remove(choice);
+        }
+
+        [System.Serializable]
+        public class Choice
+        {
+            [field: SerializeField] public string Name { get; set; }
+            [field: SerializeField] public string OutputPortGuid { get; set; }
+            [field: SerializeField] public GVNodeData Child { get; set; }
+
+            public Choice()
+            {
+                Name = "new choice";
+                OutputPortGuid = $"{Guid.NewGuid()}";
+            }
+        }
+
+        public override void Execute()
+        {
+            DialogueManager.Instance.OnSelectChoicesEvent(new(CharacterData, QuestionText, choices.Select(c => c.Name).ToArray()));
+        }
+
+        [field: SerializeField] List<GVNodeData> Children { get; set; }
+
+        public override string[] OutputPortGuids => choices.Select(choice => choice.OutputPortGuid).ToArray();
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
             Children = new List<GVNodeData>();
             choices = new();
-        }
-
-        public override void Draw(Node node)
-        {
-            Button addCondition = new() { text = "Add Choice" };
-            addCondition.clicked += () => OnAddChoice(node);
-            node.mainContainer.Insert(1, addCondition);
-
-            SpeakerName ??= "???";
-            QuestionText ??= string.Empty;
-
-            TextField speakerTxtField = new() { value = SpeakerName };
-            TextField questionTxtField = new() { value = QuestionText };
-
-            node.mainContainer.Insert(1, speakerTxtField);
-            node.mainContainer.Insert(2, questionTxtField);
-
-            speakerTxtField.RegisterCallback<InputEvent>(ev => SpeakerName = ev.newData);
-            questionTxtField.RegisterCallback<InputEvent>(ev => QuestionText = ev.newData);
-
-            DrawInputPort(node);
-
-            // output port
-            foreach (var choice in choices)
-            {
-                DrawChoicePort(node, choice);
-            }
-        }
-
-        void DrawChoicePort(Node node, Choice choice)
-        {
-            Port choicePort = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
-            choicePort.portName = string.Empty;
-            choicePort.viewDataKey = choice.OutputPortGuid;
-            Button deleteChoiceBtn = new() { text = "X" };
-            TextField choiceTxtField = new() { value = choice.Name };
-            choiceTxtField.style.width = 100;
-            choicePort.Add(choiceTxtField);
-            choicePort.Add(deleteChoiceBtn);
-
-            node.outputContainer.Add(choicePort);
-
-            choiceTxtField.RegisterCallback<InputEvent>((ev) =>
-            {
-                TextField txtField = ev.currentTarget as TextField;
-                choice.Name = ev.newData;
-            });
-
-            deleteChoiceBtn.clicked += () =>
-            {
-                node.outputContainer.Remove(choicePort);
-                choices.Remove(choice);
-            };
         }
 
         public override void AddChild(GVNodeData child)
@@ -93,24 +90,6 @@ namespace Graphview.NodeData
         public override IEnumerable<GVNodeData> GetChildren()
         {
             return Children;
-        }
-        /*
-        public void OnCompleted(int choiceIdx)
-        {
-            Debug.Log($"you choose : {choiceIdx}");
-            if (choiceIdx >= 0 && choiceIdx < choices.Count)
-            {
-                DialogueManager.Instance.CurrentNode = choices[choiceIdx].Child;
-                
-            }
-        }
-        */
-        void OnAddChoice(Node node)
-        {
-            Choice choice = new();
-            choices.Add(choice);
-
-            DrawChoicePort(node, choice);
         }
 
         public void Disconnect(string portGuid)
@@ -130,28 +109,88 @@ namespace Graphview.NodeData
                 choices[portIdx].Child = child;
             }
         }
-
-
-        [System.Serializable]
-        class Choice
-        {
-            [field: SerializeField] public string Name { get; set; }
-            [field: SerializeField] public string OutputPortGuid { get; set; }
-            [field: SerializeField] public GVNodeData Child { get; set; }
-
-            public Choice()
-            {
-                Name = "new choice";
-                OutputPortGuid = $"{Guid.NewGuid()}";
-            }
-
-        }
     }
 
-    public struct ChoicesNodeOutput
+    [CustomGraphViewNode(typeof(ChoicesNode))]
+    public class CustomChoicesGraphViewNode : GraphViewNode
     {
-        public string SpeakerName { get; set; }
-        public string QuestionText { get; set; }
-        public string[] ChoicesText { get; set; }
+        public override void OnDrawNodeView(GVNodeData nodeData)
+        {
+            if (nodeData is ChoicesNode choicesNode)
+            {
+                Button addCondition = new() { text = "Add Choice" };
+                addCondition.clicked += () => OnAddChoice(choicesNode);
+                mainContainer.Insert(1, addCondition);
+
+                choicesNode.QuestionText ??= string.Empty;
+
+                // CharacterData ObjectField
+                ObjectField characterDataObjectField = new()
+                {
+                    objectType = typeof(CharacterData),
+                    value = choicesNode.CharacterData
+                };
+                characterDataObjectField.RegisterValueChangedCallback(e => choicesNode.CharacterData = (CharacterData)e.newValue);
+                mainContainer.Insert(1, characterDataObjectField);
+
+                // Custom extension
+                VisualElement customVisualElement = new();
+
+                var textArea = new TextField()
+                {
+                    value = choicesNode.QuestionText,
+                    multiline = true,
+                };
+                textArea.RegisterValueChangedCallback((e) => choicesNode.QuestionText = e.newValue);
+                customVisualElement.Add(textArea);
+
+                extensionContainer.Add(customVisualElement);
+
+                DrawInputPort();
+
+                // output port
+                foreach (var choice in choicesNode.Choices)
+                {
+                    DrawChoicePort(choicesNode, choice);
+                }
+
+                // start with expanded state
+                RefreshExpandedState();
+            }
+        }
+
+        void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice)
+        {
+            Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+            choicePort.portName = string.Empty;
+            choicePort.viewDataKey = choice.OutputPortGuid;
+            Button deleteChoiceBtn = new() { text = "X" };
+            TextField choiceTxtField = new() { value = choice.Name };
+            choiceTxtField.style.width = 100;
+            choicePort.Add(choiceTxtField);
+            choicePort.Add(deleteChoiceBtn);
+
+            outputContainer.Add(choicePort);
+
+            choiceTxtField.RegisterCallback<InputEvent>((ev) =>
+            {
+                TextField txtField = ev.currentTarget as TextField;
+                choice.Name = ev.newData;
+            });
+
+            deleteChoiceBtn.clicked += () =>
+            {
+                outputContainer.Remove(choicePort);
+                choicesNode.RemoveChoice(choice);
+            };
+        }
+
+        void OnAddChoice(ChoicesNode choicesNode)
+        {
+            ChoicesNode.Choice choice = new();
+            choicesNode.AddChoice(choice);
+
+            DrawChoicePort(choicesNode, choice);
+        }
     }
 }
