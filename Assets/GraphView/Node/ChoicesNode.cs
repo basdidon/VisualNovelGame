@@ -13,19 +13,20 @@ namespace Graphview.NodeData
     public record ChoicesRecord
     {
         public DialogueRecord DialogueRecord { get; }
+        public ChoicesNode.Choice Choices { get; }
         public string[] ChoicesText { get; }
+        public bool[] ChoicesEnable { get; }
 
-        public ChoicesRecord(DialogueRecord dialogueRecord, string[] choicesText)
+        public ChoicesRecord(DialogueRecord dialogueRecord, string[] choicesText, bool[] choicesEnable)
         {
             DialogueRecord = dialogueRecord;
             ChoicesText = choicesText;
+            ChoicesEnable = choicesEnable;
         }
 
-        public ChoicesRecord(CharacterData characterData, string dialogueText, string[] choicesText)
-        {
-            DialogueRecord = new(characterData,dialogueText);
-            ChoicesText = choicesText;
-        }
+        public ChoicesRecord(CharacterData characterData, string dialogueText, string[] choicesText, bool[] choicesEnable) 
+            : this(new(characterData, dialogueText), choicesText, choicesEnable) 
+        { }
     }
 
     public partial class ChoicesNode : GVNodeData
@@ -50,29 +51,42 @@ namespace Graphview.NodeData
         [System.Serializable]
         public class Choice
         {
+            [field: SerializeField] public bool IsEnable { get; set; }
             [field: SerializeField] public string Name { get; set; }
+            [field: SerializeField] public string InputPortGuid { get; set; }
             [field: SerializeField] public string OutputPortGuid { get; set; }
             [field: SerializeField] public GVNodeData Child { get; set; }
 
             public Choice()
             {
+                IsEnable = true;
                 Name = "new choice";
+                InputPortGuid = $"{Guid.NewGuid()}";
                 OutputPortGuid = $"{Guid.NewGuid()}";
             }
         }
 
         public override void Execute()
         {
-            DialogueManager.Instance.OnSelectChoicesEvent(new(CharacterData, QuestionText, choices.Select(c => c.Name).ToArray()));
+            DialogueManager.Instance.OnSelectChoicesEvent(new(
+                CharacterData, 
+                QuestionText, 
+                choices.Select(c => c.Name).ToArray(),
+                choices.Select(c=>c.IsEnable).ToArray()
+            ));
         }
 
         [field: SerializeField] List<GVNodeData> Children { get; set; }
 
+        [field: SerializeField] public string InputFlowPortGuid { get; private set; }
+        public override string[] InputPortGuids => choices.Select(choice=> choice.InputPortGuid).Append(InputFlowPortGuid).ToArray();
         public override string[] OutputPortGuids => choices.Select(choice => choice.OutputPortGuid).ToArray();
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
+            Debug.Log("Init");
             base.Initialize(position, dialogueTree);
+            InputFlowPortGuid = Guid.NewGuid().ToString();
             Children = new List<GVNodeData>();
             choices = new();
         }
@@ -118,6 +132,10 @@ namespace Graphview.NodeData
         {
             if (nodeData is ChoicesNode choicesNode)
             {
+                var inputFlowPort = GetInputFlowPort();
+                inputFlowPort.viewDataKey = choicesNode.InputFlowPortGuid;
+                inputContainer.Add(inputFlowPort);
+
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () => OnAddChoice(choicesNode);
                 mainContainer.Insert(1, addCondition);
@@ -146,8 +164,6 @@ namespace Graphview.NodeData
 
                 extensionContainer.Add(customVisualElement);
 
-                DrawInputPort();
-
                 // output port
                 foreach (var choice in choicesNode.Choices)
                 {
@@ -161,16 +177,43 @@ namespace Graphview.NodeData
 
         void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice)
         {
+            VisualElement ChoiceContainer = new();
+            ChoiceContainer.style.marginTop = new StyleLength(8);
+            ChoiceContainer.style.backgroundColor = Color.cyan;
+
+            VisualElement PortsContainer = new();
+            PortsContainer.style.flexDirection = FlexDirection.Row;
+            PortsContainer.style.justifyContent = Justify.SpaceBetween;
+            ChoiceContainer.Add(PortsContainer);
+
+            Port isEnablePort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            isEnablePort.portName = "IsEnable";
+            
+            var isEnablePortLabel =  isEnablePort.Q<Label>();
+            isEnablePortLabel.style.color = Color.black;
+            
+            PortsContainer.Add(isEnablePort);
+
+            List<string> booleanStrings = new() { "true", "false" };
+            var isEnableDropdown = new DropdownField(booleanStrings,choice.IsEnable ? booleanStrings[0] : booleanStrings[1]);
+
+            isEnableDropdown.RegisterValueChangedCallback(e => choice.IsEnable = e.newValue == booleanStrings[0]);
+            isEnablePort.Add(isEnableDropdown);
+
             Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
             choicePort.portName = string.Empty;
+            choicePort.portColor = Color.yellow;
             choicePort.viewDataKey = choice.OutputPortGuid;
-            Button deleteChoiceBtn = new() { text = "X" };
+            PortsContainer.Add(choicePort);
+            
             TextField choiceTxtField = new() { value = choice.Name };
-            choiceTxtField.style.width = 100;
-            choicePort.Add(choiceTxtField);
-            choicePort.Add(deleteChoiceBtn);
+            ChoiceContainer.Add(choiceTxtField);
+            
+            
+            Button deleteChoiceBtn = new() { text = "X" };
+            ChoiceContainer.Add(deleteChoiceBtn);
 
-            outputContainer.Add(choicePort);
+            extensionContainer.Add(ChoiceContainer);
 
             choiceTxtField.RegisterCallback<InputEvent>((ev) =>
             {
@@ -180,7 +223,7 @@ namespace Graphview.NodeData
 
             deleteChoiceBtn.clicked += () =>
             {
-                outputContainer.Remove(choicePort);
+                extensionContainer.Remove(ChoiceContainer);
                 choicesNode.RemoveChoice(choice);
             };
         }
@@ -193,4 +236,5 @@ namespace Graphview.NodeData
             DrawChoicePort(choicesNode, choice);
         }
     }
+    
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 
@@ -9,7 +10,11 @@ namespace Graphview.NodeData
     using NodeView;
     public class BooleanNode : GVNodeData
     {
+        [field:SerializeField] public bool Value { get; set; }
+
         [field: SerializeField] GVNodeData Child { get; set; }
+
+        public override string[] InputPortGuids => new string[] { };
 
         [SerializeField] string outputPortGuid;
         public override string[] OutputPortGuids => new string[] { outputPortGuid };
@@ -45,8 +50,10 @@ namespace Graphview.NodeData
                 outputPort.portName = "bool";
                 outputContainer.Add(outputPort);
 
-                var valueToggle = new ToolbarToggle();
+                var valueToggle = new Toggle() { label = "boolean", value = booleanNode.Value };
+                valueToggle.RegisterValueChangedCallback(e => booleanNode.Value = e.newValue);
                 extensionContainer.Add(valueToggle);
+                RefreshExpandedState();
             }
         }
     }

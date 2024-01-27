@@ -36,6 +36,9 @@ namespace Graphview.NodeData
             DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
         }
 
+        [SerializeField] string inputPortGuid;
+        public override string[] InputPortGuids => new string[] { inputPortGuid };
+
         [SerializeField] string outputPortGuid;
         public override string[] OutputPortGuids => new string[] { outputPortGuid };
 
@@ -45,6 +48,7 @@ namespace Graphview.NodeData
 
             DialogueText = string.Empty;
 
+            inputPortGuid = Guid.NewGuid().ToString();
             outputPortGuid = Guid.NewGuid().ToString();
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
@@ -77,12 +81,15 @@ namespace Graphview.NodeData
         {
             if (nodeData is DialogueNode dialogueNode)
             {
-                DrawInputPort();
+                var inputFlowPort = GetInputFlowPort();
+                inputFlowPort.viewDataKey = dialogueNode.InputPortGuids[0];
+                inputContainer.Add(inputFlowPort);
 
                 // output port
                 Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
                 outputPort.viewDataKey = nodeData.OutputPortGuids[0];
                 outputPort.portName = "Output";
+                outputPort.portColor = Color.yellow;
                 outputContainer.Add(outputPort);
 
                 // CharacterData ObjectField

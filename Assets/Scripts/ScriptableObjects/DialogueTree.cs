@@ -23,34 +23,41 @@ namespace Graphview.NodeData
 
         public void AddEdge(EdgeData edge)
         {
-            Debug.Log("add edge 1");
+            Debug.Log($"add edge {edge.From} -> {edge.To}");
 
             var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
-            var toIdx = Nodes.FindIndex(node => node.InputPortGuid == edge.To);
+            var toIdx = Nodes.FindIndex(node => node.InputPortGuids.Contains(edge.To));
 
-            Debug.Log($"{fromIdx} -> {toIdx}");
 
-            if (fromIdx >= 0 && toIdx >= 0)
+            if (fromIdx < 0)
+                throw new Exception($"can't find output node ({edge.From})");
+
+            if (toIdx < 0)
+                throw new Exception($"can't find input node ({edge.To})");
+
+            Debug.Log($"created edge {fromIdx} -> {toIdx}");
+            edges.Add(edge);
+
+            if (Nodes[fromIdx] is ChoicesNode choicesNode)
             {
-
-                Debug.Log("add edge 2");
-                edges.Add(edge);
-
-                if (Nodes[fromIdx] is ChoicesNode choicesNode)
-                {
-                    choicesNode.Connect(edge.From, Nodes[toIdx]);
-                }
-
-                Nodes[fromIdx].AddChild(Nodes[toIdx]);
+                choicesNode.Connect(edge.From, Nodes[toIdx]);
             }
+
+            Nodes[fromIdx].AddChild(Nodes[toIdx]);
+
 
             SaveChanges();
         }
 
         public void RemoveEdge(EdgeData edge)
         {
+            foreach(GVNodeData node in Nodes)
+            {
+                Debug.Log($"{node.name} {node.InputPortGuids}");
+            }
             var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
-            var toIdx = Nodes.FindIndex(node => node.InputPortGuid == edge.To);
+            Debug.Log(edge.To);
+            var toIdx = Nodes.FindIndex(node => node.InputPortGuids.Contains(edge.To));
 
             if (fromIdx >= 0 && toIdx >= 0)
             {

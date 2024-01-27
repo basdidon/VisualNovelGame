@@ -31,7 +31,7 @@ public class ChoicesPickerUiController : IUiController
         */
     }
 
-    public void SetChoices(string[] choices)
+    public void SetChoices(string[] choices,bool[] isEnable)
     {
         // clear old choices
         while (Root[0].childCount > 0)
@@ -49,6 +49,9 @@ public class ChoicesPickerUiController : IUiController
             btn.clicked += () => {
                 DialogueManager.Instance.ExecuteNextNode(btn.parent.IndexOf(btn));
             };
+
+            if (isEnable[i] == false)
+                btn.SetEnabled(false);
         }
     }
 

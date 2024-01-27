@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148491671}
-  - component: {fileID: 148491672}
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
@@ -155,20 +154,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &148491672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148491669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af0d2fe28ab86e24287007cd7ceeca5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
-  <Coin>k__BackingField: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +286,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 954757471}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49e4f0483f9a3954eb9030cb8bf39846, type: 3}
   m_Name: 
@@ -341,7 +326,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1033439909
 Transform:
   m_ObjectHideFlags: 0
@@ -369,7 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdd986decf041141a6f2e2e3d24e25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 8bc252285b901414699a5ac3e1b74188, type: 2}
+  <DialogueTree>k__BackingField: {fileID: 11400000, guid: e9e8b6ef8340dc844818597493d2eebd, type: 2}
   <TapInputAction>k__BackingField: {fileID: 1027717850900299178, guid: ffaadf679290887408afd991aeac8720, type: 3}
 --- !u!114 &1033439912
 MonoBehaviour:

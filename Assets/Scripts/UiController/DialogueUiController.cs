@@ -8,35 +8,32 @@ public class DialogueUiController: IUiController
     VisualElement Root { get; set; }
 
     Label SpeakerNameLabel { get; set; }
-    Label[] LineLabels { get; set; }
+    Label TextDisplay { get; set; }
 
-    public bool IsDisplay => Root.resolvedStyle.display == DisplayStyle.Flex;
+    string ShowBottomSheetClassName => "bottomsheet--up";
+
+    public bool IsDisplay => Root.ClassListContains(ShowBottomSheetClassName);
 
     // text anim
-    readonly Sequence mySequence;
+    Sequence mySequence;
+    float textInputSpeed => .2f;
 
     public DialogueUiController(VisualElement panel)
     {
         Root = panel;
 
         SpeakerNameLabel = Root.Q<Label>("speaker-name-txt");
-        LineLabels = new Label[]{
-            Root.Q<Label>("line-1-txt"),
-            Root.Q<Label>("line-2-txt"),
-            Root.Q<Label>("line-3-txt")
-        };
-
-        mySequence = DOTween.Sequence();
+        TextDisplay = Root.Q<Label>("text-display");
     }
 
     public void Display()
     {
-        Root.AddToClassList("bottomsheet--up");
+        Root.AddToClassList(ShowBottomSheetClassName);
     }
 
     public void Hide()
     {
-        Root.RemoveFromClassList("bottomsheet--up");
+        Root.RemoveFromClassList(ShowBottomSheetClassName);
     }
 
     public void Next()
@@ -54,38 +51,36 @@ public class DialogueUiController: IUiController
         }
     }
 
-    public void SetDialogue(string speakerName,string dialogue)
+    public void SetDialogue(string speakerName, string dialogue)
     {
-        Display();
-
-        SpeakerNameLabel.text = speakerName;
-        LineLabels[0].text = dialogue ?? string.Empty;
-        /*
-        for(int i = 0; i < LineLabels.Length; i++)
-        {
-            LineLabels[i].text = textLine.ElementAtOrDefault(i) ?? string.Empty;
-        }
-
-        /*
+        // Create a new DOTween sequence
         mySequence = DOTween.Sequence();
 
-        var tweens = LineLabels.Select((v, i) => DOTween.To(() => v.text, x => v.text = x, textLine[i], textLine[i].Length > 0 ? txtAnimSpeed * textLine[i].Length : 0).SetEase(Ease.Linear));
-
+        // Append an interval to the sequence based on whether the dialogue box is already displayed
         mySequence.AppendInterval(IsDisplay ? 0 : 1);
 
-        foreach (var tween in tweens)
-            mySequence.Append(tween);
+        // Append a DOTween animation to gradually update the TextDisplay.text with the dialogue
+        mySequence.Append(DOTween.To(
+            () => TextDisplay.text,            // Getter function
+            x => TextDisplay.text = x,         // Setter function
+            dialogue,                          // End value (dialogue to be displayed)
+            textInputSpeed * dialogue.Length   // Duration of the animation
+        ).SetEase(Ease.Linear));
 
+        // Set up a callback to be executed when the sequence starts playing
         mySequence.OnPlay(() =>
         {
-            Debug.Log("on play");
-            SpeakerNameLabel.text = "SomeOne";
+            // Set the SpeakerNameLabel.text to the specified speakerName
+            SpeakerNameLabel.text = speakerName;
 
-            LineLabels[0].text = string.Empty;
-            LineLabels[1].text = string.Empty;
-            LineLabels[2].text = string.Empty;
+            // Clear the TextDisplay.text before starting the animation
+            TextDisplay.text = string.Empty;
         });
 
-        */  
+        // Start playing the DOTween sequence
+        mySequence.Play();
+
+        // Display the dialogue box
+        Display();
     }
 }

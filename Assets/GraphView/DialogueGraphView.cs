@@ -55,7 +55,6 @@ namespace Graphview.NodeView
                 if (outputPort == null || inputPort == null)
                     continue;
 
-                
                 Edge edge = outputPort.ConnectTo(inputPort);
                 edge.viewDataKey = edgeData.Id;
                 AddElement(edge);

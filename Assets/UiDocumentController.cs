@@ -61,6 +61,7 @@ public class UiDocumentController : MonoBehaviour
             TapAction.performed += (_) =>
             {
                 DialogueUiController.Next();
+                Debug.Log("tap");
             };
 
             // Dialogue Event
@@ -77,7 +78,7 @@ public class UiDocumentController : MonoBehaviour
 
                 DialogueUiController.SetDialogue(ctx.DialogueRecord.CharacterData.Name,ctx.DialogueRecord.DialogueText);
 
-                ChoicesPickerUiController.SetChoices(ctx.ChoicesText);
+                ChoicesPickerUiController.SetChoices(ctx.ChoicesText,ctx.ChoicesEnable);
                 ChoicesPickerUiController.Display();
             };
 

@@ -13,7 +13,7 @@ namespace Graphview.NodeData
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
         // Port
-        public string InputPortGuid => Id;
+        public abstract string[] InputPortGuids { get; }
         public abstract string[] OutputPortGuids { get; }
 
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)

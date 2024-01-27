@@ -13,6 +13,7 @@ namespace Graphview.NodeData
     {
         [field: SerializeField] GVNodeData Child { get; set; }
 
+        public override string[] InputPortGuids => new string[]{};
         // Port
         [SerializeField] string outputPortGuid;
         public override string[] OutputPortGuids => new string[] { outputPortGuid };
@@ -21,7 +22,6 @@ namespace Graphview.NodeData
         {
             base.Initialize(position, dialogueTree);
             outputPortGuid = Guid.NewGuid().ToString();
-            //AssetDatabase.SaveAssets();
         }
 
         public override void AddChild(GVNodeData child)
@@ -53,6 +53,7 @@ namespace Graphview.NodeData
             Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
             outputPort.viewDataKey = nodeData.OutputPortGuids[0];
             outputPort.portName = "Output";
+            outputPort.portColor = Color.yellow;
             outputContainer.Add(outputPort);
 
             RefreshExpandedState();
