@@ -25,7 +25,7 @@ namespace Graphview.NodeData
 
     public class DialogueNode : GVNodeData
     {
-        [field: SerializeField] public CharacterData CharacterData { get; set; }
+        [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
         public string DialogueText { get; set; }
         
@@ -81,34 +81,28 @@ namespace Graphview.NodeData
         {
             if (nodeData is DialogueNode dialogueNode)
             {
+                SerializedObject SO = new(dialogueNode);
+                mainContainer.Bind(SO);
+
                 var inputFlowPort = GetInputFlowPort();
                 inputFlowPort.viewDataKey = dialogueNode.InputPortGuids[0];
                 inputContainer.Add(inputFlowPort);
 
                 // output port
-                Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
+                Port outputPort = GetOutputFlowPort();
                 outputPort.viewDataKey = nodeData.OutputPortGuids[0];
-                outputPort.portName = "Output";
-                outputPort.portColor = Color.yellow;
                 outputContainer.Add(outputPort);
 
                 // CharacterData ObjectField
-                ObjectField characterDataObjectField = new()
-                {
-                    objectType = typeof(CharacterData),
-                    value = dialogueNode.CharacterData,
-                };
-                characterDataObjectField.RegisterValueChangedCallback(e => dialogueNode.CharacterData = (CharacterData)e.newValue);
+                mainContainer.Insert(1, GetCharacterDataObjectField());
                 
-                mainContainer.Insert(1, characterDataObjectField);
                 // Custom extension
                 VisualElement customVisualElement = new();
                 var textArea = new TextField()
                 {
-                    value = dialogueNode.DialogueText,
                     multiline = true,
+                    bindingPath = GetPropertyBindingPath("DialogueText")
                 };
-                textArea.RegisterValueChangedCallback((e) => dialogueNode.DialogueText = e.newValue);
                 customVisualElement.Add(textArea);
                 
                 extensionContainer.Add(customVisualElement);

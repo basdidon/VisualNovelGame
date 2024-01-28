@@ -54,7 +54,6 @@ namespace Test
             var objField = new PropertyField(serializedObject.FindProperty("<GameObject>k__BackingField"));
             objField.RegisterValueChangeCallback(e=>
             {
-                Debug.Log("value Changed");
                 if(e.changedProperty.objectReferenceValue != null)
                 {
                     typeList = FindClassesInObject(e.changedProperty.objectReferenceValue as GameObject).ToList();

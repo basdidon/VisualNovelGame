@@ -23,27 +23,26 @@ namespace Graphview.NodeData
 
         public void AddEdge(EdgeData edge)
         {
-            Debug.Log($"add edge {edge.From} -> {edge.To}");
+            Debug.Log($"add edge {edge.OutputPortGuid} -> {edge.InputPortGuid}");
 
-            var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
-            var toIdx = Nodes.FindIndex(node => node.InputPortGuids.Contains(edge.To));
+            var fromNode = Nodes.FirstOrDefault(node => node.OutputPortGuids.Contains(edge.OutputPortGuid));
+            var toNode = Nodes.FirstOrDefault(node => node.InputPortGuids.Contains(edge.InputPortGuid));
 
+            if (fromNode == null)
+                throw new Exception($"can't find output node ({edge.OutputPortGuid})");
 
-            if (fromIdx < 0)
-                throw new Exception($"can't find output node ({edge.From})");
+            if (toNode == null)
+                throw new Exception($"can't find input node ({edge.InputPortGuid})");
 
-            if (toIdx < 0)
-                throw new Exception($"can't find input node ({edge.To})");
-
-            Debug.Log($"created edge {fromIdx} -> {toIdx}");
+            Debug.Log($"created edge {fromNode.Id} -> {toNode.Id}");
             edges.Add(edge);
 
-            if (Nodes[fromIdx] is ChoicesNode choicesNode)
+            if (fromNode is ChoicesNode choicesNode)
             {
-                choicesNode.Connect(edge.From, Nodes[toIdx]);
+                choicesNode.Connect(edge.OutputPortGuid, toNode);
             }
 
-            Nodes[fromIdx].AddChild(Nodes[toIdx]);
+            fromNode.AddChild(toNode);
 
 
             SaveChanges();
@@ -51,25 +50,24 @@ namespace Graphview.NodeData
 
         public void RemoveEdge(EdgeData edge)
         {
-            foreach(GVNodeData node in Nodes)
+            var fromNode = Nodes.FirstOrDefault(node => node.OutputPortGuids.Contains(edge.OutputPortGuid));
+            var toNode = Nodes.FirstOrDefault(node => node.InputPortGuids.Contains(edge.InputPortGuid));
+
+            if (fromNode == null)
+                throw new Exception($"can't find output node ({edge.OutputPortGuid})");
+
+            if (toNode == null)
+                throw new Exception($"can't find input node ({edge.InputPortGuid})");
+
+            edges.Remove(edge);
+
+            if (fromNode is ChoicesNode choicesNode)
             {
-                Debug.Log($"{node.name} {node.InputPortGuids}");
+                choicesNode.Disconnect(edge.OutputPortGuid);
             }
-            var fromIdx = Nodes.FindIndex(node => node.OutputPortGuids.Contains(edge.From));
-            Debug.Log(edge.To);
-            var toIdx = Nodes.FindIndex(node => node.InputPortGuids.Contains(edge.To));
 
-            if (fromIdx >= 0 && toIdx >= 0)
-            {
-                edges.Remove(edge);
+            fromNode.RemoveChild(toNode);
 
-                if (Nodes[fromIdx] is ChoicesNode choicesNode)
-                {
-                    choicesNode.Disconnect(edge.From);
-                }
-
-                Nodes[fromIdx].RemoveChild(Nodes[toIdx]);
-            }
 
             SaveChanges();
         }
@@ -126,15 +124,15 @@ namespace Graphview.NodeData
     [Serializable]
     public class EdgeData
     {
-        [field: SerializeField] public string Id { get; private set; }
-        [field: SerializeField] public string From { get; private set; }
-        [field: SerializeField] public string To { get; private set; }
+        [field: SerializeField] public string EdgeGuid { get; private set; }
+        [field: SerializeField] public string OutputPortGuid { get; private set; }
+        [field: SerializeField] public string InputPortGuid { get; private set; }
 
-        public EdgeData(string from, string to, string id)
+        public EdgeData(string outputPortGuid, string inputPortGuid)
         {
-            From = from;
-            To = to;
-            Id = id;
+            EdgeGuid = Guid.NewGuid().ToString();   // generate guid
+            OutputPortGuid = outputPortGuid;
+            InputPortGuid = inputPortGuid;
         }
     }
 }

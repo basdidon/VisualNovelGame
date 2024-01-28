@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -22,15 +23,8 @@ namespace Graphview.NodeData
             GraphPosition = position;
             name = GetType().Name;
             dialogueTree.Nodes.Add(this);
-            // save node asset
             AssetDatabase.AddObjectToAsset(this, dialogueTree);
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssetIfDirty(this);
-        }
-
-        public GraphViewNode GetNodeView()
-        {
-            return NodeFactory.GetNodeView(this);
+            SaveChanges();
         }
 
         public abstract void AddChild(GVNodeData child);
@@ -38,5 +32,12 @@ namespace Graphview.NodeData
         public abstract IEnumerable<GVNodeData> GetChildren();
 
         public abstract void Execute();
+
+        public void SaveChanges()
+        {
+            // save node asset
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssetIfDirty(this);
+        }
     }
 }

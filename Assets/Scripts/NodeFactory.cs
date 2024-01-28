@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Graphview.NodeData;
 using System;
@@ -19,13 +20,7 @@ namespace Graphview.NodeView
             return nodeData;
         }
 
-        public static GraphViewNode LoadNode(GVNodeData nodeData)
-        {
-            Debug.Log($"load node {nodeData.name}");
-            return nodeData.GetNodeView();
-        }
-
-        public static GraphViewNode GetNodeView<T>(T nodeData) where T : GVNodeData
+        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : GVNodeData
         {
             var allTypes = Assembly.GetExecutingAssembly().GetTypes();
             var typesWithAttribute = allTypes
@@ -46,7 +41,7 @@ namespace Graphview.NodeView
                 instance = Activator.CreateInstance<GraphViewNode>();
             }
 
-            instance.Initialize(nodeData);
+            instance.Initialize(nodeData,graphView);
             instance.OnDrawNodeView(nodeData);
             return instance;
 

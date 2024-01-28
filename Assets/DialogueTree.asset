@@ -13,12 +13,43 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: e92831b4-2f48-4def-ad1e-e0444d6a5a86
-  <GraphPosition>k__BackingField: {x: 1215, y: 338}
+  <GraphPosition>k__BackingField: {x: 1453, y: 241}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   <DialogueText>k__BackingField: "\u0E41\u0E01\u0E15\u0E49\u0E2D\u0E07\u0E40\u0E25\u0E37\u0E2D\u0E01"
   inputPortGuid: 43564eca-4eff-442a-9af6-dbc12365e138
   outputPortGuid: 296647c6-63c1-4aef-8598-cdaa8c0309ec
   <Child>k__BackingField: {fileID: 0}
+--- !u!114 &-6338964265371624974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
+  m_Name: ChoicesNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: cd8b53c3-d06a-435c-bcca-5f3fb780d924
+  <GraphPosition>k__BackingField: {x: 1085, y: -14}
+  <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
+  <QuestionText>k__BackingField: 
+  choices:
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: new choice
+    <InputPortGuid>k__BackingField: 804b6042-c6b8-49d4-befb-1a8c543d80ea
+    <OutputPortGuid>k__BackingField: 2c60d6f6-9919-4371-9383-71c050a177d2
+    <Child>k__BackingField: {fileID: -6318875774757584143}
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: new choice
+    <InputPortGuid>k__BackingField: 3be83950-1384-4836-bca8-a6713b06ea7f
+    <OutputPortGuid>k__BackingField: 9a3b2bc7-03b3-4128-9437-33a6d7ac571a
+    <Child>k__BackingField: {fileID: -6364309909499196989}
+  <Children>k__BackingField:
+  - {fileID: -6364309909499196989}
+  - {fileID: -6318875774757584143}
+  <InputFlowPortGuid>k__BackingField: 272aee4f-46ba-4b4c-aeea-a79825117059
 --- !u!114 &-6318875774757584143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,12 +63,30 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: f63b7985-b622-47a1-859b-958b0dc9b0fb
-  <GraphPosition>k__BackingField: {x: 1215, y: 175}
+  <GraphPosition>k__BackingField: {x: 1453, y: 78}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   <DialogueText>k__BackingField: "\u0E04\u0E34\u0E14\u0E44\u0E14\u0E49\u0E22\u0E31\u0E07\u0E44\u0E07"
   inputPortGuid: 928a62b2-dda1-4aeb-9cb9-a162f026e40d
   outputPortGuid: 25e1fa22-cda2-4147-85f4-15e818cb24a2
   <Child>k__BackingField: {fileID: 0}
+--- !u!114 &-4559937831197572980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd37ee5bf7d9114abe0be01ec46de41, type: 3}
+  m_Name: BooleanNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: c7a5cc6d-c3cd-4c81-a6b7-d52901b26bb3
+  <GraphPosition>k__BackingField: {x: 761, y: 181}
+  value: 0
+  <Value>k__BackingField: 0
+  <Child>k__BackingField: {fileID: -6338964265371624974}
+  outputPortGuid: 0edb8779-b93f-45cd-91cf-081f77237763
 --- !u!114 &-2576522320656993070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,24 +124,16 @@ MonoBehaviour:
   - {fileID: 755985354285083630}
   - {fileID: -6318875774757584143}
   - {fileID: -6364309909499196989}
-  - {fileID: 7353592299654893142}
   - {fileID: 7099480717868309914}
+  - {fileID: -6338964265371624974}
+  - {fileID: -4559937831197572980}
   edges:
-  - <Id>k__BackingField: e3a0eb2e-482c-4853-bb8d-d3cea4119539
-    <From>k__BackingField: f7c890f3-1cfb-47d1-b965-564a99cfb642
-    <To>k__BackingField: 8f988f94-5a8f-411b-bdcd-ba8675aa9977
-  - <Id>k__BackingField: 3b1cf1c5-6cc3-4332-8760-ae4b89249ed2
-    <From>k__BackingField: 667808c3-3b0a-4bda-b5ad-0fdeb1a5cd88
-    <To>k__BackingField: 268b8bd5-c2e4-448b-bd34-aa59d102d2bf
-  - <Id>k__BackingField: 6878d1cf-0476-4725-ad02-8237e3b6a677
-    <From>k__BackingField: cfe68453-0516-4457-8371-5f61f8b1418d
-    <To>k__BackingField: 928a62b2-dda1-4aeb-9cb9-a162f026e40d
-  - <Id>k__BackingField: 621a0c5a-8d41-461f-bbff-df8a11c7104d
-    <From>k__BackingField: eb73e58e-1211-4626-aa3f-89b8c5613a23
-    <To>k__BackingField: 43564eca-4eff-442a-9af6-dbc12365e138
-  - <Id>k__BackingField: 1d4ca6de-a036-46b6-aab0-4af9ec4b4ced
-    <From>k__BackingField: 8661e986-cf22-4f09-b0e3-d983db4a3b14
-    <To>k__BackingField: 5a3a6587-f39e-4d1a-965b-4365237fcfdd
+  - <EdgeGuid>k__BackingField: ed500f1f-16bf-4b69-921b-baf3876c44e9
+    <OutputPortGuid>k__BackingField: 0edb8779-b93f-45cd-91cf-081f77237763
+    <InputPortGuid>k__BackingField: 3be83950-1384-4836-bca8-a6713b06ea7f
+  - <EdgeGuid>k__BackingField: c9695f2a-23aa-440d-8b98-54567355d945
+    <OutputPortGuid>k__BackingField: 0edb8779-b93f-45cd-91cf-081f77237763
+    <InputPortGuid>k__BackingField: 3be83950-1384-4836-bca8-a6713b06ea7f
 --- !u!114 &755985354285083630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +147,7 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: b8f170bf-dd5e-4110-a33c-773a5401c856
-  <GraphPosition>k__BackingField: {x: 1215, y: 0}
+  <GraphPosition>k__BackingField: {x: 1453, y: -97}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   <DialogueText>k__BackingField: "\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E44\u0E14\u0E49\u0E14\u0E35"
   inputPortGuid: 268b8bd5-c2e4-448b-bd34-aa59d102d2bf
@@ -141,48 +182,11 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 98e4a17b-709b-4a24-9ad4-35209b544883
-  <GraphPosition>k__BackingField: {x: 758, y: -156}
+  <GraphPosition>k__BackingField: {x: 761, y: -4}
   <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   <DialogueText>k__BackingField: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35\u0E08\u0E49\u0E32
     \u0E09\u0E31\u0E19\u0E0A\u0E37\u0E48\u0E2D\u0E27\u0E48\u0E32\u0E08\u0E2D\u0E19\u0E19\u0E35\u0E48
     \u0E22\u0E34\u0E19\u0E14\u0E35\u0E17\u0E35\u0E48\u0E44\u0E14\u0E49\u0E1E\u0E1A"
   inputPortGuid: 5a3a6587-f39e-4d1a-965b-4365237fcfdd
   outputPortGuid: 6235b21f-6a89-4a31-be65-a68f7a026bd6
-  <Child>k__BackingField: {fileID: 0}
---- !u!114 &7353592299654893142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
-  m_Name: ChoicesNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: e2ca67a1-87fa-4290-be53-e9332a9f0f77
-  <GraphPosition>k__BackingField: {x: 813, y: 77}
-  <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
-  <QuestionText>k__BackingField: 
-  choices:
-  - <IsEnable>k__BackingField: 1
-    <Name>k__BackingField: new choice
-    <InputPortGuid>k__BackingField: c99921cd-b43c-4b39-89df-3ec49ced1846
-    <OutputPortGuid>k__BackingField: 667808c3-3b0a-4bda-b5ad-0fdeb1a5cd88
-    <Child>k__BackingField: {fileID: 755985354285083630}
-  - <IsEnable>k__BackingField: 1
-    <Name>k__BackingField: new choice
-    <InputPortGuid>k__BackingField: ef80ab2c-c111-4749-87f3-be93670c8639
-    <OutputPortGuid>k__BackingField: cfe68453-0516-4457-8371-5f61f8b1418d
-    <Child>k__BackingField: {fileID: -6318875774757584143}
-  - <IsEnable>k__BackingField: 0
-    <Name>k__BackingField: new choice
-    <InputPortGuid>k__BackingField: e17ec6d3-c2de-4666-b49d-ee383bbfd3c8
-    <OutputPortGuid>k__BackingField: eb73e58e-1211-4626-aa3f-89b8c5613a23
-    <Child>k__BackingField: {fileID: -6364309909499196989}
-  <Children>k__BackingField:
-  - {fileID: 755985354285083630}
-  - {fileID: -6318875774757584143}
-  - {fileID: -6364309909499196989}
-  <InputFlowPortGuid>k__BackingField: 9dc526e0-7941-45fc-874a-ab1aa22c7c40
+  <Child>k__BackingField: {fileID: -6338964265371624974}

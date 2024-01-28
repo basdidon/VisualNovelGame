@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,10 +8,12 @@ namespace Graphview.NodeView
 {
     public abstract class GraphViewNode : Node
     {
+        public DialogueGraphView GraphView { get; private set; }
         public GVNodeData NodeData { get; private set; }
 
-        public void Initialize(GVNodeData nodeData)
+        public void Initialize(GVNodeData nodeData, DialogueGraphView graphView)
         {
+            GraphView = graphView;
             NodeData = nodeData;
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
             viewDataKey = nodeData.Id;
@@ -40,6 +41,18 @@ namespace Graphview.NodeView
             outputPort.portColor = Color.yellow;
             return outputPort;
         }
+
+        public ObjectField GetCharacterDataObjectField(string propertyName = "CharacterData")
+        {
+            ObjectField characterDataObjectField = new()
+            {
+                objectType = typeof(CharacterData),
+                bindingPath = GetPropertyBindingPath(propertyName),
+            };
+            return characterDataObjectField;
+        }
+
+        public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
         void DrawHeader()
         {
@@ -69,6 +82,15 @@ namespace Graphview.NodeView
             titleLabel.AddManipulator(clickable);
         }
 
+        public void RemovePort(Port port)
+        {
+            if (!port.connected)
+                return;
 
+            GraphView.DeleteElements(port.connections);
+
+            port.DisconnectAll();
+            GraphView.RemoveElement(port);
+        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using System;
 using System.Linq;
 using UnityEditor.UIElements;
+using UnityEditor;
 using Graphview.NodeView;
 
 namespace Graphview.NodeData
@@ -29,9 +30,9 @@ namespace Graphview.NodeData
         { }
     }
 
-    public partial class ChoicesNode : GVNodeData
+    public class ChoicesNode : GVNodeData
     {
-        [field: SerializeField] public CharacterData CharacterData { get; set; }
+        [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
         public string QuestionText { get; set; }
 
@@ -45,6 +46,7 @@ namespace Graphview.NodeData
 
         public void RemoveChoice(Choice choice)
         {
+            RemoveChild(choice.Child);
             choices.Remove(choice);
         }
 
@@ -132,6 +134,9 @@ namespace Graphview.NodeData
         {
             if (nodeData is ChoicesNode choicesNode)
             {
+                SerializedObject SO = new(choicesNode);
+                mainContainer.Bind(SO);
+
                 var inputFlowPort = GetInputFlowPort();
                 inputFlowPort.viewDataKey = choicesNode.InputFlowPortGuid;
                 inputContainer.Add(inputFlowPort);
@@ -143,31 +148,24 @@ namespace Graphview.NodeData
                 choicesNode.QuestionText ??= string.Empty;
 
                 // CharacterData ObjectField
-                ObjectField characterDataObjectField = new()
-                {
-                    objectType = typeof(CharacterData),
-                    value = choicesNode.CharacterData
-                };
-                characterDataObjectField.RegisterValueChangedCallback(e => choicesNode.CharacterData = (CharacterData)e.newValue);
-                mainContainer.Insert(1, characterDataObjectField);
+                mainContainer.Insert(1,GetCharacterDataObjectField());
 
                 // Custom extension
                 VisualElement customVisualElement = new();
 
                 var textArea = new TextField()
                 {
-                    value = choicesNode.QuestionText,
+                    bindingPath = GetPropertyBindingPath("QuestionText"),
                     multiline = true,
                 };
-                textArea.RegisterValueChangedCallback((e) => choicesNode.QuestionText = e.newValue);
                 customVisualElement.Add(textArea);
 
                 extensionContainer.Add(customVisualElement);
 
                 // output port
-                foreach (var choice in choicesNode.Choices)
+                for(int i = 0;i<choicesNode.Choices.Count();i++)
                 {
-                    DrawChoicePort(choicesNode, choice);
+                    DrawChoicePort(choicesNode, choicesNode.Choices.ElementAt(i),i);
                 }
 
                 // start with expanded state
@@ -175,7 +173,7 @@ namespace Graphview.NodeData
             }
         }
 
-        void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice)
+        void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice,int choiceIdx)
         {
             VisualElement ChoiceContainer = new();
             ChoiceContainer.style.marginTop = new StyleLength(8);
@@ -187,6 +185,7 @@ namespace Graphview.NodeData
             ChoiceContainer.Add(PortsContainer);
 
             Port isEnablePort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            isEnablePort.viewDataKey = choice.InputPortGuid;
             isEnablePort.portName = "IsEnable";
             
             var isEnablePortLabel =  isEnablePort.Q<Label>();
@@ -194,37 +193,29 @@ namespace Graphview.NodeData
             
             PortsContainer.Add(isEnablePort);
 
-            List<string> booleanStrings = new() { "true", "false" };
-            var isEnableDropdown = new DropdownField(booleanStrings,choice.IsEnable ? booleanStrings[0] : booleanStrings[1]);
+            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField" };
+            isEnablePort.Add(isEnableToggle);
 
-            isEnableDropdown.RegisterValueChangedCallback(e => choice.IsEnable = e.newValue == booleanStrings[0]);
-            isEnablePort.Add(isEnableDropdown);
-
-            Port choicePort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
+            // choice output flow port
+            Port choicePort = GetOutputFlowPort();
             choicePort.portName = string.Empty;
-            choicePort.portColor = Color.yellow;
             choicePort.viewDataKey = choice.OutputPortGuid;
             PortsContainer.Add(choicePort);
-            
-            TextField choiceTxtField = new() { value = choice.Name };
+
+            TextField choiceTxtField = new() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
             ChoiceContainer.Add(choiceTxtField);
-            
             
             Button deleteChoiceBtn = new() { text = "X" };
             ChoiceContainer.Add(deleteChoiceBtn);
 
             extensionContainer.Add(ChoiceContainer);
 
-            choiceTxtField.RegisterCallback<InputEvent>((ev) =>
-            {
-                TextField txtField = ev.currentTarget as TextField;
-                choice.Name = ev.newData;
-            });
-
             deleteChoiceBtn.clicked += () =>
             {
-                extensionContainer.Remove(ChoiceContainer);
-                choicesNode.RemoveChoice(choice);
+                RemovePort(isEnablePort);
+                RemovePort(choicePort);
+                RefreshPorts();
+                
             };
         }
 
@@ -233,7 +224,7 @@ namespace Graphview.NodeData
             ChoicesNode.Choice choice = new();
             choicesNode.AddChoice(choice);
 
-            DrawChoicePort(choicesNode, choice);
+            DrawChoicePort(choicesNode, choice, choicesNode.Choices.Count()-1);
         }
     }
     

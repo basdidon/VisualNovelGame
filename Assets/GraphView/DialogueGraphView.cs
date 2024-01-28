@@ -36,10 +36,9 @@ namespace Graphview.NodeView
                 if(obj == null)
                     continue;
                 
-                
                 if (obj is GVNodeData nodeData)
                 {
-                    AddElement(NodeFactory.LoadNode(nodeData));
+                    AddElement(NodeFactory.GetNodeView(nodeData,this));
                     continue;
                 }
 
@@ -49,14 +48,14 @@ namespace Graphview.NodeView
 
             foreach (var edgeData in Tree.Edges)
             {
-                Port outputPort = GetPortByGuid(edgeData.From);
-                Port inputPort = GetPortByGuid(edgeData.To);
+                Port outputPort = GetPortByGuid(edgeData.OutputPortGuid);
+                Port inputPort = GetPortByGuid(edgeData.InputPortGuid);
 
                 if (outputPort == null || inputPort == null)
                     continue;
 
                 Edge edge = outputPort.ConnectTo(inputPort);
-                edge.viewDataKey = edgeData.Id;
+                edge.viewDataKey = edgeData.EdgeGuid;
                 AddElement(edge);
             }
         }
@@ -93,7 +92,7 @@ namespace Graphview.NodeView
         }
 
         void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:GVNodeData
-            =>  AddElement(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree).GetNodeView());
+            =>  AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree),this));
         
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -134,7 +133,7 @@ namespace Graphview.NodeView
                     if (inputNode == null)
                         throw new Exception("inputNode == null");
 
-                    EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey, edge.viewDataKey);
+                    EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey);
                     Tree.AddEdge(edgeData);
                 }
             }
@@ -145,9 +144,13 @@ namespace Graphview.NodeView
                 {
                     if (element is Edge edge)
                     {
-                        Debug.Log("Edge was removed.");
-                        EdgeData toRemoveEdgeData = Tree.Edges.FirstOrDefault(_edge => _edge.Id == edge.viewDataKey);
-                        Tree.RemoveEdge(toRemoveEdgeData);
+                        EdgeData toRemoveEdgeData = Tree.Edges.FirstOrDefault(_edge => _edge.EdgeGuid == edge.viewDataKey);
+                        if (toRemoveEdgeData != null)
+                        {
+                            Tree.RemoveEdge(toRemoveEdgeData);
+                            Debug.Log("Edge was removed.");
+                        }
+
                     }
                     else if (element is Node node)
                     {

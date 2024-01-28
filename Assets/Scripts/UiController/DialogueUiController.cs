@@ -16,7 +16,7 @@ public class DialogueUiController: IUiController
 
     // text anim
     Sequence mySequence;
-    float textInputSpeed => .2f;
+    float TextInputSpeed => .1f;
 
     public DialogueUiController(VisualElement panel)
     {
@@ -64,7 +64,7 @@ public class DialogueUiController: IUiController
             () => TextDisplay.text,            // Getter function
             x => TextDisplay.text = x,         // Setter function
             dialogue,                          // End value (dialogue to be displayed)
-            textInputSpeed * dialogue.Length   // Duration of the animation
+            TextInputSpeed * dialogue.Length   // Duration of the animation
         ).SetEase(Ease.Linear));
 
         // Set up a callback to be executed when the sequence starts playing
