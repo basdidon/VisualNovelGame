@@ -9,12 +9,10 @@ namespace Graphview.NodeView
     public abstract class GraphViewNode : Node
     {
         public DialogueGraphView GraphView { get; private set; }
-        public GVNodeData NodeData { get; private set; }
 
         public void Initialize(GVNodeData nodeData, DialogueGraphView graphView)
         {
             GraphView = graphView;
-            NodeData = nodeData;
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
             viewDataKey = nodeData.Id;
             userData = nodeData;
@@ -84,13 +82,15 @@ namespace Graphview.NodeView
 
         public void RemovePort(Port port)
         {
-            if (!port.connected)
-                return;
+            Debug.Log("removing port");
+            if (port.connected)
+            {
+                Debug.Log("-- deleting edges");
+                GraphView.DeleteElements(port.connections);
+                port.DisconnectAll();
+            }
 
-            GraphView.DeleteElements(port.connections);
-
-            port.DisconnectAll();
-            GraphView.RemoveElement(port);
+            //GraphView.RemoveElement(port);
         }
     }
 }

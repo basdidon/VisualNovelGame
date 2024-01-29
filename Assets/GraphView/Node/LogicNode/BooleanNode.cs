@@ -55,13 +55,13 @@ namespace Graphview.NodeData
     {
         public override void OnDrawNodeView(GVNodeData nodeData)
         {
-            if(NodeData is BooleanNode booleanNode)
+            if(nodeData is BooleanNode booleanNode)
             {
                 SerializedObject SO = new(booleanNode);
                 mainContainer.Bind(SO);
 
                 var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(bool));
-                outputPort.viewDataKey = NodeData.OutputPortGuids[0];
+                outputPort.viewDataKey = booleanNode.OutputPortGuids[0];
                 outputPort.portName = "bool";
                 outputContainer.Add(outputPort);
                 outputPort.userData = booleanNode.Value;

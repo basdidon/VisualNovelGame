@@ -53,18 +53,71 @@ namespace Graphview.NodeData
         [System.Serializable]
         public class Choice
         {
-            [field: SerializeField] public bool IsEnable { get; set; }
-            [field: SerializeField] public string Name { get; set; }
-            [field: SerializeField] public string InputPortGuid { get; set; }
-            [field: SerializeField] public string OutputPortGuid { get; set; }
-            [field: SerializeField] public GVNodeData Child { get; set; }
+            [field:SerializeField] public ChoicesNode ChoicesNode { get; private set; }
+            [SerializeField] bool isEnable;
+            public bool IsEnable {
+                get
+                {
+                    var isEnablePortConnected = false;
+                    if (isEnablePortConnected)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        return isEnable;
+                    }
+                }
+            }
+            [field: SerializeField] public string Name { get; private set; }
 
-            public Choice()
+            [field: SerializeField] public string InputPortGuid { get; private set; }
+            [field: SerializeField] public EdgeData InputEdgeData { get; private set; }
+            
+            [field: SerializeField] public string OutputPortGuid { get; private set; }
+            [SerializeField] EdgeData outputEdgeData;
+            public EdgeData OutputEdgeData { 
+                get => outputEdgeData;
+                private set {
+                    outputEdgeData = value;
+                    
+                    if(OutputEdgeData != null)
+                    {
+                        Child = OutputEdgeData.GetInputNodeData();
+                    }
+                    else
+                    {
+                        Child = null;
+                    }
+                } 
+            }
+
+            [field: SerializeField] public GVNodeData Child { get; private set; }
+
+            public Choice(ChoicesNode choicesNode)
             {
-                IsEnable = true;
+                ChoicesNode = choicesNode;
+                isEnable = true;
                 Name = "new choice";
                 InputPortGuid = $"{Guid.NewGuid()}";
                 OutputPortGuid = $"{Guid.NewGuid()}";
+
+                ChoicesNode.DialogueTree.OnAddEdge += edgeData =>
+                {
+                    if (edgeData.OutputPortGuid == OutputPortGuid)
+                        OutputEdgeData = edgeData;
+
+                    if (edgeData.InputPortGuid == InputPortGuid)
+                        InputEdgeData = edgeData;
+                };
+
+                ChoicesNode.DialogueTree.OnRemoveEdge += edgeData =>
+                {
+                    if (edgeData.OutputPortGuid == OutputPortGuid)
+                        OutputEdgeData = null;
+                    if (edgeData.InputPortGuid == InputPortGuid)
+                        InputEdgeData = null;
+                };
             }
         }
 
@@ -78,8 +131,6 @@ namespace Graphview.NodeData
             ));
         }
 
-        [field: SerializeField] List<GVNodeData> Children { get; set; }
-
         [field: SerializeField] public string InputFlowPortGuid { get; private set; }
         public override string[] InputPortGuids => choices.Select(choice=> choice.InputPortGuid).Append(InputFlowPortGuid).ToArray();
         public override string[] OutputPortGuids => choices.Select(choice => choice.OutputPortGuid).ToArray();
@@ -89,42 +140,14 @@ namespace Graphview.NodeData
             Debug.Log("Init");
             base.Initialize(position, dialogueTree);
             InputFlowPortGuid = Guid.NewGuid().ToString();
-            Children = new List<GVNodeData>();
             choices = new();
         }
 
-        public override void AddChild(GVNodeData child)
-        {
-            Children.Add(child);
-        }
+        public override void AddChild(GVNodeData child){}
 
-        public override void RemoveChild(GVNodeData child)
-        {
-            Children.Remove(child);
-        }
+        public override void RemoveChild(GVNodeData child){}
 
-        public override IEnumerable<GVNodeData> GetChildren()
-        {
-            return Children;
-        }
-
-        public void Disconnect(string portGuid)
-        {
-            var portIdx = choices.FindIndex(choice => choice.OutputPortGuid == portGuid);
-            if (portIdx >= 0)
-            {
-                choices[portIdx].Child = null;
-            }
-        }
-
-        public void Connect(string portGuid, GVNodeData child)
-        {
-            var portIdx = choices.FindIndex(choice => choice.OutputPortGuid == portGuid);
-            if (portIdx >= 0)
-            {
-                choices[portIdx].Child = child;
-            }
-        }
+        public override IEnumerable<GVNodeData> GetChildren() => Choices.Where(c => c.Child != null).Select(c => c.Child);
     }
 
     [CustomGraphViewNode(typeof(ChoicesNode))]
@@ -165,7 +188,7 @@ namespace Graphview.NodeData
                 // output port
                 for(int i = 0;i<choicesNode.Choices.Count();i++)
                 {
-                    DrawChoicePort(choicesNode, choicesNode.Choices.ElementAt(i),i);
+                    DrawChoicePort(choicesNode.Choices.ElementAt(i),i);
                 }
 
                 // start with expanded state
@@ -173,7 +196,7 @@ namespace Graphview.NodeData
             }
         }
 
-        void DrawChoicePort(ChoicesNode choicesNode,ChoicesNode.Choice choice,int choiceIdx)
+        void DrawChoicePort(ChoicesNode.Choice choice,int choiceIdx)
         {
             VisualElement ChoiceContainer = new();
             ChoiceContainer.style.marginTop = new StyleLength(8);
@@ -193,7 +216,7 @@ namespace Graphview.NodeData
             
             PortsContainer.Add(isEnablePort);
 
-            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField" };
+            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].isEnable" };
             isEnablePort.Add(isEnableToggle);
 
             // choice output flow port
@@ -221,10 +244,10 @@ namespace Graphview.NodeData
 
         void OnAddChoice(ChoicesNode choicesNode)
         {
-            ChoicesNode.Choice choice = new();
+            ChoicesNode.Choice choice = new(choicesNode);
             choicesNode.AddChoice(choice);
 
-            DrawChoicePort(choicesNode, choice, choicesNode.Choices.Count()-1);
+            DrawChoicePort(choice, choicesNode.Choices.Count()-1);
         }
     }
     

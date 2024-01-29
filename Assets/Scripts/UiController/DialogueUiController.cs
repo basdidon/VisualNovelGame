@@ -6,7 +6,7 @@ using DG.Tweening;
 public class DialogueUiController: IUiController
 {
     VisualElement Root { get; set; }
-
+    
     Label SpeakerNameLabel { get; set; }
     Label TextDisplay { get; set; }
 

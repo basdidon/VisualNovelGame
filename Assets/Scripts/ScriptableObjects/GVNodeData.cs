@@ -1,15 +1,14 @@
 using UnityEngine;
 using System;
-using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
 using UnityEditor;
 
 namespace Graphview.NodeData
 {
-    using NodeView;
-
     public abstract class GVNodeData : ScriptableObject
     {
+        public DialogueTree DialogueTree { get; private set; }
+
         [field: SerializeField] public string Id { get; private set; }
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
@@ -21,6 +20,7 @@ namespace Graphview.NodeData
         {
             Id = $"{Guid.NewGuid()}";
             GraphPosition = position;
+            DialogueTree = dialogueTree;
             name = GetType().Name;
             dialogueTree.Nodes.Add(this);
             AssetDatabase.AddObjectToAsset(this, dialogueTree);

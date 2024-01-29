@@ -114,7 +114,7 @@ namespace Graphview.NodeView
 
         GraphViewChange OnGraphViewChange(GraphViewChange changes)
         {
-            Debug.Log("Changed");
+            Debug.Log("OnGraphViewChange");
             if (changes.edgesToCreate != null)
             {
                 foreach (var edge in changes.edgesToCreate)
@@ -122,7 +122,7 @@ namespace Graphview.NodeView
                     Node InputNode = edge.input.node;
                     Node OutputNode = edge.output.node;
 
-                    Debug.Log($"{OutputNode.title} -> {InputNode.title}");
+                    Debug.Log($"EdgesToCreate {OutputNode.title} -> {InputNode.title}");
 
                     if (OutputNode.userData is not GVNodeData outputNode)
                         throw new Exception("OutputNode.userData is not GVNodeData outputNode");
@@ -133,8 +133,7 @@ namespace Graphview.NodeView
                     if (inputNode == null)
                         throw new Exception("inputNode == null");
 
-                    EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey);
-                    Tree.AddEdge(edgeData);
+                    Tree.AddEdge(edge);
                 }
             }
 
@@ -149,6 +148,10 @@ namespace Graphview.NodeView
                         {
                             Tree.RemoveEdge(toRemoveEdgeData);
                             Debug.Log("Edge was removed.");
+                        }
+                        else
+                        {
+                            Debug.Log($"not found Edge {edge.viewDataKey}");
                         }
 
                     }
