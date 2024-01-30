@@ -14,25 +14,15 @@ namespace Graphview.NodeData
         [field: SerializeField] GVNodeData Child { get; set; }
 
         public override string[] InputPortGuids => new string[]{};
+        public override string[] OutputPortGuids => new string[] { outputFlowPortData.PortGuid };
+
         // Port
-        [SerializeField] string outputPortGuid;
-        public override string[] OutputPortGuids => new string[] { outputPortGuid };
+        [SerializeField] PortData outputFlowPortData;
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-            outputPortGuid = Guid.NewGuid().ToString();
-        }
-
-        public override void AddChild(GVNodeData child)
-        {
-            Child = child;
-        }
-
-        public override void RemoveChild(GVNodeData child)
-        {
-            if (Child == child)
-                Child = null;
+            outputFlowPortData = new(dialogueTree, Direction.Output);
         }
 
         public override IEnumerable<GVNodeData> GetChildren()

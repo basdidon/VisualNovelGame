@@ -36,11 +36,15 @@ namespace Graphview.NodeData
             DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
         }
 
-        [SerializeField] string inputPortGuid;
-        public override string[] InputPortGuids => new string[] { inputPortGuid };
+        // port
+        [SerializeField] PortData inputFlowPortData;
+        public PortData InputFlowPortData => inputFlowPortData;
 
-        [SerializeField] string outputPortGuid;
-        public override string[] OutputPortGuids => new string[] { outputPortGuid };
+        [SerializeField] PortData outputFlowPortData;
+        public PortData OutputFlowPortData => outputFlowPortData;
+
+        public override string[] InputPortGuids => new string[] { InputFlowPortData.PortGuid };
+        public override string[] OutputPortGuids => new string[] { OutputFlowPortData.PortGuid };
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
@@ -48,29 +52,15 @@ namespace Graphview.NodeData
 
             DialogueText = string.Empty;
 
-            inputPortGuid = Guid.NewGuid().ToString();
-            outputPortGuid = Guid.NewGuid().ToString();
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssetIfDirty(this);
-            AssetDatabase.Refresh();
-        }
+            inputFlowPortData = new(DialogueTree, Direction.Input);
+            outputFlowPortData = new(DialogueTree, Direction.Output);
 
-        [field: SerializeField] GVNodeData Child { get; set; }
-
-        public override void AddChild(GVNodeData child)
-        {
-            Child = child;
-        }
-
-        public override void RemoveChild(GVNodeData child)
-        {
-            if (Child == child)
-                Child = null;
+            SaveChanges();
         }
 
         public override IEnumerable<GVNodeData> GetChildren()
         {
-            return new GVNodeData[] { Child };
+            return new GVNodeData[] { OutputFlowPortData.ConnectedNode.Single() };
         }
     }
 
@@ -84,13 +74,12 @@ namespace Graphview.NodeData
                 SerializedObject SO = new(dialogueNode);
                 mainContainer.Bind(SO);
 
-                var inputFlowPort = GetInputFlowPort();
-                inputFlowPort.viewDataKey = dialogueNode.InputPortGuids[0];
+                // input port
+                var inputFlowPort = GetInputFlowPort(dialogueNode.InputPortGuids.Single());
                 inputContainer.Add(inputFlowPort);
 
                 // output port
-                Port outputPort = GetOutputFlowPort();
-                outputPort.viewDataKey = nodeData.OutputPortGuids[0];
+                Port outputPort = GetOutputFlowPort(nodeData.OutputPortGuids.Single());
                 outputContainer.Add(outputPort);
 
                 // CharacterData ObjectField

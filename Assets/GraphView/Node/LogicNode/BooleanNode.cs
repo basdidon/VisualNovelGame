@@ -1,50 +1,37 @@
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEditor;
 
 namespace Graphview.NodeData
 {
     using NodeView;
-    using System;
-    using UnityEditor;
 
     public class BooleanNode : GVNodeData
     {
         [SerializeField] bool value;
         [field:SerializeField] public bool Value { get; set; }
 
-        [field: SerializeField] GVNodeData Child { get; set; }
-
         public override string[] InputPortGuids => new string[] { };
 
-        [SerializeField] string outputPortGuid;
-        public override string[] OutputPortGuids => new string[] { outputPortGuid };
+        [SerializeField] PortData outputFlowPortData;
+        public PortData OutputFlowPortData => outputFlowPortData;
+        public override string[] OutputPortGuids => new string[] { outputFlowPortData.PortGuid };
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-            outputPortGuid = Guid.NewGuid().ToString();
-            Debug.Log($"output guid : {outputPortGuid}");
+            outputFlowPortData = new(DialogueTree, Direction.Output);
+
             SaveChanges();
-        }
-
-        public override void AddChild(GVNodeData child)
-        {
-            Child = child;
-        }
-
-        public override void RemoveChild(GVNodeData child)
-        {
-            if (Child == child)
-                Child = null;
         }
 
         public override IEnumerable<GVNodeData> GetChildren()
         {
-            return new GVNodeData[] { Child };
+            return new GVNodeData[] { outputFlowPortData.ConnectedNode.Single() };
         }
 
         public override void Execute() { }

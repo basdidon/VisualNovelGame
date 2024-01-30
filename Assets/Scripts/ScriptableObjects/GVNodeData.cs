@@ -15,6 +15,7 @@ namespace Graphview.NodeData
         // Port
         public abstract string[] InputPortGuids { get; }
         public abstract string[] OutputPortGuids { get; }
+        public abstract IEnumerable<GVNodeData> GetChildren();
 
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
@@ -24,12 +25,9 @@ namespace Graphview.NodeData
             name = GetType().Name;
             dialogueTree.Nodes.Add(this);
             AssetDatabase.AddObjectToAsset(this, dialogueTree);
+
             SaveChanges();
         }
-
-        public abstract void AddChild(GVNodeData child);
-        public abstract void RemoveChild(GVNodeData child);
-        public abstract IEnumerable<GVNodeData> GetChildren();
 
         public abstract void Execute();
 

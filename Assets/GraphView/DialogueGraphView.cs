@@ -38,12 +38,16 @@ namespace Graphview.NodeView
                 
                 if (obj is GVNodeData nodeData)
                 {
-                    AddElement(NodeFactory.GetNodeView(nodeData,this));
+                    var node = NodeFactory.GetNodeView(nodeData, this);
+                    AddElement(node);
+                    //Debug.Log($"-> {}");
                     continue;
                 }
 
                 throw new Exception($"Unexpected asset type. {obj.GetType()}");
             }
+
+            //Debug.Log($"-> {GetPortByGuid("aad956ad-4dad-46ec-9069-b5226819ff81").direction}");
             // create edges
 
             foreach (var edgeData in Tree.Edges)
@@ -54,8 +58,18 @@ namespace Graphview.NodeView
                 if (outputPort == null || inputPort == null)
                     continue;
 
-                Edge edge = outputPort.ConnectTo(inputPort);
+                Debug.Log($"{outputPort.viewDataKey} {outputPort.direction} -> {edgeData.InputPortGuid} {inputPort.direction}");
+                /*
+                if (outputPort.direction == inputPort.direction)
+                    continue;
+                               Edge edge = outputPort.ConnectTo(inputPort);
+                               edge.viewDataKey = edgeData.EdgeGuid;
+                */
+                Edge edge = new();
                 edge.viewDataKey = edgeData.EdgeGuid;
+                edge.input = inputPort;
+                edge.output = outputPort;
+                edge.UpdateEdgeControl();
                 AddElement(edge);
             }
         }
@@ -101,6 +115,7 @@ namespace Graphview.NodeView
 
             evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
             evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
+            evt.menu.AppendAction($"Create QuestionNode", CreateActionEvent<QuestionNode>);
             evt.menu.AppendAction("Create LogicNode/Boolean", CreateActionEvent<BooleanNode>);
         }
 
@@ -133,7 +148,9 @@ namespace Graphview.NodeView
                     if (inputNode == null)
                         throw new Exception("inputNode == null");
 
-                    Tree.AddEdge(edge);
+                    EdgeData edgeData = new(Tree, edge.output.viewDataKey, edge.input.viewDataKey);
+                    edge.viewDataKey = edgeData.EdgeGuid;
+                    Tree.AddEdge(edgeData);
                 }
             }
 

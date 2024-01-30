@@ -22,21 +22,23 @@ namespace Graphview.NodeView
 
         public abstract void OnDrawNodeView(GVNodeData nodeData);
 
-        public Port GetInputFlowPort()
+        public Port GetInputFlowPort(string guid)
         {
             // input port
             Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(ExecutionFlow));
             inputPort.portName = "input";
             inputPort.portColor = Color.yellow;
+            inputPort.viewDataKey = guid;
             return inputPort;
         }
 
-        public Port GetOutputFlowPort()
+        public Port GetOutputFlowPort(string guid)
         {
             // input port
             Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
             outputPort.portName = "output";
             outputPort.portColor = Color.yellow;
+            outputPort.viewDataKey = guid;
             return outputPort;
         }
 

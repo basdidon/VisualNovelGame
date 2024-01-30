@@ -21,24 +21,9 @@ namespace Graphview.NodeData
                 .OfType<StartNode>()
                 .First();
 
-        public void AddEdge(Edge edge)
+        public void AddEdge(EdgeData edgeData)
         {
-            EdgeData edgeData = new(this, edge.output.viewDataKey, edge.input.viewDataKey);
-            edge.viewDataKey = edgeData.EdgeGuid;
-            
-            Debug.Log($"add edge {edgeData.OutputPortGuid} -> {edgeData.InputPortGuid}");
-
-            var fromNode = edgeData.GetOutputNodeData();
-            var toNode = edgeData.GetInputNodeData();
-
-            Debug.Log($"created edge ({edgeData.EdgeGuid}) \r\n" +
-                $"[Output] node : {fromNode.Id} ,port : {edgeData.OutputPortGuid}\r\n"+
-                $"[Input]  node : {toNode.Id} ,port : {edgeData.InputPortGuid}");
-            
             edges.Add(edgeData);
-
-            fromNode.AddChild(toNode);
-
             OnAddEdge?.Invoke(edgeData);
 
             SaveChanges();
@@ -46,13 +31,7 @@ namespace Graphview.NodeData
 
         public void RemoveEdge(EdgeData edgeData)
         {
-            var fromNode = edgeData.GetOutputNodeData();
-            var toNode = edgeData.GetInputNodeData();
-
             edges.Remove(edgeData);
-
-            fromNode.RemoveChild(toNode);
-
             OnRemoveEdge?.Invoke(edgeData);
 
             SaveChanges();
@@ -136,26 +115,81 @@ namespace Graphview.NodeData
     [Serializable]
     public class PortData
     {
-        [field: SerializeField] public string PortGuid { get; private set; }
-        [field: SerializeField] public Direction Direction { get; private set; }
-        [field: SerializeField] public Port.Capacity Capacity {get; private set;}
-
-        [field: SerializeField] public EdgeData EdgeData { get; private set; }
-
         DialogueTree DialogueTree { get; set; }
 
-        public PortData(DialogueTree dialogueTree,Direction direction,Port.Capacity capacity ,EdgeData edgeData)
+        [field: SerializeField] public string PortGuid { get; private set; }
+        [field: SerializeField] public Direction Direction { get; private set; }
+        [field: SerializeField] public List<EdgeData> EdgesData { get; private set; }
+
+        [field: SerializeField] public List<GVNodeData> ConnectedNode { get; private set; }
+
+        public PortData(DialogueTree dialogueTree,Direction direction)
         {
             DialogueTree = dialogueTree;
-            PortGuid = Guid.NewGuid().ToString();
             Direction = direction;
-            Capacity = capacity;
-            EdgeData = edgeData;
+        
+            PortGuid = Guid.NewGuid().ToString();
+            EdgesData = new();
+            ConnectedNode = new();
+
+            UpdatePortData();
+
+            DialogueTree.OnAddEdge += OnAddEdge;
+            DialogueTree.OnRemoveEdge += OnRemoveEdge;
         }
 
         void OnAddEdge(EdgeData edgeData)
         {
-            
+            if(Direction == Direction.Input && edgeData.InputPortGuid == PortGuid)
+            {
+                EdgesData.Add(edgeData);
+            }
+            if(Direction == Direction.Output && edgeData.OutputPortGuid == PortGuid)
+            {
+                EdgesData.Add(edgeData);
+            }
+
+            UpdateConnectedNode();
+        }
+
+        void OnRemoveEdge(EdgeData edgeData)
+        {
+            if (Direction == Direction.Input && edgeData.InputPortGuid == PortGuid)
+            {
+                EdgesData.Remove(edgeData);
+            }
+            if (Direction == Direction.Output && edgeData.OutputPortGuid == PortGuid)
+            {
+                EdgesData.Remove(edgeData);
+            }
+
+            UpdateConnectedNode();
+        }
+
+        public void UpdatePortData()
+        {
+            if (Direction == Direction.Input)
+            {
+                EdgesData = DialogueTree.Edges.Where(e => e.InputPortGuid == PortGuid).ToList();
+            }
+            else if (Direction == Direction.Output)
+            {
+                EdgesData = DialogueTree.Edges.Where(e => e.OutputPortGuid == PortGuid).ToList();
+            }
+
+            UpdateConnectedNode();
+        }
+
+        void UpdateConnectedNode()
+        {
+            if(Direction == Direction.Input)
+            {
+                ConnectedNode = EdgesData.Select(e => e.GetOutputNodeData()).ToList();
+            }
+            else if(Direction == Direction.Output)
+            {
+                ConnectedNode = EdgesData.Select(e => e.GetInputNodeData()).ToList();
+            }
         }
     }
 }

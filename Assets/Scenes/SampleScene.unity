@@ -488,7 +488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdd986decf041141a6f2e2e3d24e25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialogueTree>k__BackingField: {fileID: 11400000, guid: e9e8b6ef8340dc844818597493d2eebd, type: 2}
+  <DialogueTree>k__BackingField: {fileID: 0}
   <TapInputAction>k__BackingField: {fileID: 1027717850900299178, guid: ffaadf679290887408afd991aeac8720, type: 3}
 --- !u!114 &1033439912
 MonoBehaviour:
