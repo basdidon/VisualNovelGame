@@ -72,7 +72,7 @@ public class UiDocumentController : MonoBehaviour
                 DialogueUiController.SetDialogue(ctx.CharacterData.Name,ctx.DialogueText);
                 ChoicesPickerUiController.Hide();
             };
-
+            /*
             DialogueManager.Instance.OnSelectChoices += (ctx) => {
                 TapAction.Disable();
 
@@ -81,7 +81,7 @@ public class UiDocumentController : MonoBehaviour
                 ChoicesPickerUiController.SetChoices(ctx.ChoicesText,ctx.ChoicesEnable);
                 ChoicesPickerUiController.Display();
             };
-
+            */
             DialogueManager.Instance.OnFinish += () =>
             {
                 TapAction.Disable();

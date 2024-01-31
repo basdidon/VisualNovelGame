@@ -14,6 +14,12 @@ namespace Graphview.NodeData
 
     public class QuestionNode : GVNodeData
     {
+        // prop
+        [field: SerializeField] public CharacterData CharacterData { get; private set; }
+        [field: SerializeField, TextArea]
+        public string QuestionText { get; set; }
+
+        // port
         [SerializeField] PortData inputFlowPortData;
         public PortData InputFlowPortData => inputFlowPortData;
 
@@ -23,6 +29,7 @@ namespace Graphview.NodeData
         [SerializeField] PortData outputFlowPortData;
         public PortData OutputFlowPortData => outputFlowPortData;
 
+        // port guid
         public override string[] InputPortGuids => new string[] { InputFlowPortData.PortGuid, InputChoicesPortData.PortGuid };
 
         public override string[] OutputPortGuids => new string[] { OutputFlowPortData.PortGuid };
@@ -54,17 +61,36 @@ namespace Graphview.NodeData
                 SerializedObject SO = new(questionNode);
                 mainContainer.Bind(SO);
 
+                // CharacterData ObjectField
+                mainContainer.Insert(1, GetCharacterDataObjectField());
+
                 Port inputFlowPort = GetInputFlowPort(questionNode.InputFlowPortData.PortGuid);
                 inputContainer.Add(inputFlowPort);
 
-                Port inputChoicesPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, null); // change to choice later
+                Port inputChoicesPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(ChoicesGraphData)); // change to choice later
                 inputChoicesPort.portName = "Choices";
                 inputContainer.Add(inputChoicesPort);
 
                 Port outputFlowPort = GetOutputFlowPort(questionNode.OutputFlowPortData.PortGuid);
                 outputContainer.Add(outputFlowPort);
 
-                Label testLabel = new();
+                Port outputSelectedIdx = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(int));
+                outputSelectedIdx.portName = "selectedIndex";
+                outputContainer.Add(outputSelectedIdx);
+
+                // Custom extension
+                VisualElement customVisualElement = new();
+
+                var textArea = new TextField()
+                {
+                    bindingPath = GetPropertyBindingPath("QuestionText"),
+                    multiline = true,
+                };
+                customVisualElement.Add(textArea);
+
+                extensionContainer.Add(customVisualElement);
+
+                RefreshExpandedState();
                 
             }
         }

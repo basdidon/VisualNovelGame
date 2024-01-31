@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5117951464758837715
+--- !u!114 &-5475256031496169401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,27 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de63f8a2f31d0e4469485a6aa310193f, type: 3}
-  m_Name: QuestionNode
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 30f8ffa0-91e3-4ac1-b983-e6f2e98b4254
-  <GraphPosition>k__BackingField: {x: 708, y: 77}
+  <Id>k__BackingField: 5287398d-e0b4-4493-b4e5-7a62cbe7bb65
+  <GraphPosition>k__BackingField: {x: 371, y: 19}
+  <CharacterData>k__BackingField: {fileID: 0}
+  <DialogueText>k__BackingField: 
   inputFlowPortData:
-    <PortGuid>k__BackingField: 
-    <Direction>k__BackingField: 0
-    <EdgesData>k__BackingField: []
-    <ConnectedNode>k__BackingField: []
-  inputChoicesPortData:
-    <PortGuid>k__BackingField: 
+    <PortGuid>k__BackingField: 48d00716-ec1f-4c78-973c-1d0a360d31e0
     <Direction>k__BackingField: 0
     <EdgesData>k__BackingField: []
     <ConnectedNode>k__BackingField: []
   outputFlowPortData:
-    <PortGuid>k__BackingField: 
-    <Direction>k__BackingField: 0
+    <PortGuid>k__BackingField: 8565fba6-28ce-404f-b14c-e20b0d0a003f
+    <Direction>k__BackingField: 1
     <EdgesData>k__BackingField: []
     <ConnectedNode>k__BackingField: []
---- !u!114 &-2233481114948461052
+--- !u!114 &-5073637289842980830
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,69 +35,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
-  m_Name: ChoicesNode
+  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
+  m_Name: StartNode
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 1de7debc-36fa-4832-8073-0c1e0c7453a4
-  <GraphPosition>k__BackingField: {x: 999, y: -47}
-  <CharacterData>k__BackingField: {fileID: 0}
-  <QuestionText>k__BackingField: 
-  choices: []
-  inputFlowPortData:
-    <PortGuid>k__BackingField: 6ef26b6e-acd8-44dd-be37-3efbafc0b73c
-    <Direction>k__BackingField: 0
-    <EdgesData>k__BackingField:
-    - <DialogueTree>k__BackingField: {fileID: 11400000}
-      <EdgeGuid>k__BackingField: ea7998f3-2b6c-40c7-bf62-7de492ce7d53
-      <OutputPortGuid>k__BackingField: 720e796b-3b61-4135-9bef-92dcd033447c
-      <InputPortGuid>k__BackingField: 6ef26b6e-acd8-44dd-be37-3efbafc0b73c
-    <ConnectedNode>k__BackingField:
-    - {fileID: -2009513655879384587}
---- !u!114 &-2009513655879384587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
-  m_Name: ChoicesNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: 854b6fb9-7c75-4ac2-b885-6bbbd5229ecf
-  <GraphPosition>k__BackingField: {x: 389, y: 94}
-  <CharacterData>k__BackingField: {fileID: 0}
-  <QuestionText>k__BackingField: 
-  choices:
-  - <ChoicesNode>k__BackingField: {fileID: -2009513655879384587}
-    isEnable: 1
-    <Name>k__BackingField: new choice
-    isEnableInputPortData:
-      <PortGuid>k__BackingField: ec79931b-f223-4452-8bf6-eeb6645e54a0
-      <Direction>k__BackingField: 0
-      <EdgesData>k__BackingField: []
-      <ConnectedNode>k__BackingField: []
-    outputFlowPortData:
-      <PortGuid>k__BackingField: 720e796b-3b61-4135-9bef-92dcd033447c
-      <Direction>k__BackingField: 1
-      <EdgesData>k__BackingField:
-      - <DialogueTree>k__BackingField: {fileID: 11400000}
-        <EdgeGuid>k__BackingField: ea7998f3-2b6c-40c7-bf62-7de492ce7d53
-        <OutputPortGuid>k__BackingField: 720e796b-3b61-4135-9bef-92dcd033447c
-        <InputPortGuid>k__BackingField: 6ef26b6e-acd8-44dd-be37-3efbafc0b73c
-      <ConnectedNode>k__BackingField:
-      - {fileID: -2233481114948461052}
-  inputFlowPortData:
-    <PortGuid>k__BackingField: 87b13158-7169-4bc0-9439-5b520638eb50
-    <Direction>k__BackingField: 0
-    <EdgesData>k__BackingField:
-    - <DialogueTree>k__BackingField: {fileID: 11400000}
-      <EdgeGuid>k__BackingField: 6f730a78-6b11-4b6e-a205-561a295f18c2
-      <OutputPortGuid>k__BackingField: b1561a99-8d5c-45f5-a3e2-c30d80212b07
-      <InputPortGuid>k__BackingField: 87b13158-7169-4bc0-9439-5b520638eb50
-    <ConnectedNode>k__BackingField:
-    - {fileID: 7313095580588524651}
+  <Id>k__BackingField: ce709ba7-ff6e-471f-b781-81837e793263
+  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  <Child>k__BackingField: {fileID: 0}
+  outputFlowPortData:
+    <PortGuid>k__BackingField: 905784fd-0e92-4ad7-bda7-a47b76d00e89
+    <Direction>k__BackingField: 1
+    <EdgesData>k__BackingField: []
+    <ConnectedNode>k__BackingField: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,41 +59,6 @@ MonoBehaviour:
   m_Name: DialogueTree
   m_EditorClassIdentifier: 
   <Nodes>k__BackingField:
-  - {fileID: 7313095580588524651}
-  - {fileID: -2009513655879384587}
-  - {fileID: -2233481114948461052}
-  - {fileID: -5117951464758837715}
-  edges:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <EdgeGuid>k__BackingField: 6f730a78-6b11-4b6e-a205-561a295f18c2
-    <OutputPortGuid>k__BackingField: b1561a99-8d5c-45f5-a3e2-c30d80212b07
-    <InputPortGuid>k__BackingField: 87b13158-7169-4bc0-9439-5b520638eb50
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <EdgeGuid>k__BackingField: a5858622-724c-4249-ac2d-f40ca6d018c2
-    <OutputPortGuid>k__BackingField: 720e796b-3b61-4135-9bef-92dcd033447c
-    <InputPortGuid>k__BackingField: 
---- !u!114 &7313095580588524651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
-  m_Name: StartNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: 17dbb5c7-61b2-4a7e-96f3-5155b9392311
-  <GraphPosition>k__BackingField: {x: 0, y: 0}
-  <Child>k__BackingField: {fileID: 0}
-  outputFlowPortData:
-    <PortGuid>k__BackingField: b1561a99-8d5c-45f5-a3e2-c30d80212b07
-    <Direction>k__BackingField: 1
-    <EdgesData>k__BackingField:
-    - <DialogueTree>k__BackingField: {fileID: 11400000}
-      <EdgeGuid>k__BackingField: 6f730a78-6b11-4b6e-a205-561a295f18c2
-      <OutputPortGuid>k__BackingField: b1561a99-8d5c-45f5-a3e2-c30d80212b07
-      <InputPortGuid>k__BackingField: 87b13158-7169-4bc0-9439-5b520638eb50
-    <ConnectedNode>k__BackingField:
-    - {fileID: -2009513655879384587}
+  - {fileID: -5073637289842980830}
+  - {fileID: -5475256031496169401}
+  edges: []

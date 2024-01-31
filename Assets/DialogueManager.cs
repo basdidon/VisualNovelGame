@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
 
     // event for ui
     public event Action<DialogueRecord> OnNewDialogue;
-    public event Action<ChoicesRecord> OnSelectChoices;
+    //public event Action<ChoicesRecord> OnSelectChoices;
     public event Action OnFinish;
 
     // forNodeinvoke
@@ -46,12 +46,12 @@ public class DialogueManager : MonoBehaviour
     {
         OnNewDialogue?.Invoke(record);
     }
-
+    /*
     internal void OnSelectChoicesEvent(ChoicesRecord choicesRecord)
     {
         OnSelectChoices?.Invoke(choicesRecord);
     }
-
+    */
     public void ExecuteNextNode(int idx = 0)
     {
         CurrentNode = CurrentNode.GetChildren().ElementAtOrDefault(idx);

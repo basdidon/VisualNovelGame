@@ -33,9 +33,9 @@ namespace Graphview.NodeView
             Debug.Log($"Load {assetPath}");
             foreach (var obj in AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath)) // load all sub assets
             {
-                if(obj == null)
+                if (obj == null)
                     continue;
-                
+
                 if (obj is GVNodeData nodeData)
                 {
                     var node = NodeFactory.GetNodeView(nodeData, this);
@@ -50,28 +50,28 @@ namespace Graphview.NodeView
             //Debug.Log($"-> {GetPortByGuid("aad956ad-4dad-46ec-9069-b5226819ff81").direction}");
             // create edges
 
+            Debug.Log($"StartDrawingEdge ({Tree.Edges.Count})");
             foreach (var edgeData in Tree.Edges)
             {
                 Port outputPort = GetPortByGuid(edgeData.OutputPortGuid);
                 Port inputPort = GetPortByGuid(edgeData.InputPortGuid);
 
+
                 if (outputPort == null || inputPort == null)
                     continue;
 
                 Debug.Log($"{outputPort.viewDataKey} {outputPort.direction} -> {edgeData.InputPortGuid} {inputPort.direction}");
-                /*
+
+
                 if (outputPort.direction == inputPort.direction)
                     continue;
-                               Edge edge = outputPort.ConnectTo(inputPort);
-                               edge.viewDataKey = edgeData.EdgeGuid;
-                */
-                Edge edge = new();
+
+                Edge edge = outputPort.ConnectTo(inputPort);
                 edge.viewDataKey = edgeData.EdgeGuid;
-                edge.input = inputPort;
-                edge.output = outputPort;
-                edge.UpdateEdgeControl();
+
                 AddElement(edge);
             }
+            
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
