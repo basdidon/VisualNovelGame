@@ -63,11 +63,15 @@ namespace Graphview.NodeData
                 RefreshExpandedState();
             }
         }
+    }
 
-        protected override void OnPortRemoved(Port port)
-        {
-            base.OnPortRemoved(port);
-            Debug.Log("port removed");
-        }
+    public class BooleanPortOutput
+    {
+        public bool GetValue;
+    }
+
+    public class PortOutput<T>
+    {
+        public T Value { get; set; }
     }
 }

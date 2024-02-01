@@ -69,19 +69,19 @@ public class UiDocumentController : MonoBehaviour
             {
                 TapAction.Enable();
 
-                DialogueUiController.SetDialogue(ctx.CharacterData.Name,ctx.DialogueText);
+                DialogueUiController.SetDialogue(ctx.CharacterData?.Name, ctx.DialogueText);
                 ChoicesPickerUiController.Hide();
             };
-            /*
+            
             DialogueManager.Instance.OnSelectChoices += (ctx) => {
                 TapAction.Disable();
 
-                DialogueUiController.SetDialogue(ctx.DialogueRecord.CharacterData.Name,ctx.DialogueRecord.DialogueText);
+                DialogueUiController.SetDialogue(ctx.DialogueRecord.CharacterData?.Name,ctx.DialogueRecord.DialogueText);
 
                 ChoicesPickerUiController.SetChoices(ctx.ChoicesText,ctx.ChoicesEnable);
                 ChoicesPickerUiController.Display();
             };
-            */
+            
             DialogueManager.Instance.OnFinish += () =>
             {
                 TapAction.Disable();

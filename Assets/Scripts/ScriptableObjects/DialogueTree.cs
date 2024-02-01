@@ -47,8 +47,6 @@ namespace Graphview.NodeData
             AssetDatabase.Refresh();
         }
 
-
-
 #if UNITY_EDITOR
         public static string GetCurrentProjectBrowserDirectory()
         {
@@ -137,6 +135,8 @@ namespace Graphview.NodeData
 
             DialogueTree.OnAddEdge += OnAddEdge;
             DialogueTree.OnRemoveEdge += OnRemoveEdge;
+
+            Debug.Log($"create port {PortGuid}");
         }
 
         void OnAddEdge(EdgeData edgeData)
@@ -190,6 +190,7 @@ namespace Graphview.NodeData
             else if(Direction == Direction.Output)
             {
                 ConnectedNode = EdgesData.Select(e => e.GetInputNodeData()).ToList();
+                Debug.Log($"{PortGuid} : {ConnectedNode.Count}");
             }
         }
     }

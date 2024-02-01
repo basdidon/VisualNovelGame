@@ -11,7 +11,7 @@ using Graphview.NodeView;
 
 namespace Graphview.NodeData
 {
-    /*
+    
     public record ChoicesRecord
     {
         public DialogueRecord DialogueRecord { get; }
@@ -29,15 +29,15 @@ namespace Graphview.NodeData
         public ChoicesRecord(CharacterData characterData, string dialogueText, string[] choicesText, bool[] choicesEnable) 
             : this(new(characterData, dialogueText), choicesText, choicesEnable) 
         { }
-    }*/
+    }
 
     public class ChoicesNode : GVNodeData
     {
-        /*
+        
         [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
         public string QuestionText { get; set; }
-        */
+        
         [SerializeField] List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
 
@@ -90,13 +90,12 @@ namespace Graphview.NodeData
 
         public override void Execute()
         {
-            /*
             DialogueManager.Instance.OnSelectChoicesEvent(new(
                 CharacterData, 
                 QuestionText, 
                 choices.Select(c => c.Name).ToArray(),
                 choices.Select(c=>c.IsEnable).ToArray()
-            ));*/
+            ));
         }
 
         [SerializeField] PortData inputFlowPortData;
@@ -125,15 +124,15 @@ namespace Graphview.NodeData
         {
             if (nodeData is ChoicesNode choicesNode)
             {
-                SerializedObject SO = new(choicesNode);
-                mainContainer.Bind(SO);
+                // CharacterData ObjectField
+                mainContainer.Insert(1, GetCharacterDataObjectField());
 
                 var inputFlowPort = GetInputFlowPort(choicesNode.InputFlowPortData.PortGuid);
                 inputContainer.Add(inputFlowPort);
 
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () => OnAddChoice(choicesNode);
-                mainContainer.Insert(1, addCondition);
+                mainContainer.Insert(2, addCondition);
 
                 // output port
                 for(int i = 0;i<choicesNode.Choices.Count();i++)
@@ -157,7 +156,6 @@ namespace Graphview.NodeData
             StyleLength styleLenght_8 = new(8);
             ChoiceContainer.style.marginTop = styleLenght_8;
             ChoiceContainer.style.backgroundColor = new Color(.08f,.08f,.08f,.5f);
-
             ChoiceContainer.style.borderBottomLeftRadius = styleLenght_8;
             ChoiceContainer.style.borderBottomRightRadius = styleLenght_8;
             ChoiceContainer.style.borderTopLeftRadius = styleLenght_8;
@@ -171,13 +169,13 @@ namespace Graphview.NodeData
             Port isEnablePort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
             isEnablePort.viewDataKey = choice.IsEnableInputPortData.PortGuid;
             isEnablePort.portName = string.Empty;
+            //isEnablePort.userData;
             PortsContainer.Add(isEnablePort);
             
             var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].isEnable" };
             isEnablePort.Add(isEnableToggle);
 
             // choice output flow port
-
             Port choicePort = GetOutputFlowPort(choice.OutputFlowPortData.PortGuid);
             PortsContainer.Add(choicePort);
             
@@ -204,6 +202,7 @@ namespace Graphview.NodeData
             choicesNode.AddChoice(choice);
 
             DrawChoicePort(choice, choicesNode.Choices.Count()-1);
+            RefreshExpandedState();
         }
     }
 

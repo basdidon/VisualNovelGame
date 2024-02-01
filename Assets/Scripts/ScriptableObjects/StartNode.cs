@@ -6,13 +6,12 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
 
 namespace Graphview.NodeData
 {
     public class StartNode : GVNodeData
     {
-        [field: SerializeField] GVNodeData Child { get; set; }
-
         public override string[] InputPortGuids => new string[]{};
         public override string[] OutputPortGuids => new string[] { outputFlowPortData.PortGuid };
 
@@ -23,11 +22,12 @@ namespace Graphview.NodeData
         {
             base.Initialize(position, dialogueTree);
             outputFlowPortData = new(dialogueTree, Direction.Output);
+            
         }
 
         public override IEnumerable<GVNodeData> GetChildren()
         {
-            return new GVNodeData[] { Child };
+            return new GVNodeData[] { outputFlowPortData.ConnectedNode.FirstOrDefault() };
         }
 
         public override void Execute(){}

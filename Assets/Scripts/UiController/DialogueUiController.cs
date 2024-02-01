@@ -53,6 +53,8 @@ public class DialogueUiController: IUiController
 
     public void SetDialogue(string speakerName, string dialogue)
     {
+        if (speakerName == null)
+            speakerName = "Unknown";
         // Create a new DOTween sequence
         mySequence = DOTween.Sequence();
 

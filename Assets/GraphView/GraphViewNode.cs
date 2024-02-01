@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Graphview.NodeView
     public abstract class GraphViewNode : Node
     {
         public DialogueGraphView GraphView { get; private set; }
+        public SerializedObject SerializedObject { get; private set; }
 
         public void Initialize(GVNodeData nodeData, DialogueGraphView graphView)
         {
@@ -18,6 +20,9 @@ namespace Graphview.NodeView
             userData = nodeData;
             title = name = nodeData.GetType().Name;
             DrawHeader();
+            
+            SerializedObject = new(nodeData);
+            mainContainer.Bind(SerializedObject);
         }
 
         public abstract void OnDrawNodeView(GVNodeData nodeData);
@@ -25,7 +30,7 @@ namespace Graphview.NodeView
         public Port GetInputFlowPort(string guid)
         {
             // input port
-            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(ExecutionFlow));
+            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ExecutionFlow));
             inputPort.portName = "input";
             inputPort.portColor = Color.yellow;
             inputPort.viewDataKey = guid;

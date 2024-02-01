@@ -19,7 +19,7 @@ namespace Graphview.NodeData
         public DialogueRecord(CharacterData characterData,string dialogueText)
         {
             CharacterData = characterData;
-            DialogueText = dialogueText;
+            DialogueText = dialogueText ?? string.Empty;
         }
     }
 
@@ -60,7 +60,7 @@ namespace Graphview.NodeData
 
         public override IEnumerable<GVNodeData> GetChildren()
         {
-            return new GVNodeData[] { OutputFlowPortData.ConnectedNode.Single() };
+            return new GVNodeData[] { OutputFlowPortData.ConnectedNode.FirstOrDefault() };
         }
     }
 
