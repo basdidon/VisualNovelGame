@@ -5,7 +5,7 @@
             <ui:Label tabindex="-1" text="[speaker-name]" display-tooltip-when-elided="true" name="speaker-name-txt" style="color: rgb(255, 255, 255); font-size: 148px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 12px; padding-right: 12px; padding-top: 8px; padding-bottom: 8px; -unity-font-style: bold;" />
         </ui:VisualElement>
         <ui:VisualElement name="dialogue-container" class="dialogue-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); margin-top: 24px; margin-right: 24px; margin-bottom: 24px; margin-left: 24px; min-height: 400px; max-height: 400px;">
-            <ui:Label tabindex="-1" text="line 1&#10;line 2&#10;line 3" display-tooltip-when-elided="true" name="text-display" class="dialogue-text" style="-unity-text-align: upper-left;" />
+            <ui:Label tabindex="-1" text="line 1&lt;color = green&gt;green&lt;/color&gt;&#10;line 2&#10;line 3" display-tooltip-when-elided="true" name="text-display" class="dialogue-text" style="-unity-text-align: upper-left;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

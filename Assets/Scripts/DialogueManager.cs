@@ -7,16 +7,7 @@ public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
 
-    GVNodeData currentNode;
-    public GVNodeData CurrentNode{ 
-        get => currentNode;
-        private set 
-        {
-            currentNode = value;
-            if(CurrentNode != null)
-                CurrentNode.Execute();
-        }
-    }
+    public GVNodeData CurrentNode { get; set; }
 
     private void Awake()
     {
@@ -32,8 +23,15 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(DialogueTree dialogueTree)
     {
-        CurrentNode = dialogueTree.StartNode;
-        ExecuteNextNode();
+        if (dialogueTree == null)
+        {
+            Debug.LogWarning("can't start when dialogueTree is null");
+        }
+        else
+        {
+            CurrentNode = dialogueTree.StartNode;
+            ExecuteNextNode();
+        }
     }
 
     // event for ui
@@ -54,13 +52,15 @@ public class DialogueManager : MonoBehaviour
     
     public void ExecuteNextNode(int idx = 0)
     {
-        CurrentNode = CurrentNode.GetChildren().ElementAtOrDefault(idx);
-
         if (CurrentNode == null)
         {
             Debug.Log("finish");
             OnFinish?.Invoke();
             return;
         }
+        /*
+        CurrentNode.Execute(idx);
+        */
+
     }
 }

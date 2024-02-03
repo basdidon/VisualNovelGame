@@ -115,7 +115,8 @@ namespace Graphview.NodeView
 
             evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
             evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
-            evt.menu.AppendAction($"Create QuestionNode", CreateActionEvent<QuestionNode>);
+            //evt.menu.AppendAction($"Create QuestionNode", CreateActionEvent<QuestionNode>);
+            evt.menu.AppendAction($"Create TextNode", CreateActionEvent<TextNode>);
             evt.menu.AppendAction("Create LogicNode/Boolean", CreateActionEvent<BooleanNode>);
         }
 

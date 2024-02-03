@@ -66,9 +66,11 @@ namespace Graphview.NodeData
             Debug.Log(uniquePath);
 
             AssetDatabase.CreateAsset(tree, uniquePath);
+
+            NodeFactory.CreateNode<StartNode>(Vector2.zero, tree);
+            
             EditorUtility.SetDirty(tree);
             AssetDatabase.SaveAssetIfDirty(tree);
-            NodeFactory.CreateNode<StartNode>(Vector2.zero, tree);
         }
 
         [OnOpenAsset(0)]
@@ -106,21 +108,38 @@ namespace Graphview.NodeData
         }
 
         public static EdgeData GetEdgeData(DialogueTree dialogueTree,string edgeGuid)=> dialogueTree.Edges.First(e => e.EdgeGuid == edgeGuid);
-        
-        public GVNodeData GetInputNodeData()=> DialogueTree.Nodes.First(n=>n.InputPortGuids.Contains(InputPortGuid));
+
+        public GVNodeData GetInputNodeData()
+        {
+            var result = DialogueTree.Nodes.FirstOrDefault(n => n.InputPortGuids.Contains(InputPortGuid));
+            if(result == null)
+            {
+                throw new Exception($"can't find any node that contain {InputPortGuid}");
+            }
+            else
+            {
+                return result;
+            }
+        }
+
         public GVNodeData GetOutputNodeData()=> DialogueTree.Nodes.First(n=>n.OutputPortGuids.Contains(OutputPortGuid));
     }
 
     [Serializable]
     public class PortData
     {
-        DialogueTree DialogueTree { get; set; }
+        [field: SerializeField] DialogueTree DialogueTree { get; set; }
 
         [field: SerializeField] public string PortGuid { get; private set; }
         [field: SerializeField] public Direction Direction { get; private set; }
         [field: SerializeField] public List<EdgeData> EdgesData { get; private set; }
 
         [field: SerializeField] public List<GVNodeData> ConnectedNode { get; private set; }
+        public List<GVNodeData> GetConnectedNode()
+        {
+            UpdateConnectedNode();
+            return ConnectedNode;
+        }
 
         public PortData(DialogueTree dialogueTree,Direction direction)
         {
@@ -141,6 +160,7 @@ namespace Graphview.NodeData
 
         void OnAddEdge(EdgeData edgeData)
         {
+            Debug.Log($"onAddEdge : {edgeData.OutputPortGuid} 11100");
             if(Direction == Direction.Input && edgeData.InputPortGuid == PortGuid)
             {
                 EdgesData.Add(edgeData);
@@ -169,6 +189,8 @@ namespace Graphview.NodeData
 
         public void UpdatePortData()
         {
+            Debug.Log(DialogueTree);
+            Debug.Log(DialogueTree.Edges.Count());
             if (Direction == Direction.Input)
             {
                 EdgesData = DialogueTree.Edges.Where(e => e.InputPortGuid == PortGuid).ToList();

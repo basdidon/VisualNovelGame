@@ -15,26 +15,22 @@ namespace Graphview.NodeData
         [SerializeField] bool value;
         [field:SerializeField] public bool Value { get; set; }
 
-        public override string[] InputPortGuids => new string[] { };
-
-        [SerializeField] PortData outputFlowPortData;
-        public PortData OutputFlowPortData => outputFlowPortData;
-        public override string[] OutputPortGuids => new string[] { outputFlowPortData.PortGuid };
+        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-            outputFlowPortData = new(DialogueTree, Direction.Output);
 
             SaveChanges();
         }
 
-        public override IEnumerable<GVNodeData> GetChildren()
+        public override void OnInstantiatePortData()
         {
-            return new GVNodeData[] { outputFlowPortData.ConnectedNode.Single() };
+            OutputFlowPortData = InstantiatePortData(Direction.Output);
         }
-
+        /*
         public override void Execute() { }
+        */
     }
 
     [CustomGraphViewNode(typeof(BooleanNode))]
@@ -44,11 +40,8 @@ namespace Graphview.NodeData
         {
             if(nodeData is BooleanNode booleanNode)
             {
-                SerializedObject SO = new(booleanNode);
-                mainContainer.Bind(SO);
-
                 var outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(bool));
-                outputPort.viewDataKey = booleanNode.OutputPortGuids[0];
+                outputPort.viewDataKey = booleanNode.OutputFlowPortData.PortGuid;
                 outputPort.portName = "bool";
                 outputContainer.Add(outputPort);
                 outputPort.userData = booleanNode.Value;

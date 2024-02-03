@@ -28,23 +28,45 @@ namespace Graphview.NodeData
         [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
         public string DialogueText { get; set; }
-        
-        public DialogueRecord GetData => new(CharacterData, DialogueText);
 
+        public DialogueRecord GetData
+        {
+            get
+            {
+                if (InputObjectPortData.GetConnectedNode().Count == 0)
+                {
+                    return new(CharacterData, DialogueText);
+                }
+                else
+                {
+                    if (InputObjectPortData.GetConnectedNode()[0].Values == null)
+                    {
+                        Debug.Log("asfasgf");
+                    }
+                    if (InputObjectPortData.GetConnectedNode()[0].Values.TryGetValue(InputObjectPortData.PortGuid, out object value))
+                    {
+                        return new(CharacterData, (string)value);
+                    }
+                    else
+                    {
+                        throw new Exception("not found data.");
+                    }
+                }
+            }
+        }
+        /*
         public override void Execute()
         {
+            Debug.Log("dialogue node executing");
             DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
         }
+        */
+        // Flow Port
+        [field: SerializeField] public PortData InputFlowPortData { get; private set; }
+        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
-        // port
-        [SerializeField] PortData inputFlowPortData;
-        public PortData InputFlowPortData => inputFlowPortData;
-
-        [SerializeField] PortData outputFlowPortData;
-        public PortData OutputFlowPortData => outputFlowPortData;
-
-        public override string[] InputPortGuids => new string[] { InputFlowPortData.PortGuid };
-        public override string[] OutputPortGuids => new string[] { OutputFlowPortData.PortGuid };
+        // object
+        [field: SerializeField] public PortData InputObjectPortData { get; private set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
@@ -52,15 +74,15 @@ namespace Graphview.NodeData
 
             DialogueText = string.Empty;
 
-            inputFlowPortData = new(DialogueTree, Direction.Input);
-            outputFlowPortData = new(DialogueTree, Direction.Output);
-
             SaveChanges();
         }
 
-        public override IEnumerable<GVNodeData> GetChildren()
+        public override void OnInstantiatePortData()
         {
-            return new GVNodeData[] { OutputFlowPortData.ConnectedNode.FirstOrDefault() };
+            InputFlowPortData = InstantiatePortData(Direction.Input);
+            OutputFlowPortData = InstantiatePortData(Direction.Output);
+
+            InputObjectPortData = InstantiatePortData(Direction.Input);
         }
     }
 
@@ -71,16 +93,18 @@ namespace Graphview.NodeData
         {
             if (nodeData is DialogueNode dialogueNode)
             {
-                SerializedObject SO = new(dialogueNode);
-                mainContainer.Bind(SO);
-
                 // input port
-                var inputFlowPort = GetInputFlowPort(dialogueNode.InputPortGuids.Single());
+                var inputFlowPort = GetInputFlowPort(dialogueNode.InputFlowPortData.PortGuid);
                 inputContainer.Add(inputFlowPort);
 
                 // output port
-                Port outputPort = GetOutputFlowPort(nodeData.OutputPortGuids.Single());
+                Port outputPort = GetOutputFlowPort(dialogueNode.OutputFlowPortData.PortGuid);
                 outputContainer.Add(outputPort);
+
+                // object input
+                Port inputObjectPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(string));
+                inputObjectPort.viewDataKey = dialogueNode.InputObjectPortData.PortGuid;
+                inputContainer.Add(inputObjectPort);
 
                 // CharacterData ObjectField
                 mainContainer.Insert(1, GetCharacterDataObjectField());

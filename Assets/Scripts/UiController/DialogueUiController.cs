@@ -53,6 +53,18 @@ public class DialogueUiController: IUiController
 
     public void SetDialogue(string speakerName, string dialogue)
     {
+        if (string.IsNullOrEmpty(speakerName))
+            speakerName = "Unknown";
+        Debug.Log("<color=green>green</color>");
+        Debug.Log($"ad : {speakerName} , {dialogue}");
+        SpeakerNameLabel.text = speakerName;
+        TextDisplay.text = dialogue;
+
+        Display();
+    }
+
+    public void SetDialogueTyping(string speakerName, string dialogue)
+    {
         if (speakerName == null)
             speakerName = "Unknown";
         // Create a new DOTween sequence

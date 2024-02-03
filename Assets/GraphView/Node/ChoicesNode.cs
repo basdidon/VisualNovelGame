@@ -33,16 +33,16 @@ namespace Graphview.NodeData
 
     public class ChoicesNode : GVNodeData
     {
-        
         [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
         public string QuestionText { get; set; }
-        
+
         [SerializeField] List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
 
-        public void AddChoice(Choice choice)
+        public void CreateChoice()
         {
+            Choice choice = new(InstantiatePortData(Direction.Input), InstantiatePortData(Direction.Output));
             choices.Add(choice);
         }
 
@@ -54,7 +54,6 @@ namespace Graphview.NodeData
         [System.Serializable]
         public class Choice
         {
-            [field:SerializeField] public ChoicesNode ChoicesNode { get; private set; }
             [SerializeField] bool isEnable;
             public bool IsEnable {
                 get
@@ -72,49 +71,53 @@ namespace Graphview.NodeData
             }
             [field: SerializeField] public string Name { get; private set; }
 
-            [SerializeField] PortData isEnableInputPortData;
-            public PortData IsEnableInputPortData => isEnableInputPortData;
+            [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
 
-            [SerializeField] PortData outputFlowPortData;
-            public PortData OutputFlowPortData => outputFlowPortData;
+            [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
-            public Choice(ChoicesNode choicesNode)
+            public Choice(PortData isEnableInputPortData, PortData outputFlowPortData)
             {
-                ChoicesNode = choicesNode;
                 isEnable = true;
                 Name = "new choice";
-                isEnableInputPortData = new(ChoicesNode.DialogueTree, Direction.Input);
-                outputFlowPortData = new(ChoicesNode.DialogueTree,Direction.Output);
+                IsEnableInputPortData = isEnableInputPortData;
+                OutputFlowPortData = outputFlowPortData;
             }
         }
-
-        public override void Execute()
+        /*
+        public override void Execute(int idx)  
         {
-            DialogueManager.Instance.OnSelectChoicesEvent(new(
-                CharacterData, 
-                QuestionText, 
-                choices.Select(c => c.Name).ToArray(),
-                choices.Select(c=>c.IsEnable).ToArray()
-            ));
+            if (idx < 0 || idx >= Choices.Count)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            else
+            {
+                Debug.Log("choices node executing");
+                DialogueManager.Instance.OnSelectChoicesEvent(new(
+                    CharacterData,
+                    QuestionText,
+                    choices.Select(c => c.Name).ToArray(),
+                    choices.Select(c => c.IsEnable).ToArray()
+                ));
+            }
         }
-
-        [SerializeField] PortData inputFlowPortData;
-        public PortData InputFlowPortData => inputFlowPortData;
-
-        public override string[] InputPortGuids => choices.Select(choice=> choice.IsEnableInputPortData.PortGuid).Append(InputFlowPortData.PortGuid).ToArray();
-        public override string[] OutputPortGuids => choices.Select(choice => choice.OutputFlowPortData.PortGuid).ToArray();
+        */
+        [field: SerializeField] public PortData InputFlowPortData { get; private set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-            inputFlowPortData = new(dialogueTree, Direction.Input);
+
             choices = new();
 
             SaveChanges();
         }
 
+        public override void OnInstantiatePortData()
+        {
+            InputFlowPortData = InstantiatePortData(Direction.Input);
+        }
 
-        public override IEnumerable<GVNodeData> GetChildren() => Choices.SelectMany(c=>c.OutputFlowPortData.ConnectedNode);
     }
 
     [CustomGraphViewNode(typeof(ChoicesNode))]
@@ -131,7 +134,13 @@ namespace Graphview.NodeData
                 inputContainer.Add(inputFlowPort);
 
                 Button addCondition = new() { text = "Add Choice" };
-                addCondition.clicked += () => OnAddChoice(choicesNode);
+                addCondition.clicked += () =>
+                {
+                    choicesNode.CreateChoice();
+
+                    DrawChoicePort(choicesNode.Choices.Last(), choicesNode.Choices.Count() - 1);
+                    RefreshExpandedState();
+                };
                 mainContainer.Insert(2, addCondition);
 
                 // output port
@@ -194,15 +203,6 @@ namespace Graphview.NodeData
                 RefreshPorts();
                 
             };
-        }
-
-        void OnAddChoice(ChoicesNode choicesNode)
-        {
-            ChoicesNode.Choice choice = new(choicesNode);
-            choicesNode.AddChoice(choice);
-
-            DrawChoicePort(choice, choicesNode.Choices.Count()-1);
-            RefreshExpandedState();
         }
     }
 

@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
-
+/*
 
 namespace Graphview.NodeData
 {
@@ -20,34 +20,22 @@ namespace Graphview.NodeData
         public string QuestionText { get; set; }
 
         // port
-        [SerializeField] PortData inputFlowPortData;
-        public PortData InputFlowPortData => inputFlowPortData;
-
-        [SerializeField] PortData inputChoicesPortData;
-        public PortData InputChoicesPortData => inputChoicesPortData;
-
-        [SerializeField] PortData outputFlowPortData;
-        public PortData OutputFlowPortData => outputFlowPortData;
-
-        // port guid
-        public override string[] InputPortGuids => new string[] { InputFlowPortData.PortGuid, InputChoicesPortData.PortGuid };
-
-        public override string[] OutputPortGuids => new string[] { OutputFlowPortData.PortGuid };
+        [field: SerializeField] public PortData InputFlowPortData { get; private set; }
+        [field: SerializeField] public PortData InputChoicesPortData { get; private set; }
+        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-
-            inputFlowPortData = new(dialogueTree, Direction.Input);
-            inputChoicesPortData = new(dialogueTree, Direction.Input);
-            outputFlowPortData = new(dialogueTree, Direction.Output);
         }
 
         public override void Execute(){}
 
-        public override IEnumerable<GVNodeData> GetChildren()
+        public override void OnInstantiatePortData()
         {
-            return OutputFlowPortData.ConnectedNode;
+            InputFlowPortData = InstantiatePortData(Direction.Input);
+            InputChoicesPortData = InstantiatePortData(Direction.Input);
+            OutputFlowPortData = InstantiatePortData(Direction.Output);
         }
     }
 
@@ -96,4 +84,4 @@ namespace Graphview.NodeData
         }
     }
 
-}
+}*/

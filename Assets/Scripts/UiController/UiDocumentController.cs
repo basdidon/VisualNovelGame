@@ -69,7 +69,8 @@ public class UiDocumentController : MonoBehaviour
             {
                 TapAction.Enable();
 
-                DialogueUiController.SetDialogue(ctx.CharacterData?.Name, ctx.DialogueText);
+                
+                DialogueUiController.SetDialogue(ctx.CharacterData != null ? ctx.CharacterData.Name : null, ctx.DialogueText);
                 ChoicesPickerUiController.Hide();
             };
             
