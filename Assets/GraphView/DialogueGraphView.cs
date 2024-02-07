@@ -36,7 +36,7 @@ namespace Graphview.NodeView
                 if (obj == null)
                     continue;
 
-                if (obj is GVNodeData nodeData)
+                if (obj is NodeData nodeData)
                 {
                     var node = NodeFactory.GetNodeView(nodeData, this);
                     AddElement(node);
@@ -105,7 +105,7 @@ namespace Graphview.NodeView
             this.AddManipulator(SaveContextualMenu());
         }
 
-        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:GVNodeData
+        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:NodeData
             =>  AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree),this));
         
 
@@ -140,10 +140,10 @@ namespace Graphview.NodeView
 
                     Debug.Log($"EdgesToCreate {OutputNode.title} -> {InputNode.title}");
 
-                    if (OutputNode.userData is not GVNodeData outputNode)
+                    if (OutputNode.userData is not NodeData outputNode)
                         throw new Exception("OutputNode.userData is not GVNodeData outputNode");
 
-                    if (InputNode.userData is not GVNodeData inputNode)
+                    if (InputNode.userData is not NodeData inputNode)
                         throw new Exception("InputNode.userData is not GVNodeData inputNode");
 
                     if (inputNode == null)
@@ -176,7 +176,7 @@ namespace Graphview.NodeView
                     else if (element is Node node)
                     {
                         Debug.Log("Node was removed.");
-                        GVNodeData toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
+                        NodeData toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
                         Tree.Nodes.Remove(toRemoveNode);
                         AssetDatabase.RemoveObjectFromAsset(toRemoveNode);
                         //AssetDatabase.SaveAssets();
@@ -188,7 +188,7 @@ namespace Graphview.NodeView
             {
                 foreach (var element in changes.movedElements)
                 {
-                    if (element.userData is GVNodeData nodeData)
+                    if (element.userData is NodeData nodeData)
                     {
                         nodeData.GraphPosition = element.GetPosition().position;
                     }

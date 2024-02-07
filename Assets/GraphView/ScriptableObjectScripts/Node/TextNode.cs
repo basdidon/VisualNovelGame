@@ -6,23 +6,16 @@ using UnityEditor.Experimental.GraphView;
 namespace Graphview.NodeData
 {
     using NodeView;
-    public class TextNode : GVNodeData
+    public class TextNode : NodeData
     {
         [field:SerializeField] public PortData OutputStringPortData { get; private set; }
-        /*
-        public override void Execute()
-        {
-            throw new System.NotImplementedException();
-        }*/
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-
             
-
             values = new();
-            values.Add(OutputStringPortData.PortGuid,"chipi chipi");
+            values.Add(new OutputValue() { Guid = OutputStringPortData.PortGuid, Value = "chipi chipi" , Text = "chipi chipi"});
             Debug.Log("chipi chipi");
         }
 
@@ -35,7 +28,7 @@ namespace Graphview.NodeData
     [CustomGraphViewNode(typeof(TextNode))]
     public class CustomTextGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(GVNodeData nodeData)
+        public override void OnDrawNodeView(NodeData nodeData)
         {
             if(nodeData is TextNode textNode)
             {

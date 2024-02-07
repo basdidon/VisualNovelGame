@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Graphview.NodeData
 {
-    public abstract class GVNodeData : ScriptableObject
+    public abstract class NodeData : ScriptableObject
     {
         DialogueTree dialogueTree;
         public DialogueTree DialogueTree
@@ -41,8 +41,8 @@ namespace Graphview.NodeData
         //public abstract IEnumerable<GVNodeData> GetChildren();
 
         // values
-        protected Dictionary<string, object> values;
-        public IReadOnlyDictionary<string, object> Values => values;
+        [field:SerializeField] protected List<OutputValue> values;
+        public IReadOnlyList<OutputValue> Values => values;
 
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
@@ -78,8 +78,13 @@ namespace Graphview.NodeData
     {
         public void Start();
         public void Exit();
+    }
 
-        public event Action OnStart;
-        public event Action OnExit;
+    [Serializable]
+    public record OutputValue
+    {
+        [field: SerializeField] public string Guid { get; set; }
+        [field: SerializeField] public object Value { get; set; }
+        [field: SerializeField] public string Text { get; set; }
     }
 }

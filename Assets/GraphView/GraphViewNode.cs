@@ -12,7 +12,7 @@ namespace Graphview.NodeView
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
 
-        public void Initialize(GVNodeData nodeData, DialogueGraphView graphView)
+        public void Initialize(NodeData.NodeData nodeData, DialogueGraphView graphView)
         {
             GraphView = graphView;
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
@@ -25,7 +25,7 @@ namespace Graphview.NodeView
             mainContainer.Bind(SerializedObject);
         }
 
-        public abstract void OnDrawNodeView(GVNodeData nodeData);
+        public abstract void OnDrawNodeView(NodeData.NodeData nodeData);
 
         public Port GetInputFlowPort(string guid)
         {

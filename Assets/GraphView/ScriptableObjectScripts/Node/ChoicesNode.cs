@@ -31,7 +31,7 @@ namespace Graphview.NodeData
         { }
     }
 
-    public class ChoicesNode : GVNodeData
+    public class ChoicesNode : NodeData
     {
         [field: SerializeField] public CharacterData CharacterData { get; private set; }
         [field: SerializeField, TextArea]
@@ -123,7 +123,7 @@ namespace Graphview.NodeData
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class CustomChoicesGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(GVNodeData nodeData)
+        public override void OnDrawNodeView(NodeData nodeData)
         {
             if (nodeData is ChoicesNode choicesNode)
             {

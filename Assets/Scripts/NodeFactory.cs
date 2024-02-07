@@ -12,7 +12,7 @@ namespace Graphview.NodeView
     [CustomGraphViewNode(typeof(NodeFactory))]
     public static class NodeFactory
     {
-        public static GVNodeData CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : GVNodeData
+        public static NodeData.NodeData CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : NodeData.NodeData
         {
             var nodeData = ScriptableObject.CreateInstance<T>();
             nodeData.Initialize(position, dialogueTree);
@@ -20,7 +20,7 @@ namespace Graphview.NodeView
             return nodeData;
         }
 
-        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : GVNodeData
+        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : NodeData.NodeData
         {
             var allTypes = Assembly.GetExecutingAssembly().GetTypes();
             var typesWithAttribute = allTypes

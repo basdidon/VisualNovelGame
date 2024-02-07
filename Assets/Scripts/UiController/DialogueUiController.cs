@@ -47,7 +47,7 @@ public class DialogueUiController: IUiController
         }
         else
         {
-            DialogueManager.Instance.ExecuteNextNode();
+            DialogueManager.Instance.NextDialogue();
         }
     }
 

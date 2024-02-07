@@ -1,8 +1,4 @@
 using Graphview.NodeView;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,7 +6,7 @@ using System.Linq;
 
 namespace Graphview.NodeData
 {
-    public class StartNode : GVNodeData
+    public class StartNode : NodeData,IExecutableNode
     {
         // Port
         [field:SerializeField] public PortData OutputFlowPortData { get; private set; }
@@ -24,18 +20,20 @@ namespace Graphview.NodeData
         {
             OutputFlowPortData = InstantiatePortData(Direction.Output);
         }
-        /*
-        public override void Execute(int idx)
-        {
-            DialogueManager.Instance.CurrentNode = OutputFlowPortData.ConnectedNode.FirstOrDefault();
-        }*/
 
+        public void Start()
+        {
+            DialogueManager.Instance.CurrentNode = OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault();
+            Debug.Log(OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault());
+        }
+
+        public void Exit(){}
     }
 
     [CustomGraphViewNode(typeof(StartNode))]
     public class CustomStartGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(GVNodeData nodeData)
+        public override void OnDrawNodeView(NodeData nodeData)
         {
             if (nodeData is StartNode startNode)
             {

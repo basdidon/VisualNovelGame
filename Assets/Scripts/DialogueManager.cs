@@ -7,7 +7,25 @@ public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
 
-    public GVNodeData CurrentNode { get; set; }
+    IExecutableNode currentNode;
+    public IExecutableNode CurrentNode
+    {
+        get => currentNode;
+        set
+        {
+            CurrentNode?.Exit();
+            currentNode = value;
+            if(CurrentNode != null)
+            {
+                CurrentNode.Start();
+            }
+            else
+            {
+                Debug.Log("finish");
+                OnFinish?.Invoke();
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -30,7 +48,6 @@ public class DialogueManager : MonoBehaviour
         else
         {
             CurrentNode = dialogueTree.StartNode;
-            ExecuteNextNode();
         }
     }
 
@@ -42,6 +59,7 @@ public class DialogueManager : MonoBehaviour
     // forNodeinvoke
     internal void OnNewDialogueEventInvoke(DialogueRecord record)
     {
+        Debug.Log($"OnNewDialogue : {record.CharacterData.Name} ");
         OnNewDialogue?.Invoke(record);
     }
     
@@ -49,18 +67,21 @@ public class DialogueManager : MonoBehaviour
     {
         OnSelectChoices?.Invoke(choicesRecord);
     }
-    
-    public void ExecuteNextNode(int idx = 0)
-    {
-        if (CurrentNode == null)
-        {
-            Debug.Log("finish");
-            OnFinish?.Invoke();
-            return;
-        }
-        /*
-        CurrentNode.Execute(idx);
-        */
 
+    // user input to node
+    public void NextDialogue()
+    {
+        if(CurrentNode is DialogueNode dialogueNode)
+        {
+            dialogueNode.Next();
+        }
+    }
+
+    public void SelectChoice(int choiceIdx)
+    {
+        if(CurrentNode is ChoicesNode choicesNode)
+        {
+
+        }
     }
 }

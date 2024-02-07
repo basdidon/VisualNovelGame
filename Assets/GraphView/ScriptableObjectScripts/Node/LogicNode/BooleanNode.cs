@@ -10,7 +10,7 @@ namespace Graphview.NodeData
 {
     using NodeView;
 
-    public class BooleanNode : GVNodeData
+    public class BooleanNode : NodeData
     {
         [SerializeField] bool value;
         [field:SerializeField] public bool Value { get; set; }
@@ -36,7 +36,7 @@ namespace Graphview.NodeData
     [CustomGraphViewNode(typeof(BooleanNode))]
     public class CustomBooleanGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(GVNodeData nodeData)
+        public override void OnDrawNodeView(NodeData nodeData)
         {
             if(nodeData is BooleanNode booleanNode)
             {
