@@ -28,7 +28,7 @@ namespace Graphview.NodeData
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
         // Port
-        List<PortData> PortsData;
+        [SerializeField] List<PortData> PortsData;
         public IEnumerable<string> InputPortGuids => PortsData.Where(p => p.Direction == Direction.Input).Select(p => p.PortGuid);
         public IEnumerable<string> OutputPortGuids => PortsData.Where(p => p.Direction == Direction.Output).Select(p => p.PortGuid);
         
@@ -40,10 +40,6 @@ namespace Graphview.NodeData
         }
         //public abstract IEnumerable<GVNodeData> GetChildren();
 
-        // values
-        [field:SerializeField] protected List<OutputValue> values;
-        public IReadOnlyList<OutputValue> Values => values;
-
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             Id = $"{Guid.NewGuid()}";
@@ -52,7 +48,6 @@ namespace Graphview.NodeData
             name = GetType().Name;
 
             PortsData = new();
-            values = new();
 
             OnInstantiatePortData();
 

@@ -25,6 +25,17 @@ namespace Graphview.NodeData
         public NodeData GetInputNodeData()
         {
             var result = DialogueTree.Nodes.FirstOrDefault(n => n.InputPortGuids.Contains(InputPortGuid));
+
+            foreach(var node in DialogueTree.Nodes)
+            {
+                Debug.Log($"{node.name} {node.InputPortGuids.Count()}");
+                foreach(var inputPortGuid in node.InputPortGuids)
+                {
+                    Debug.Log($"{InputPortGuid} <> {inputPortGuid} -> {InputPortGuid == inputPortGuid}");
+                    
+                }
+            }
+
             if (result == null)
             {
                 throw new Exception($"can't find any node that contain {InputPortGuid}");

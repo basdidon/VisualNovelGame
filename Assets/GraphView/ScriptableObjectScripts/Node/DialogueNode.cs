@@ -75,8 +75,12 @@ namespace Graphview.NodeData
             // If a match is found
             if (match.Success)
             {
+                for(int i = 0; i < match.Groups.Count; i++)
+                {
+                    Debug.Log($"{i} : {match.Groups[i].Value}");
+                }
                 // Extract the character ID from the matched group
-                int characterId = int.Parse(match.Groups[0].Value);
+                int characterId = int.Parse(match.Groups[2].Value);
 
                 // Call a function to get the character name based on the ID
                 string characterName = GetCharacterNameById(characterId);

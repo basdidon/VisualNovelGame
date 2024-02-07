@@ -13,12 +13,8 @@ namespace Graphview.NodeData
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
-            
-            values = new();
-            values.Add(new OutputValue() { Guid = OutputStringPortData.PortGuid, Value = "chipi chipi" , Text = "chipi chipi"});
-            Debug.Log("chipi chipi");
         }
-
+            
         public override void OnInstantiatePortData()
         {
             OutputStringPortData = InstantiatePortData(Direction.Output);
