@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DialogueNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 409277f4-ff55-47d2-8cf7-032a91fc0da9
-  <GraphPosition>k__BackingField: {x: 692, y: 12}
+  <GraphPosition>k__BackingField: {x: 702, y: 0}
   PortsData:
   - <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: 3dd5e018-fe34-4ca1-8fe0-20e8e9b9ba4c
@@ -21,7 +21,7 @@ MonoBehaviour:
   - <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: e01d8918-6271-4577-9785-1f0b3d4cc044
     <Direction>k__BackingField: 1
-  <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
+  <SpeakerName>k__BackingField: 
   <DialogueText>k__BackingField: test
   <InputFlowPortData>k__BackingField:
     <DialogueTree>k__BackingField: {fileID: 11400000}
@@ -31,6 +31,63 @@ MonoBehaviour:
     <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: e01d8918-6271-4577-9785-1f0b3d4cc044
     <Direction>k__BackingField: 1
+--- !u!114 &-3028131416127952667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
+  m_Name: ChoicesNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 0e0cf0d7-6e9a-4b33-b1f5-dc4b86966f5f
+  <GraphPosition>k__BackingField: {x: 1039, y: 0}
+  PortsData:
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 9b3da45f-4bd6-443a-9866-eef2535a6099
+    <Direction>k__BackingField: 0
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 57337e2a-6eeb-45c5-ba98-719c783e3f59
+    <Direction>k__BackingField: 0
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 0ab3979f-0a21-4187-98fb-f1b9e8b039ae
+    <Direction>k__BackingField: 1
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: ba36c265-816e-4fd3-b083-4a36d71fe1f4
+    <Direction>k__BackingField: 0
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 2e1b8f66-2321-4ff9-81e4-4d1d971c9022
+    <Direction>k__BackingField: 1
+  <SpeakerName>k__BackingField: 
+  <QuestionText>k__BackingField: 
+  choices:
+  - isEnable: 1
+    <Name>k__BackingField: 12
+    <IsEnableInputPortData>k__BackingField:
+      <DialogueTree>k__BackingField: {fileID: 11400000}
+      <PortGuid>k__BackingField: 57337e2a-6eeb-45c5-ba98-719c783e3f59
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <DialogueTree>k__BackingField: {fileID: 11400000}
+      <PortGuid>k__BackingField: 0ab3979f-0a21-4187-98fb-f1b9e8b039ae
+      <Direction>k__BackingField: 1
+  - isEnable: 1
+    <Name>k__BackingField: 99
+    <IsEnableInputPortData>k__BackingField:
+      <DialogueTree>k__BackingField: {fileID: 11400000}
+      <PortGuid>k__BackingField: ba36c265-816e-4fd3-b083-4a36d71fe1f4
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <DialogueTree>k__BackingField: {fileID: 11400000}
+      <PortGuid>k__BackingField: 2e1b8f66-2321-4ff9-81e4-4d1d971c9022
+      <Direction>k__BackingField: 1
+  <InputFlowPortData>k__BackingField:
+    <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 9b3da45f-4bd6-443a-9866-eef2535a6099
+    <Direction>k__BackingField: 0
 --- !u!114 &-2841165966484583549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +126,8 @@ MonoBehaviour:
   - {fileID: -2841165966484583549}
   - {fileID: 9051989458939054357}
   - {fileID: -5669379806478855874}
+  - {fileID: -3028131416127952667}
+  - {fileID: 8363535291035291107}
   edges:
   - <DialogueTree>k__BackingField: {fileID: 11400000}
     <EdgeGuid>k__BackingField: b6cec2e5-c2a9-4648-ab6d-a84cd1dc41c9
@@ -78,6 +137,49 @@ MonoBehaviour:
     <EdgeGuid>k__BackingField: bfa9a280-8605-45ea-b76b-96960502e122
     <OutputPortGuid>k__BackingField: 6d83e3e1-c11c-4414-9de5-86acab8558ec
     <InputPortGuid>k__BackingField: 3dd5e018-fe34-4ca1-8fe0-20e8e9b9ba4c
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <EdgeGuid>k__BackingField: f4afca75-780a-4291-aace-cdc434b1d749
+    <OutputPortGuid>k__BackingField: e01d8918-6271-4577-9785-1f0b3d4cc044
+    <InputPortGuid>k__BackingField: 9b3da45f-4bd6-443a-9866-eef2535a6099
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <EdgeGuid>k__BackingField: 0509922b-1be1-4363-b930-c172a4d70dce
+    <OutputPortGuid>k__BackingField: 0ab3979f-0a21-4187-98fb-f1b9e8b039ae
+    <InputPortGuid>k__BackingField: 401f53fd-34eb-4160-8d61-2d3bc6d5d384
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <EdgeGuid>k__BackingField: 6198d0d7-e64b-433c-a711-88c6936aae11
+    <OutputPortGuid>k__BackingField: 2e1b8f66-2321-4ff9-81e4-4d1d971c9022
+    <InputPortGuid>k__BackingField: 401f53fd-34eb-4160-8d61-2d3bc6d5d384
+--- !u!114 &8363535291035291107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 67ae7622-f65b-4ae2-b35d-72ab5c663156
+  <GraphPosition>k__BackingField: {x: 1394, y: 107}
+  PortsData:
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 401f53fd-34eb-4160-8d61-2d3bc6d5d384
+    <Direction>k__BackingField: 0
+  - <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: dc6c4cde-8978-4b5f-815c-b6ee32b33fee
+    <Direction>k__BackingField: 1
+  <SpeakerName>k__BackingField: 
+  <DialogueText>k__BackingField: "\u0E41\u0E08\u0E4A\u0E27"
+  <InputFlowPortData>k__BackingField:
+    <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: 401f53fd-34eb-4160-8d61-2d3bc6d5d384
+    <Direction>k__BackingField: 0
+  <OutputFlowPortData>k__BackingField:
+    <DialogueTree>k__BackingField: {fileID: 11400000}
+    <PortGuid>k__BackingField: dc6c4cde-8978-4b5f-815c-b6ee32b33fee
+    <Direction>k__BackingField: 1
 --- !u!114 &9051989458939054357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,7 +201,7 @@ MonoBehaviour:
   - <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: 6d83e3e1-c11c-4414-9de5-86acab8558ec
     <Direction>k__BackingField: 1
-  <CharacterData>k__BackingField: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
+  <SpeakerName>k__BackingField: a
   <DialogueText>k__BackingField: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35 [c:0] <color=red>a</color>"
   <InputFlowPortData>k__BackingField:
     <DialogueTree>k__BackingField: {fileID: 11400000}

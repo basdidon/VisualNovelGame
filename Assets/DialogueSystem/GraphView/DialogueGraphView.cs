@@ -6,10 +6,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Graphview.NodeView
+namespace BasDidon.Dialogue.VisualGraphView
 {
-    using NodeData;
-
     public class DialogueGraphView : GraphView
     {
         public DialogueTree Tree { get; private set; }
@@ -40,15 +38,11 @@ namespace Graphview.NodeView
                 {
                     var node = NodeFactory.GetNodeView(nodeData, this);
                     AddElement(node);
-                    //Debug.Log($"-> {}");
                     continue;
                 }
 
                 throw new Exception($"Unexpected asset type. {obj.GetType()}");
             }
-
-            //Debug.Log($"-> {GetPortByGuid("aad956ad-4dad-46ec-9069-b5226819ff81").direction}");
-            // create edges
 
             Debug.Log($"StartDrawingEdge ({Tree.Edges.Count})");
             foreach (var edgeData in Tree.Edges)
@@ -115,8 +109,6 @@ namespace Graphview.NodeView
 
             evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
             evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
-            //evt.menu.AppendAction($"Create QuestionNode", CreateActionEvent<QuestionNode>);
-            evt.menu.AppendAction($"Create TextNode", CreateActionEvent<TextNode>);
             evt.menu.AppendAction("Create LogicNode/Boolean", CreateActionEvent<BooleanNode>);
         }
 

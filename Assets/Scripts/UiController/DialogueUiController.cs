@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using BasDidon.Dialogue;
 
 public class DialogueUiController: IUiController
 {
@@ -55,8 +56,8 @@ public class DialogueUiController: IUiController
     {
         if (string.IsNullOrEmpty(speakerName))
             speakerName = "Unknown";
-        Debug.Log("<color=green>green</color>");
-        Debug.Log($"ad : {speakerName} , {dialogue}");
+
+        Debug.Log($"{speakerName} : {dialogue}");
         SpeakerNameLabel.text = speakerName;
         TextDisplay.text = dialogue;
 

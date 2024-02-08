@@ -4,9 +4,15 @@
 		color : #000;
 }
 
-#DialogueNode -> #node-border
+#DialogueNode -> #node-border -> #title
 {
 	background-color : #c7ea46;
+}
+
+Label -> #node-border -> #title ->  #title-label
+{
+	color : #000;
+	font-size: 16px;
 }
 
 #ConditionNode -> #node-border

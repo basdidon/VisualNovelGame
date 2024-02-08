@@ -4,7 +4,7 @@ using System;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 
-namespace Graphview.NodeData
+namespace BasDidon.Dialogue.VisualGraphView
 {
     [Serializable]
     public class PortData

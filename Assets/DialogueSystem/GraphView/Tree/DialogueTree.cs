@@ -6,10 +6,8 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Reflection;
 
-namespace Graphview.NodeData
+namespace BasDidon.Dialogue.VisualGraphView
 {
-    using NodeView;
-
     public class DialogueTree : ScriptableObject
     {
         [field: SerializeField] public List<NodeData> Nodes { get; private set; } = new();

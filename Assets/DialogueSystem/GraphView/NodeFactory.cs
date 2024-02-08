@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using Graphview.NodeData;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Graphview.NodeView
+namespace BasDidon.Dialogue.VisualGraphView
 {
     [CustomGraphViewNode(typeof(NodeFactory))]
     public static class NodeFactory
     {
-        public static NodeData.NodeData CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : NodeData.NodeData
+        public static NodeData CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : NodeData
         {
             var nodeData = ScriptableObject.CreateInstance<T>();
             nodeData.Initialize(position, dialogueTree);
@@ -20,7 +16,7 @@ namespace Graphview.NodeView
             return nodeData;
         }
 
-        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : NodeData.NodeData
+        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : NodeData
         {
             var allTypes = Assembly.GetExecutingAssembly().GetTypes();
             var typesWithAttribute = allTypes
@@ -45,16 +41,6 @@ namespace Graphview.NodeView
             instance.OnDrawNodeView(nodeData);
             return instance;
 
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Class,AllowMultiple = false,Inherited = false)]
-    public class CustomGraphViewNodeAttribute : Attribute
-    {
-        public Type Type;
-        public CustomGraphViewNodeAttribute(Type type)
-        {
-            Type = type;
         }
     }
 }

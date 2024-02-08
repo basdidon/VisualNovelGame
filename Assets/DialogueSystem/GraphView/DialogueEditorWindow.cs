@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 
-namespace Graphview.NodeView
+namespace BasDidon.Dialogue.VisualGraphView
 {
     public class DialogueEditorWindow : EditorWindow
     {

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 
-namespace Graphview.NodeData
+namespace BasDidon.Dialogue.VisualGraphView
 {
     public abstract class NodeData : ScriptableObject
     {

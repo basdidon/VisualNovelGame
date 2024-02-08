@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Graphview.NodeData
+namespace BasDidon.Dialogue.VisualGraphView
 {
     [Serializable]
     public class EdgeData
@@ -25,16 +25,6 @@ namespace Graphview.NodeData
         public NodeData GetInputNodeData()
         {
             var result = DialogueTree.Nodes.FirstOrDefault(n => n.InputPortGuids.Contains(InputPortGuid));
-
-            foreach(var node in DialogueTree.Nodes)
-            {
-                Debug.Log($"{node.name} {node.InputPortGuids.Count()}");
-                foreach(var inputPortGuid in node.InputPortGuids)
-                {
-                    Debug.Log($"{InputPortGuid} <> {inputPortGuid} -> {InputPortGuid == inputPortGuid}");
-                    
-                }
-            }
 
             if (result == null)
             {

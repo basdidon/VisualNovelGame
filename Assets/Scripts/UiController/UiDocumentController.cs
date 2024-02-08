@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
-using Graphview.NodeData;
+using BasDidon.Dialogue;
+using BasDidon.Dialogue.VisualGraphView;
 
 public class UiDocumentController : MonoBehaviour
 {
@@ -70,14 +71,14 @@ public class UiDocumentController : MonoBehaviour
                 TapAction.Enable();
 
                 
-                DialogueUiController.SetDialogue(ctx.CharacterData != null ? ctx.CharacterData.Name : null, ctx.DialogueText);
+                DialogueUiController.SetDialogue(ctx.SpeakerName , ctx.DialogueText);
                 ChoicesPickerUiController.Hide();
             };
             
             DialogueManager.Instance.OnSelectChoices += (ctx) => {
                 TapAction.Disable();
 
-                DialogueUiController.SetDialogue(ctx.DialogueRecord.CharacterData?.Name,ctx.DialogueRecord.DialogueText);
+                DialogueUiController.SetDialogue(ctx.DialogueRecord.SpeakerName ,ctx.DialogueRecord.DialogueText);
 
                 ChoicesPickerUiController.SetChoices(ctx.ChoicesText,ctx.ChoicesEnable);
                 ChoicesPickerUiController.Display();

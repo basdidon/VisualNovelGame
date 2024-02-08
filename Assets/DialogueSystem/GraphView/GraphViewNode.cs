@@ -3,16 +3,15 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Graphview.NodeData;
 
-namespace Graphview.NodeView
+namespace BasDidon.Dialogue.VisualGraphView
 {
     public abstract class GraphViewNode : Node
     {
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
 
-        public void Initialize(NodeData.NodeData nodeData, DialogueGraphView graphView)
+        public void Initialize(NodeData nodeData, DialogueGraphView graphView)
         {
             GraphView = graphView;
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
@@ -25,7 +24,7 @@ namespace Graphview.NodeView
             mainContainer.Bind(SerializedObject);
         }
 
-        public abstract void OnDrawNodeView(NodeData.NodeData nodeData);
+        public abstract void OnDrawNodeView(NodeData nodeData);
 
         public Port GetInputFlowPort(string guid)
         {
@@ -46,7 +45,7 @@ namespace Graphview.NodeView
             outputPort.viewDataKey = guid;
             return outputPort;
         }
-
+        /*
         public ObjectField GetCharacterDataObjectField(string propertyName = "CharacterData")
         {
             ObjectField characterDataObjectField = new()
@@ -55,7 +54,11 @@ namespace Graphview.NodeView
                 bindingPath = GetPropertyBindingPath(propertyName),
             };
             return characterDataObjectField;
-        }
+        }*/
+
+
+        
+        
 
         public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
