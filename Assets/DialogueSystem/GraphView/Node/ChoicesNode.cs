@@ -53,6 +53,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             public bool IsEnable {
                 get
                 {
+                    
                     var isEnablePortConnected = false;
                     if (isEnablePortConnected)
                     {
@@ -101,14 +102,11 @@ namespace BasDidon.Dialogue.VisualGraphView
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
                 new(SpeakerName,QuestionText),
                 Choices.Select(c=>c.Name).ToArray(),
-                Choices.Select(c=>c.IsEnable).ToArray()
+                Choices.Select(c=>(bool) DialogueTree.GetData(c.IsEnableInputPortData.PortGuid)).ToArray()
             ));
         }
 
-        public void Exit()
-        {
-
-        }
+        public void Exit(){}
 
         public void SelectChoice(int idx)
         {

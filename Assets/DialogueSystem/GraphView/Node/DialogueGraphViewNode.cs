@@ -28,31 +28,21 @@ namespace BasDidon.Dialogue.VisualGraphView
                     label = "Speaker",
                     bindingPath = GetPropertyBindingPath("SpeakerName"),
                 };
-                mainContainer.Insert(1, speakerTextField);
+                speakerTextField.AddToClassList("speaker-name-input");
+                extensionContainer.Add(speakerTextField);
+
+                VisualElement divider = new();
+                divider.AddToClassList("divider");
+                extensionContainer.Add(divider);
 
                 // Custom extension
                 VisualElement customVisualElement = new();
 
-                List<string> options = new() { "1", "2" };
-
-                ListView listView = new(options, 5);
-
-                listView.makeItem = () =>
-                {
-                    return new Label();
-                };
-
-                listView.bindItem = (item, index) =>
-                {
-                    item.Q<Label>().text = options[index];
-                };
-
-                DropdownField dropdown = new(options, 0);
-
                 string[] _options = new string[] { "Cube", "Sphere", "Plane" };
 
-                var label = new Label();
-                customVisualElement.Add(label);
+                var dialoguePreview = new Label();
+                dialoguePreview.AddToClassList("dialogue-preview");
+                customVisualElement.Add(dialoguePreview);
 
                 var textArea = new TextField()
                 {
@@ -61,23 +51,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 };
                 textArea.RegisterValueChangedCallback(e =>
                 {
-                    if (ValidateText(e.newValue))
-                    {
-                        dropdown.style.display = DisplayStyle.Flex;
-
-                        var idx = EditorGUILayout.Popup(0, _options);
-                        Debug.Log(idx);
-                    }
-                    else
-                    {
-                        dropdown.style.display = DisplayStyle.None;
-                    }
-
-                    label.text = DialogueNode.GetValueFromSyntax(e.newValue);
+                    dialoguePreview.text = DialogueNode.GetValueFromSyntax(e.newValue);
                 });
                 customVisualElement.Add(textArea);
-                customVisualElement.Add(dropdown);
-                //customVisualElement.Add(listView);
 
                 extensionContainer.Add(customVisualElement);
 
@@ -85,7 +61,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 RefreshExpandedState();
             }
         }
-
+        /*
         bool ValidateText(string text)
         {
             Regex regex = new(@"\[[^\[\]]*$");
@@ -101,6 +77,6 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Debug.Log($"US:{text}");
                 return false;
             }
-        }
+        }*/
     }
 }

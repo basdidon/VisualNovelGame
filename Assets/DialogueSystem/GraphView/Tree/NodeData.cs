@@ -38,7 +38,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             PortsData.Add(newPortData);
             return newPortData;
         }
-        //public abstract IEnumerable<GVNodeData> GetChildren();
 
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
@@ -59,7 +58,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public abstract void OnInstantiatePortData();
 
-       // public abstract void Execute(int idx);
+        public virtual object ReadValueFromPort(string outputPortGuid) => null;
 
         public void SaveChanges()
         {

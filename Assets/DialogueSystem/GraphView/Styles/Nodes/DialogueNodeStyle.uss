@@ -1,0 +1,16 @@
+#DialogueNode -> #node-border -> #title
+{
+	background-color: cyan;
+}
+
+#DialogueNode -> #node-border -> #title ->  #title-label
+{
+	color : white;
+	font-size: 16px;
+	-unity-font-style: bold;
+}
+
+#extension
+{
+	background-color: rgba(0.1,0.1,0.1,0.5);
+}

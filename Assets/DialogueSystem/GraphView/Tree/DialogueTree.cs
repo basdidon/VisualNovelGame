@@ -44,6 +44,23 @@ namespace BasDidon.Dialogue.VisualGraphView
             AssetDatabase.Refresh();
         }
 
+        public object GetData(string inputPortGuid)
+        {
+            if (!Edges.Any(e => e.InputPortGuid == inputPortGuid))
+                return null;
+            var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
+
+            if (edge == null)
+                return default;
+
+            var outputNode = Nodes.SingleOrDefault(n => n.OutputPortGuids.Contains(edge.OutputPortGuid));
+
+            if (outputNode == null)
+                throw new Exception();
+
+            return outputNode.ReadValueFromPort(edge.OutputPortGuid);
+        }
+
 #if UNITY_EDITOR
         public static string GetCurrentProjectBrowserDirectory()
         {

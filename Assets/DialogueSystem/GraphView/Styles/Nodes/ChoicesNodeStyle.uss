@@ -1,0 +1,16 @@
+#ChoicesNode -> #node-border -> #title
+{
+	background-color : var(--color-darkest-daisy);
+}
+
+#ChoicesNode -> #node-border -> #title -> #title-label
+{
+	color : var(--color-white);
+	font-size: 16px;
+	-unity-font-style: bold;
+}
+
+#ConditionNode -> #node-border
+{
+	background-color : #ffd800;
+}

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -206,11 +207,19 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 
         void AddStyle()
-        {
-            StyleSheet GrahpviewStyleSheet = (StyleSheet)EditorGUIUtility.Load("DialogueGVStyle.uss");
-            StyleSheet nodeStyleSheet = (StyleSheet)EditorGUIUtility.Load("NodeStyle.uss");
-            styleSheets.Add(GrahpviewStyleSheet);
-            styleSheets.Add(nodeStyleSheet);
+        {            
+            var nodeStylesPath = AssetDatabase.FindAssets(
+                "t:StyleSheet", 
+                new[] { 
+                    "Assets/DialogueSystem/GraphView/Styles",
+                    "Assets/DialogueSystem/GraphView/Styles/Nodes",
+                });
+
+            foreach(var stylesPath in nodeStylesPath)
+            {
+                var sheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(AssetDatabase.GUIDToAssetPath(stylesPath));
+                styleSheets.Add(sheet);
+            }
         }
     }
 }
