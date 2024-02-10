@@ -6,6 +6,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public class ExecutionFlow
     {
-
+        public BaseNode NextNode { get;set; }
     }
 }

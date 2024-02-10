@@ -15,11 +15,11 @@ namespace BasDidon.Dialogue
             get => currentNode;
             set
             {
-                CurrentNode?.Exit();
+                CurrentNode?.OnExit();
                 currentNode = value;
                 if (CurrentNode != null)
                 {
-                    CurrentNode.Start();
+                    CurrentNode.OnEnter();
                 }
                 else
                 {

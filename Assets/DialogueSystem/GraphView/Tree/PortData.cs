@@ -26,7 +26,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public IEnumerable<EdgeData> EdgesData => DialogueTree.Edges.Where(e => e.InputPortGuid == PortGuid || e.OutputPortGuid == PortGuid);
 
-        public IEnumerable<NodeData> GetConnectedNode()
+        public IEnumerable<BaseNode> GetConnectedNode()
         {
             if (Direction == Direction.Input)
             {

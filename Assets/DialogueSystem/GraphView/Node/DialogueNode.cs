@@ -17,7 +17,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public class DialogueNode : NodeData, IExecutableNode
+    public class DialogueNode : BaseNode, IExecutableNode
     {
         [field: SerializeField] public string SpeakerName { get; set; }
         [field: SerializeField, TextArea]
@@ -45,13 +45,13 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 
 
-        public void Start()
+        public void OnEnter()
         {
             Debug.Log("dialogue node executing");
             DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
         }
 
-        public void Exit(){}
+        public void OnExit(){}
 
         public void Next()
         {

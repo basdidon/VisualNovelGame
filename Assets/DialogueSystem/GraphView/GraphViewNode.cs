@@ -11,7 +11,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
 
-        public void Initialize(NodeData nodeData, DialogueGraphView graphView)
+        public void Initialize(BaseNode nodeData, DialogueGraphView graphView)
         {
             GraphView = graphView;
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
@@ -24,7 +24,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             mainContainer.Bind(SerializedObject);
         }
 
-        public abstract void OnDrawNodeView(NodeData nodeData);
+        public abstract void OnDrawNodeView(BaseNode nodeData);
 
         public Port GetInputFlowPort(string guid)
         {

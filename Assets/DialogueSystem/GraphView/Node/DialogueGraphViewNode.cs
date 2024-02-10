@@ -10,7 +10,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CustomGraphViewNode(typeof(DialogueNode))]
     public class DialogueGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(NodeData nodeData)
+        public override void OnDrawNodeView(BaseNode nodeData)
         {
             if (nodeData is DialogueNode dialogueNode)
             {

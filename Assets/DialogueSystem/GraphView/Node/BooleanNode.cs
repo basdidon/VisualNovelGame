@@ -3,9 +3,8 @@ using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public class BooleanNode : NodeData
+    public class BooleanNode : BaseNode
     {
-        [SerializeField] bool value;
         [field:SerializeField] public bool Value { get; set; }
 
         [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
@@ -20,6 +19,14 @@ namespace BasDidon.Dialogue.VisualGraphView
         public override void OnInstantiatePortData()
         {
             OutputFlowPortData = InstantiatePortData(Direction.Output);
+        }
+
+        public override object ReadValueFromPort(string outputPortGuid)
+        {
+            if (outputPortGuid == OutputFlowPortData.PortGuid)
+                return Value;
+
+            throw new System.Exception();
         }
     }
 }

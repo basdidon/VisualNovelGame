@@ -1,30 +1,37 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public class StartNode : NodeData,IExecutableNode
+    //[ExecutableNode(false)]
+    public class StartNode : BaseNode,IExecutableNode
     {
-        // Port
-        [field:SerializeField] public PortData OutputFlowPortData { get; private set; }
+        [Output] public ExecutionFlow Output { get; set; }
 
-        public override void Initialize(Vector2 position, DialogueTree dialogueTree)
+        // Port
+
+        public PortData OutputFlowPortData { get; private set; }
+        /*
         {
-            base.Initialize(position, dialogueTree);
-        }
+            get
+            {
+                var executable = (ExecutableNodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(ExecutableNodeAttribute), true);
+                return DialogueTree.Nodes.SingleOrDefault(e=> e == executable.OutputPortGuid);
+            }
+        }*/
 
         public override void OnInstantiatePortData()
         {
             OutputFlowPortData = InstantiatePortData(Direction.Output);
         }
 
-        public void Start()
+        public void OnEnter()
         {
             DialogueManager.Instance.CurrentNode = OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault();
-            Debug.Log(OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault());
         }
 
-        public void Exit(){}
+        public void OnExit(){}
     }
 }

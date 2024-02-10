@@ -22,7 +22,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public static EdgeData GetEdgeData(DialogueTree dialogueTree, string edgeGuid) => dialogueTree.Edges.First(e => e.EdgeGuid == edgeGuid);
 
-        public NodeData GetInputNodeData()
+        public BaseNode GetInputNodeData()
         {
             var result = DialogueTree.Nodes.FirstOrDefault(n => n.InputPortGuids.Contains(InputPortGuid));
 
@@ -36,6 +36,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
-        public NodeData GetOutputNodeData() => DialogueTree.Nodes.First(n => n.OutputPortGuids.Contains(OutputPortGuid));
+        public BaseNode GetOutputNodeData() => DialogueTree.Nodes.First(n => n.OutputPortGuids.Contains(OutputPortGuid));
     }
 }

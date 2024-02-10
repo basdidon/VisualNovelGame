@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System;
-using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -35,7 +34,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 if (obj == null)
                     continue;
 
-                if (obj is NodeData nodeData)
+                if (obj is BaseNode nodeData)
                 {
                     var node = NodeFactory.GetNodeView(nodeData, this);
                     AddElement(node);
@@ -51,12 +50,8 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Port outputPort = GetPortByGuid(edgeData.OutputPortGuid);
                 Port inputPort = GetPortByGuid(edgeData.InputPortGuid);
 
-
                 if (outputPort == null || inputPort == null)
                     continue;
-
-                Debug.Log($"{outputPort.viewDataKey} {outputPort.direction} -> {edgeData.InputPortGuid} {inputPort.direction}");
-
 
                 if (outputPort.direction == inputPort.direction)
                     continue;
@@ -100,7 +95,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             this.AddManipulator(SaveContextualMenu());
         }
 
-        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:NodeData
+        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:BaseNode
             =>  AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree),this));
         
 
@@ -133,10 +128,10 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                     Debug.Log($"EdgesToCreate {OutputNode.title} -> {InputNode.title}");
 
-                    if (OutputNode.userData is not NodeData outputNode)
+                    if (OutputNode.userData is not BaseNode outputNode)
                         throw new Exception("OutputNode.userData is not GVNodeData outputNode");
 
-                    if (InputNode.userData is not NodeData inputNode)
+                    if (InputNode.userData is not BaseNode inputNode)
                         throw new Exception("InputNode.userData is not GVNodeData inputNode");
 
                     if (inputNode == null)
@@ -169,7 +164,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                     else if (element is Node node)
                     {
                         Debug.Log("Node was removed.");
-                        NodeData toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
+                        BaseNode toRemoveNode = Tree.Nodes.FirstOrDefault(_node => _node.Id == node.viewDataKey);
                         Tree.Nodes.Remove(toRemoveNode);
                         AssetDatabase.RemoveObjectFromAsset(toRemoveNode);
                         //AssetDatabase.SaveAssets();
@@ -181,7 +176,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 foreach (var element in changes.movedElements)
                 {
-                    if (element.userData is NodeData nodeData)
+                    if (element.userData is BaseNode nodeData)
                     {
                         nodeData.GraphPosition = element.GetPosition().position;
                     }

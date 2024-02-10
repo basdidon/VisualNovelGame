@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Reflection;
+using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
     public class DialogueTree : ScriptableObject
     {
-        [field: SerializeField] public List<NodeData> Nodes { get; private set; } = new();
+        [field: SerializeField] public List<BaseNode> Nodes { get; private set; } = new();
         [SerializeField] List<EdgeData> edges = new();
         public IReadOnlyList<EdgeData> Edges => edges;
 
@@ -44,10 +45,39 @@ namespace BasDidon.Dialogue.VisualGraphView
             AssetDatabase.Refresh();
         }
 
+        public IEnumerable<EdgeData> GetConnectedEdges(PortData portData)
+        {
+            return portData.Direction switch
+            {
+                Direction.Input => Edges.Where(e => e.InputPortGuid == portData.PortGuid),
+                Direction.Output => Edges.Where(e => e.OutputPortGuid == portData.PortGuid),
+                _ => throw new InvalidOperationException("Invalid port direction.")
+            };
+        }
+
+        public BaseNode GetNodeByPort(PortData portData)
+        {
+            return portData.Direction switch
+            {
+                Direction.Input => Nodes.Single(n=> n.InputPortGuids.Contains(portData.PortGuid)),
+                Direction.Output => Nodes.Single(n=> n.OutputPortGuids.Contains(portData.PortGuid)),
+                _ => throw new InvalidOperationException("Invalid port direction.")
+            };
+        }
+
+        public IEnumerable<BaseNode> GetConnectedNodes(PortData portData)
+        {
+            throw new NotImplementedException();
+        }
+
         public object GetData(string inputPortGuid)
         {
             if (!Edges.Any(e => e.InputPortGuid == inputPortGuid))
+            {
+                Debug.Log("port is not connect.");
                 return null;
+            }
+
             var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
 
             if (edge == null)

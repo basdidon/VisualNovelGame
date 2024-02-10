@@ -6,7 +6,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CustomGraphViewNode(typeof(BooleanNode))]
     public class CustomBooleanGraphViewNode : GraphViewNode
     {
-        public override void OnDrawNodeView(NodeData nodeData)
+        public override void OnDrawNodeView(BaseNode nodeData)
         {
             if (nodeData is BooleanNode booleanNode)
             {

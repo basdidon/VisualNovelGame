@@ -26,7 +26,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         { }*/
     }
 
-    public class ChoicesNode : NodeData, IExecutableNode
+    public class ChoicesNode : BaseNode, IExecutableNode
     {
         [field: SerializeField] public string SpeakerName { get; private set; }
         [field: SerializeField, TextArea]
@@ -96,17 +96,20 @@ namespace BasDidon.Dialogue.VisualGraphView
             InputFlowPortData = InstantiatePortData(Direction.Input);
         }
 
-        public void Start()
+        public void OnEnter()
         {
             Debug.Log("choices node executing");
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
-                new(SpeakerName,QuestionText),
-                Choices.Select(c=>c.Name).ToArray(),
-                Choices.Select(c=>(bool) DialogueTree.GetData(c.IsEnableInputPortData.PortGuid)).ToArray()
+                new(SpeakerName, QuestionText),
+                Choices.Select(c => c.Name).ToArray(),
+                Choices.Select(c => {
+                    var _isEnable = DialogueTree.GetData(c.IsEnableInputPortData.PortGuid);
+                    return _isEnable != null ? (bool)_isEnable : c.IsEnable;
+                }).ToArray()
             ));
         }
 
-        public void Exit(){}
+        public void OnExit(){}
 
         public void SelectChoice(int idx)
         {

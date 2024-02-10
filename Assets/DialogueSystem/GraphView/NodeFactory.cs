@@ -8,7 +8,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CustomGraphViewNode(typeof(NodeFactory))]
     public static class NodeFactory
     {
-        public static NodeData CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : NodeData
+        public static BaseNode CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : BaseNode
         {
             var nodeData = ScriptableObject.CreateInstance<T>();
             nodeData.Initialize(position, dialogueTree);
@@ -16,7 +16,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             return nodeData;
         }
 
-        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : NodeData
+        public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : BaseNode
         {
             var allTypes = Assembly.GetExecutingAssembly().GetTypes();
             var typesWithAttribute = allTypes
