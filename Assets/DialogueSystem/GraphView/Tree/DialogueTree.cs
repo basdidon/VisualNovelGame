@@ -57,17 +57,32 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public BaseNode GetNodeByPort(PortData portData)
         {
-            return portData.Direction switch
+            return GetNodeByPort(portData.PortGuid,portData.Direction);
+        }
+
+        public BaseNode GetNodeByPort(string portGuid,Direction direction)
+        {
+            return direction switch
             {
-                Direction.Input => Nodes.Single(n=> n.InputPortGuids.Contains(portData.PortGuid)),
-                Direction.Output => Nodes.Single(n=> n.OutputPortGuids.Contains(portData.PortGuid)),
+                Direction.Input => Nodes.Single(n => n.GetPortGuids(Direction.Input).Contains(portGuid)),
+                Direction.Output => Nodes.Single(n => n.GetPortGuids(Direction.Output).Contains(portGuid)),
                 _ => throw new InvalidOperationException("Invalid port direction.")
             };
         }
 
         public IEnumerable<BaseNode> GetConnectedNodes(PortData portData)
         {
-            throw new NotImplementedException();
+            return GetConnectedEdges(portData).Select(e => portData.Direction switch
+            {
+                Direction.Input => GetNodeByPort(e.OutputPortGuid,Direction.Output),
+                Direction.Output => GetNodeByPort(e.InputPortGuid,Direction.Input),
+                _ => throw new InvalidOperationException("Invalid port direction.")
+            });
+        }
+
+        public IEnumerable<T> GetConnectedNodes<T>(PortData portData)
+        {
+            return GetConnectedNodes(portData).OfType<T>();
         }
 
         public object GetData(string inputPortGuid)
@@ -83,7 +98,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             if (edge == null)
                 return default;
 
-            var outputNode = Nodes.SingleOrDefault(n => n.OutputPortGuids.Contains(edge.OutputPortGuid));
+            var outputNode = Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Output).Contains(edge.OutputPortGuid));
 
             if (outputNode == null)
                 throw new Exception();

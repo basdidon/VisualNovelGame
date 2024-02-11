@@ -27,14 +27,16 @@ namespace BasDidon.Dialogue.VisualGraphView
                 .SingleOrDefault(item => item.Attribute != null && item.Attribute.Type == nodeData.GetType());
 
             GraphViewNode instance;
+
             if (nodeTypeAttribute != null)
             {
                 var nodeType = nodeTypeAttribute.Type;
                 instance = Activator.CreateInstance(nodeType) as GraphViewNode;
+                Debug.Log($"GetNodeView {nodeType.Name}");
             }
             else
             {
-                instance = Activator.CreateInstance<GraphViewNode>();
+                instance = Activator.CreateInstance<DefaultGraphViewNode>();
             }
 
             instance.Initialize(nodeData,graphView);

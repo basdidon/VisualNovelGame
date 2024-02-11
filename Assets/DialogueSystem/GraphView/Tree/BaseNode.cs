@@ -29,12 +29,15 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         // Port
         [SerializeField] List<PortData> PortsData;
-        public IEnumerable<string> InputPortGuids => PortsData.Where(p => p.Direction == Direction.Input).Select(p => p.PortGuid);
-        public IEnumerable<string> OutputPortGuids => PortsData.Where(p => p.Direction == Direction.Output).Select(p => p.PortGuid);
-        
+        public IEnumerable<string> GetPortGuids() => PortsData.Select(p => p.PortGuid);
+        public IEnumerable<string> GetPortGuids(Direction direction) => PortsData.Where(p=> p.Direction == direction).Select(p => p.PortGuid);
+
+        // Port
+        [SerializeField] Dictionary<string, PortData> propertyPairPortData;
+
         protected PortData InstantiatePortData(Direction direction)
         {
-            PortData newPortData = new(DialogueTree, direction);
+            PortData newPortData = new(direction);
             PortsData.Add(newPortData);
             return newPortData;
         }
@@ -47,15 +50,35 @@ namespace BasDidon.Dialogue.VisualGraphView
             name = GetType().Name;
 
             PortsData = new();
+            propertyPairPortData = new();
 
             OnInstantiatePortData();
-            
-            // InstantiatePorts();
+        
 
             dialogueTree.Nodes.Add(this);
             AssetDatabase.AddObjectToAsset(this, dialogueTree);
 
             SaveChanges();
+        }
+
+        protected void InstantiatePorts()
+        {
+            var inputProperties = GetType().GetProperties().Where(p=>p.IsDefined(typeof(InputAttribute),inherit: true));
+            var outputProperties = GetType().GetProperties().Where(p => p.IsDefined(typeof(OutputAttribute), inherit: true));
+            
+            foreach (var inputProperty in inputProperties)
+            {
+                PortData newPortData = new(Direction.Input);
+                propertyPairPortData.Add(inputProperty.Name, newPortData);
+                Debug.Log($"{GetType()} add inputPortData : {inputProperty.Name} {newPortData.PortGuid}");
+            }
+
+            foreach (var outputProperty in outputProperties)
+            {
+                PortData newPortData = new(Direction.Output);
+                propertyPairPortData.Add(outputProperty.Name, newPortData);
+                Debug.Log($"{GetType().Name} add inputPortData : {outputProperty.Name}, {newPortData.PortGuid}");
+            }
         }
         /*
         private void InstantiatePorts()
@@ -157,12 +180,9 @@ public class ExecutableNodeAttribute : Attribute
         }
     }
 
-    public class InputAttribute : PortAttribute
-    {
-    }
+    [SerializeField]
+    public class InputAttribute : PortAttribute{}
 
-    public class OutputAttribute : PortAttribute
-    {
-
-    }
+    [SerializeField]
+    public class OutputAttribute : PortAttribute{}
 }

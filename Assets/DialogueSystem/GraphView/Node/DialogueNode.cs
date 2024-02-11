@@ -55,7 +55,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void Next()
         {
-            DialogueManager.Instance.CurrentNode = OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault();
+            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(OutputFlowPortData).FirstOrDefault();
         }
 
         public static string GetValueFromSyntax(string syntax)
@@ -69,11 +69,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             // If a match is found
             if (match.Success)
             {
-                /*
-                for(int i = 0; i < match.Groups.Count; i++)
-                {
-                    Debug.Log($"{i} : {match.Groups[i].Value}");
-                }*/
                 // Extract the character ID from the matched group
                 int characterId = int.Parse(match.Groups[2].Value);
 

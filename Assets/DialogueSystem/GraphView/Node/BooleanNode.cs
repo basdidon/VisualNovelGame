@@ -5,7 +5,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public class BooleanNode : BaseNode
     {
-        [field:SerializeField] public bool Value { get; set; }
+        [Output] public bool Value { get; set; }
 
         [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
@@ -13,6 +13,8 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             base.Initialize(position, dialogueTree);
 
+            InstantiatePorts();
+            
             SaveChanges();
         }
 

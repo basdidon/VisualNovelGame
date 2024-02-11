@@ -137,7 +137,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                     if (inputNode == null)
                         throw new Exception("inputNode == null");
 
-                    EdgeData edgeData = new(Tree, edge.output.viewDataKey, edge.input.viewDataKey);
+                    EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey);
                     edge.viewDataKey = edgeData.EdgeGuid;
                     Tree.AddEdge(edgeData);
                 }

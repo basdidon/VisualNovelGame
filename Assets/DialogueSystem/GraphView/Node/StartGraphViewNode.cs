@@ -13,7 +13,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 titleButtonContainer.style.display = DisplayStyle.None;
                 // output port
-                Debug.Log(startNode.OutputFlowPortData == null);
                 Port outputPort = GetOutputFlowPort(startNode.OutputFlowPortData.PortGuid);
                 outputContainer.Add(outputPort);
 

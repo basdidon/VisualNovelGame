@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    [CustomGraphViewNode(typeof(BooleanNode))]
+    //[CustomGraphViewNode(typeof(BooleanNode))]
     public class CustomBooleanGraphViewNode : GraphViewNode
     {
         public override void OnDrawNodeView(BaseNode nodeData)

@@ -15,12 +15,10 @@ MonoBehaviour:
   <Id>k__BackingField: 7a79b378-8534-4932-9ea9-eb4241593317
   <GraphPosition>k__BackingField: {x: -23, y: 135}
   PortsData:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 2f448690-45dc-4830-905f-ebf48e94bb6b
+  - <PortGuid>k__BackingField: 2f448690-45dc-4830-905f-ebf48e94bb6b
     <Direction>k__BackingField: 1
   <Value>k__BackingField: 0
   <OutputFlowPortData>k__BackingField:
-    <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: 2f448690-45dc-4830-905f-ebf48e94bb6b
     <Direction>k__BackingField: 1
 --- !u!114 &11400000
@@ -40,12 +38,10 @@ MonoBehaviour:
   - {fileID: 3319803538165295939}
   - {fileID: -6996449935016088290}
   edges:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <EdgeGuid>k__BackingField: 83203b5d-3a99-4583-8762-18f8703d126d
+  - <EdgeGuid>k__BackingField: 83203b5d-3a99-4583-8762-18f8703d126d
     <OutputPortGuid>k__BackingField: d92a2ac9-4bac-45ad-be8e-da5ecac9a76a
     <InputPortGuid>k__BackingField: 0f917ba5-6d7f-4a60-a416-d34486604a33
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <EdgeGuid>k__BackingField: 9767aa46-ffaf-40a1-a3c7-45e23e42af32
+  - <EdgeGuid>k__BackingField: 9767aa46-ffaf-40a1-a3c7-45e23e42af32
     <OutputPortGuid>k__BackingField: 2f448690-45dc-4830-905f-ebf48e94bb6b
     <InputPortGuid>k__BackingField: 97d5d6d1-b9a2-457c-a167-ae799b08080e
 --- !u!114 &3319803538165295939
@@ -63,26 +59,19 @@ MonoBehaviour:
   <Id>k__BackingField: 7221cef0-2702-4183-ad27-1fc3997ae77e
   <GraphPosition>k__BackingField: {x: 315, y: 29}
   PortsData:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 0f917ba5-6d7f-4a60-a416-d34486604a33
+  - <PortGuid>k__BackingField: 0f917ba5-6d7f-4a60-a416-d34486604a33
     <Direction>k__BackingField: 0
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 97d5d6d1-b9a2-457c-a167-ae799b08080e
+  - <PortGuid>k__BackingField: 97d5d6d1-b9a2-457c-a167-ae799b08080e
     <Direction>k__BackingField: 0
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 73e74e9e-da2a-4e6c-a5bb-3f4a01f29f67
+  - <PortGuid>k__BackingField: 73e74e9e-da2a-4e6c-a5bb-3f4a01f29f67
     <Direction>k__BackingField: 1
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: a94cf569-eb65-4a8b-9372-a4ebd3bf9f84
+  - <PortGuid>k__BackingField: a94cf569-eb65-4a8b-9372-a4ebd3bf9f84
     <Direction>k__BackingField: 0
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 9e87126a-740a-44f3-a1aa-5f6973d6ff97
+  - <PortGuid>k__BackingField: 9e87126a-740a-44f3-a1aa-5f6973d6ff97
     <Direction>k__BackingField: 1
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 37af0c03-2dbe-4e82-9095-7da2361a4ef7
+  - <PortGuid>k__BackingField: 37af0c03-2dbe-4e82-9095-7da2361a4ef7
     <Direction>k__BackingField: 0
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 0733ecc8-9ac2-4e3d-be02-a40527911987
+  - <PortGuid>k__BackingField: 0733ecc8-9ac2-4e3d-be02-a40527911987
     <Direction>k__BackingField: 1
   <SpeakerName>k__BackingField: 
   <QuestionText>k__BackingField: 
@@ -90,35 +79,28 @@ MonoBehaviour:
   - isEnable: 1
     <Name>k__BackingField: 1
     <IsEnableInputPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: 97d5d6d1-b9a2-457c-a167-ae799b08080e
       <Direction>k__BackingField: 0
     <OutputFlowPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: 73e74e9e-da2a-4e6c-a5bb-3f4a01f29f67
       <Direction>k__BackingField: 1
   - isEnable: 1
     <Name>k__BackingField: 2
     <IsEnableInputPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: a94cf569-eb65-4a8b-9372-a4ebd3bf9f84
       <Direction>k__BackingField: 0
     <OutputFlowPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: 9e87126a-740a-44f3-a1aa-5f6973d6ff97
       <Direction>k__BackingField: 1
   - isEnable: 0
     <Name>k__BackingField: 3
     <IsEnableInputPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: 37af0c03-2dbe-4e82-9095-7da2361a4ef7
       <Direction>k__BackingField: 0
     <OutputFlowPortData>k__BackingField:
-      <DialogueTree>k__BackingField: {fileID: 11400000}
       <PortGuid>k__BackingField: 0733ecc8-9ac2-4e3d-be02-a40527911987
       <Direction>k__BackingField: 1
   <InputFlowPortData>k__BackingField:
-    <DialogueTree>k__BackingField: {fileID: 11400000}
     <PortGuid>k__BackingField: 0f917ba5-6d7f-4a60-a416-d34486604a33
     <Direction>k__BackingField: 0
 --- !u!114 &6545250988243614849
@@ -134,8 +116,7 @@ MonoBehaviour:
   m_Name: StartNode
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 4fbb8fea-7062-499d-ae90-64dc8e890ce5
-  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  <GraphPosition>k__BackingField: {x: 1, y: -9}
   PortsData:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: d92a2ac9-4bac-45ad-be8e-da5ecac9a76a
+  - <PortGuid>k__BackingField: d92a2ac9-4bac-45ad-be8e-da5ecac9a76a
     <Direction>k__BackingField: 1

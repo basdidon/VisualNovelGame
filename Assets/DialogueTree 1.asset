@@ -1,5 +1,45 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6740458042853371741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd37ee5bf7d9114abe0be01ec46de41, type: 3}
+  m_Name: BooleanNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: fdd8d7bf-3f49-4929-8b1b-84e495144b26
+  <GraphPosition>k__BackingField: {x: 266, y: 141}
+  PortsData:
+  - <PortGuid>k__BackingField: df7fdce3-10dd-4c33-be0a-84f909a17d8c
+    <Direction>k__BackingField: 1
+  <OutputFlowPortData>k__BackingField:
+    <PortGuid>k__BackingField: df7fdce3-10dd-4c33-be0a-84f909a17d8c
+    <Direction>k__BackingField: 1
+--- !u!114 &-3414674838547199189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
+  m_Name: StartNode
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: ea0649e3-ea71-4f9a-bec5-a2fea899c1e1
+  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  PortsData:
+  - <PortGuid>k__BackingField: 335b1ea9-b352-4222-b349-76091f798671
+    <Direction>k__BackingField: 1
+  <OutputFlowPortData>k__BackingField:
+    <PortGuid>k__BackingField: 335b1ea9-b352-4222-b349-76091f798671
+    <Direction>k__BackingField: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,23 +53,6 @@ MonoBehaviour:
   m_Name: DialogueTree 1
   m_EditorClassIdentifier: 
   <Nodes>k__BackingField:
-  - {fileID: 260393173297609334}
+  - {fileID: -3414674838547199189}
+  - {fileID: -6740458042853371741}
   edges: []
---- !u!114 &260393173297609334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb689868a20921b4aa8ffb486423a311, type: 3}
-  m_Name: StartNode
-  m_EditorClassIdentifier: 
-  <Id>k__BackingField: fa860b16-ea1e-4dd3-bdfa-5e1363d34b2e
-  <GraphPosition>k__BackingField: {x: 0, y: 0}
-  PortsData:
-  - <DialogueTree>k__BackingField: {fileID: 11400000}
-    <PortGuid>k__BackingField: 7a5f78e3-2af3-4016-bb23-7f8bc8b1ee94
-    <Direction>k__BackingField: 1

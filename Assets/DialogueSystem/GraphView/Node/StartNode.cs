@@ -11,16 +11,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Output] public ExecutionFlow Output { get; set; }
 
         // Port
-
-        public PortData OutputFlowPortData { get; private set; }
-        /*
-        {
-            get
-            {
-                var executable = (ExecutableNodeAttribute)Attribute.GetCustomAttribute(GetType(), typeof(ExecutableNodeAttribute), true);
-                return DialogueTree.Nodes.SingleOrDefault(e=> e == executable.OutputPortGuid);
-            }
-        }*/
+        [field:SerializeField] public PortData OutputFlowPortData { get; private set; }
 
         public override void OnInstantiatePortData()
         {
@@ -29,7 +20,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void OnEnter()
         {
-            DialogueManager.Instance.CurrentNode = OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault();
+            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(OutputFlowPortData).First();
         }
 
         public void OnExit(){}

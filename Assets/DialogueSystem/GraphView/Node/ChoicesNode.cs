@@ -114,13 +114,11 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void SelectChoice(int idx)
         {
             if (idx < 0 || idx >= Choices.Count)
-            {
                 throw new ArgumentOutOfRangeException();
-            }
-            else
-            {
-                DialogueManager.Instance.CurrentNode = Choices.ElementAt(idx).OutputFlowPortData.GetConnectedNodeOfType<IExecutableNode>().FirstOrDefault();
-            }
+
+            var selectedOutputPort = Choices.ElementAt(idx).OutputFlowPortData;
+            var selectedNode = DialogueTree.GetConnectedNodes<IExecutableNode>(selectedOutputPort).FirstOrDefault();
+            DialogueManager.Instance.CurrentNode = selectedNode;
         }
     }
 }

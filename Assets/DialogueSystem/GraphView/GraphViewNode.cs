@@ -56,10 +56,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             return characterDataObjectField;
         }*/
 
-
-        
-        
-
         public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
         void DrawHeader()
@@ -101,6 +97,25 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
 
             //GraphView.RemoveElement(port);
+        }
+    }
+
+    public class DefaultGraphViewNode : GraphViewNode
+    {
+        public override void OnDrawNodeView(BaseNode nodeData)
+        {
+            DrawInputPorts();
+            DrawOutputPorts();
+        }
+
+        void DrawInputPorts()
+        {
+            
+        }
+
+        void DrawOutputPorts()
+        {
+
         }
     }
 }
