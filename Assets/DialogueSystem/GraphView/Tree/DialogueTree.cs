@@ -87,21 +87,21 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public object GetData(string inputPortGuid)
         {
-            if (!Edges.Any(e => e.InputPortGuid == inputPortGuid))
-            {
-                Debug.Log("port is not connect.");
-                return null;
-            }
-
             var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
 
             if (edge == null)
+            {
+                Debug.Log("port is not connect. or have a port with same guid");
                 return default;
+            }
 
             var outputNode = Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Output).Contains(edge.OutputPortGuid));
 
             if (outputNode == null)
+            {
+                Debug.Log($"not found any port match with {edge.OutputPortGuid}");
                 throw new Exception();
+            }
 
             return outputNode.ReadValueFromPort(edge.OutputPortGuid);
         }

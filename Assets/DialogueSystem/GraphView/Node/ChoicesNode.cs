@@ -28,7 +28,14 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class ChoicesNode : BaseNode, IExecutableNode
     {
-        [field: SerializeField] public string SpeakerName { get; private set; }
+        [Input] public ExecutionFlow Input { get; private set; }
+        [Output] public ExecutionFlow Output { get; private set; }
+
+        [NodeField]
+        [field: SerializeField] 
+        public string SpeakerName { get; private set; }
+
+        [NodeField]
         [field: SerializeField, TextArea]
         public string QuestionText { get; set; }
 
@@ -80,8 +87,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
-        [field: SerializeField] public PortData InputFlowPortData { get; private set; }
-
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
@@ -91,11 +96,8 @@ namespace BasDidon.Dialogue.VisualGraphView
             SaveChanges();
         }
 
-        public override void OnInstantiatePortData()
-        {
-            InputFlowPortData = InstantiatePortData(Direction.Input);
-        }
 
+        // Execute Logic
         public void OnEnter()
         {
             Debug.Log("choices node executing");

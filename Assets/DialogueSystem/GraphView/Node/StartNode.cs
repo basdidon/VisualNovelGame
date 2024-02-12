@@ -8,19 +8,19 @@ namespace BasDidon.Dialogue.VisualGraphView
     //[ExecutableNode(false)]
     public class StartNode : BaseNode,IExecutableNode
     {
-        [Output] public ExecutionFlow Output { get; set; }
+        [Output] public ExecutionFlow Output { get; private set; }
 
         // Port
+        /*
         [field:SerializeField] public PortData OutputFlowPortData { get; private set; }
-
         public override void OnInstantiatePortData()
         {
             OutputFlowPortData = InstantiatePortData(Direction.Output);
         }
-
+        */
         public void OnEnter()
         {
-            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(OutputFlowPortData).First();
+            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("Output")).First();
         }
 
         public void OnExit(){}

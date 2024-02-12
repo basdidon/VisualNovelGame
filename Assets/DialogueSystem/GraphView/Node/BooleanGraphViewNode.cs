@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 namespace BasDidon.Dialogue.VisualGraphView
 {
     //[CustomGraphViewNode(typeof(BooleanNode))]
+    /*
     public class CustomBooleanGraphViewNode : GraphViewNode
     {
         public override void OnDrawNodeView(BaseNode nodeData)
@@ -27,5 +28,5 @@ namespace BasDidon.Dialogue.VisualGraphView
                 RefreshExpandedState();
             }
         }
-    }
+    }*/
 }

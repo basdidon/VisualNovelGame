@@ -3,10 +3,12 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
+using System.Reflection;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public abstract class GraphViewNode : Node
+    public class GraphViewNode : Node
     {
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
@@ -24,7 +26,53 @@ namespace BasDidon.Dialogue.VisualGraphView
             mainContainer.Bind(SerializedObject);
         }
 
-        public abstract void OnDrawNodeView(BaseNode nodeData);
+        public virtual void OnDrawNodeView(BaseNode baseNode)
+        {
+            // create port
+            foreach (var pair in baseNode.Ports)
+            {
+                var property = baseNode.GetType().GetProperty(pair.Key);
+                var port = NodePortFactory.GetPort(property.PropertyType, pair.Value, property.Name, this);
+
+                if (pair.Value.Direction == Direction.Input)
+                {
+                    inputContainer.Add(port);
+                }
+                else
+                {
+                    outputContainer.Add(port);
+                }
+
+                Debug.Log($"<color=blue>DrawPort</color> {pair.Value.Direction} ({property.PropertyType.Name})");
+            }
+
+            var nodeFieldProperties = baseNode.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(p => p.IsDefined(typeof(NodeFieldAttribute), inherit: false));
+
+            Debug.Log(nodeFieldProperties.Count());
+            foreach (var property in nodeFieldProperties)
+            {
+                var propertyBindingPath = GetPropertyBindingPath(property.Name);
+                var serializeProperty = SerializedObject.FindProperty(propertyBindingPath);
+                Debug.Log($"{property.Name} : {serializeProperty.stringValue}");
+                var propField = new PropertyField(serializeProperty);
+                extensionContainer.Add(propField);
+                /*
+                if(property.PropertyType == typeof(string))
+                {
+                    TextField speakerTextField = new()
+                    {
+                        label = "Speaker",
+                        bindingPath = GetPropertyBindingPath("SpeakerName"),
+                    };
+                    speakerTextField.AddToClassList("speaker-name-input");
+                    extensionContainer.Add(speakerTextField);
+                }*/
+            }
+
+
+
+            RefreshExpandedState();
+        }
 
         public Port GetInputFlowPort(string guid)
         {
@@ -45,16 +93,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             outputPort.viewDataKey = guid;
             return outputPort;
         }
-        /*
-        public ObjectField GetCharacterDataObjectField(string propertyName = "CharacterData")
-        {
-            ObjectField characterDataObjectField = new()
-            {
-                objectType = typeof(CharacterData),
-                bindingPath = GetPropertyBindingPath(propertyName),
-            };
-            return characterDataObjectField;
-        }*/
 
         public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
@@ -97,25 +135,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
 
             //GraphView.RemoveElement(port);
-        }
-    }
-
-    public class DefaultGraphViewNode : GraphViewNode
-    {
-        public override void OnDrawNodeView(BaseNode nodeData)
-        {
-            DrawInputPorts();
-            DrawOutputPorts();
-        }
-
-        void DrawInputPorts()
-        {
-            
-        }
-
-        void DrawOutputPorts()
-        {
-
         }
     }
 }

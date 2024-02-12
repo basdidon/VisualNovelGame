@@ -5,30 +5,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public class BooleanNode : BaseNode
     {
-        [Output] public bool Value { get; set; }
-
-        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
-
-        public override void Initialize(Vector2 position, DialogueTree dialogueTree)
-        {
-            base.Initialize(position, dialogueTree);
-
-            InstantiatePorts();
-            
-            SaveChanges();
-        }
-
-        public override void OnInstantiatePortData()
-        {
-            OutputFlowPortData = InstantiatePortData(Direction.Output);
-        }
+        [Output] public bool Value { get; private set; }
 
         public override object ReadValueFromPort(string outputPortGuid)
         {
-            if (outputPortGuid == OutputFlowPortData.PortGuid)
-                return Value;
-
-            throw new System.Exception();
+            return Value;
         }
     }
 }

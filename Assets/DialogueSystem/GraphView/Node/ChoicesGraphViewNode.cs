@@ -5,24 +5,15 @@ using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : GraphViewNode
     {
         public override void OnDrawNodeView(BaseNode nodeData)
         {
+            base.OnDrawNodeView(nodeData);
             if (nodeData is ChoicesNode choicesNode)
             {
-                // CharacterData ObjectField
-                TextField speakerTextField = new()
-                {
-                    label = "Speaker",
-                    bindingPath = GetPropertyBindingPath("SpeakerName"),
-                };
-                mainContainer.Insert(1, speakerTextField);
-
-                var inputFlowPort = GetInputFlowPort(choicesNode.InputFlowPortData.PortGuid);
-                inputContainer.Add(inputFlowPort);
-
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {

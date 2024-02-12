@@ -19,31 +19,18 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class DialogueNode : BaseNode, IExecutableNode
     {
-        [field: SerializeField] public string SpeakerName { get; set; }
+        [Input] public ExecutionFlow Input { get; private set; }
+        [Output] public ExecutionFlow Output { get; private set; }
+
+        [NodeField]
+        [field: SerializeField] 
+        public string SpeakerName { get; set; }
+
+        [NodeField]
         [field: SerializeField, TextArea]
-        public string DialogueText { get; set; }
+        public string DialogueText { get; set; } = string.Empty;
 
         public DialogueRecord GetData => new(SpeakerName, GetValueFromSyntax(DialogueText));
-
-        // Flow Port
-        [field: SerializeField] public PortData InputFlowPortData { get; private set; }
-        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
-
-        public override void Initialize(Vector2 position, DialogueTree dialogueTree)
-        {
-            base.Initialize(position, dialogueTree);
-
-            DialogueText = string.Empty;
-
-            SaveChanges();
-        }
-
-        public override void OnInstantiatePortData()
-        {
-            InputFlowPortData = InstantiatePortData(Direction.Input);
-            OutputFlowPortData = InstantiatePortData(Direction.Output);
-        }
-
 
         public void OnEnter()
         {
@@ -55,7 +42,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void Next()
         {
-            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(OutputFlowPortData).FirstOrDefault();
+            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("Output")).FirstOrDefault();
         }
 
         public static string GetValueFromSyntax(string syntax)

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    /*
     [CustomGraphViewNode(typeof(StartNode))]
     public class CustomStartGraphViewNode : GraphViewNode
     {
@@ -19,5 +20,5 @@ namespace BasDidon.Dialogue.VisualGraphView
                 RefreshExpandedState();
             }
         }
-    }
+    }*/
 }

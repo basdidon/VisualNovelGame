@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    /*
     [CustomGraphViewNode(typeof(DialogueNode))]
     public class DialogueGraphViewNode : GraphViewNode
     {
@@ -77,6 +78,6 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Debug.Log($"US:{text}");
                 return false;
             }
-        }*/
-    }
+        }
+    }*/
 }
