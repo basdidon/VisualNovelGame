@@ -3,7 +3,10 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
+using System.Collections;
+using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -20,24 +23,73 @@ namespace BasDidon.Dialogue.VisualGraphView
             ChoicesText = choicesText;
             ChoicesEnable = choicesEnable;
         }
-        /*
-        public ChoicesRecord(CharacterData characterData, string dialogueText, string[] choicesText, bool[] choicesEnable) 
-            : this(new(characterData, dialogueText), choicesText, choicesEnable)
-        { }*/
     }
 
-    public class ChoicesNode : BaseNode, IExecutableNode
+    [Serializable]
+    public class Option: BaseNodeElement
     {
-        [Input] public ExecutionFlow Input { get; private set; }
-        [Output] public ExecutionFlow Output { get; private set; }
+        [Input] public bool isEnable;
+        [Output] public ExecutionFlow output;
+    }
+
+    [Serializable]
+    public class Options : List<Option>, ISerializationCallbackReceiver
+    {
+        [SerializeField, HideInInspector]
+        List<Option> options = new();
+
+        public void OnAfterDeserialize()
+        {
+            options.Clear();
+
+            foreach(var option in this)
+            {
+                options.Add(option);
+            }
+        }
+
+        public void OnBeforeSerialize()
+        {
+            Clear();
+
+            foreach(var option in options)
+            {
+                Add(option);
+            }
+        }
+    }
+
+    [CustomPropertyDrawer(typeof(Options))]
+    public class OptionsEditor : PropertyDrawer
+    {
+        public override VisualElement CreatePropertyGUI(SerializedProperty property)
+        {
+            VisualElement root = new();
+            
+            var list = new PropertyField(property.FindPropertyRelative("options"));
+
+            if(property.FindPropertyRelative("options") == null)
+            {
+                Debug.Log($"list is null");
+            }
+
+            root.Add(list);
+            return root;
+        }
+    }
+
+    public class ChoicesNode : ExecutableNode
+    {
+        [NodeField]
+        public string speakerName;
+
+        [TextArea, NodeField]
+        public string questionText;
+
+        public Options options;
 
         [NodeField]
-        [field: SerializeField] 
-        public string SpeakerName { get; private set; }
-
-        [NodeField]
-        [field: SerializeField, TextArea]
-        public string QuestionText { get; set; }
+        public List<Option> optionList;
 
         [SerializeField] List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
@@ -56,31 +108,15 @@ namespace BasDidon.Dialogue.VisualGraphView
         [System.Serializable]
         public class Choice
         {
-            [SerializeField] bool isEnable;
-            public bool IsEnable {
-                get
-                {
-                    
-                    var isEnablePortConnected = false;
-                    if (isEnablePortConnected)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        return isEnable;
-                    }
-                }
-            }
+            [field: SerializeField] public bool IsEnable { get; set; }
             [field: SerializeField] public string Name { get; private set; }
 
             [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
-
             [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
             public Choice(PortData isEnableInputPortData, PortData outputFlowPortData)
             {
-                isEnable = true;
+                IsEnable = true;
                 Name = "new choice";
                 IsEnableInputPortData = isEnableInputPortData;
                 OutputFlowPortData = outputFlowPortData;
@@ -96,13 +132,12 @@ namespace BasDidon.Dialogue.VisualGraphView
             SaveChanges();
         }
 
-
         // Execute Logic
-        public void OnEnter()
+        public override void OnEnter()
         {
             Debug.Log("choices node executing");
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
-                new(SpeakerName, QuestionText),
+                new(speakerName, questionText),
                 Choices.Select(c => c.Name).ToArray(),
                 Choices.Select(c => {
                     var _isEnable = DialogueTree.GetData(c.IsEnableInputPortData.PortGuid);
@@ -111,7 +146,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             ));
         }
 
-        public void OnExit(){}
+        public override void OnExit(){}
 
         public void SelectChoice(int idx)
         {

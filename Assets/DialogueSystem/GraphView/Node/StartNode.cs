@@ -8,7 +8,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     //[ExecutableNode(false)]
     public class StartNode : BaseNode,IExecutableNode
     {
-        [Output] public ExecutionFlow Output { get; private set; }
+        [Output] public ExecutionFlow Output;
 
         // Port
         /*

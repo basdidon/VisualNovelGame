@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
     public class BooleanNode : BaseNode
     {
-        [Output] public bool Value { get; private set; }
+        [Output]
+        //[field: SerializeField]
+        public bool Value;
 
         public override object ReadValueFromPort(string outputPortGuid)
         {

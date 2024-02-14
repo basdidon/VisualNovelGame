@@ -46,7 +46,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public static class NodePortFactory
+    public static class NodeElementFactory
     {
         public static VisualElement GetPort<T>(PortData portData, string propertyName, GraphViewNode nodeView) 
         {
@@ -63,11 +63,20 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 return GetBoolPort(portData, propertyName, nodeView);
             }
-
+            
 
             throw new InvalidOperationException();
         }
 
+        static string ToCapitalCase(string text)
+        {
+            return char.ToUpper(text[0]) + text[1..];
+        }
+
+        static string GetArrayPropertyBindingPath(string arrayFieldName,int index, string subObjectField)
+        {
+            return $"{arrayFieldName}.Array.data[{index}].{subObjectField}";
+        }
 
         static VisualElement GetExecutionFlowPort(PortData portData, string propertyName, GraphViewNode nodeView)
         {
@@ -79,7 +88,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             );
 
             port.viewDataKey = portData.PortGuid;
-            port.portName = propertyName;
+            port.portName = ToCapitalCase(propertyName);
             port.portColor = Color.yellow;
 
             return port;
@@ -92,12 +101,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, Port.Capacity.Multi,typeof(bool));
             port.viewDataKey = portData.PortGuid;
-            port.portName = propertyName;
+            port.portName = ToCapitalCase(propertyName);
             portElement.Add(port);
             
             var valueToggle = new Toggle()
             {
-                bindingPath = $"<{propertyName}>k__BackingField"
+                bindingPath = propertyName,
             };
 
             portElement.Add(valueToggle);

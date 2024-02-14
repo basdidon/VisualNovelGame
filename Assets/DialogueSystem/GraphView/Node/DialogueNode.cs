@@ -17,28 +17,23 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public class DialogueNode : BaseNode, IExecutableNode
+    public class DialogueNode : ExecutableNode
     {
-        [Input] public ExecutionFlow Input { get; private set; }
-        [Output] public ExecutionFlow Output { get; private set; }
-
         [NodeField]
-        [field: SerializeField] 
-        public string SpeakerName { get; set; }
+        public string SpeakerName;
 
-        [NodeField]
-        [field: SerializeField, TextArea]
-        public string DialogueText { get; set; } = string.Empty;
+        [TextArea, NodeField]
+        public string DialogueText  = string.Empty;
 
         public DialogueRecord GetData => new(SpeakerName, GetValueFromSyntax(DialogueText));
 
-        public void OnEnter()
+        public override void OnEnter()
         {
             Debug.Log("dialogue node executing");
             DialogueManager.Instance.OnNewDialogueEventInvoke(GetData);
         }
 
-        public void OnExit(){}
+        public override void OnExit(){}
 
         public void Next()
         {

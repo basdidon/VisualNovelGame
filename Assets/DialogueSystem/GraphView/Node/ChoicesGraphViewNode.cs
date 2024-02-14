@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : GraphViewNode
     {
@@ -62,7 +61,8 @@ namespace BasDidon.Dialogue.VisualGraphView
             //isEnablePort.userData;
             PortsContainer.Add(isEnablePort);
 
-            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].isEnable" };
+            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField" };
+            isEnableToggle.value = choice.IsEnable;
             isEnablePort.Add(isEnableToggle);
 
             // choice output flow port
@@ -70,6 +70,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             PortsContainer.Add(choicePort);
 
             TextField choiceTxtField = new() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
+            choiceTxtField.value = choice.Name;
             ChoiceContainer.Add(choiceTxtField);
 
             Button deleteChoiceBtn = new() { text = "X" };

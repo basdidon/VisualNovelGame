@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    [System.Serializable]
     public class ExecutionFlow
     {
         public IExecutableNode NextNode { get;set; }

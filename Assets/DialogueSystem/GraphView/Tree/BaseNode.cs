@@ -54,8 +54,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             DialogueTree = dialogueTree;
             name = GetType().Name;
 
-            ports = new();
-
             InstantiatePorts();
 
             dialogueTree.Nodes.Add(this);
@@ -66,21 +64,30 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         protected void InstantiatePorts()
         {
-            var inputProperties = GetType().GetProperties().Where(p=>p.IsDefined(typeof(InputAttribute),inherit: true));
-            var outputProperties = GetType().GetProperties().Where(p => p.IsDefined(typeof(OutputAttribute), inherit: true));
-            
-            foreach (var inputProperty in inputProperties)
-            {
-                PortData newPortData = new(Direction.Input);
-                ports.Add(inputProperty.Name, newPortData);
-                Debug.Log($"{GetType()} add inputPortData : {inputProperty.Name} {newPortData.PortGuid}");
-            }
+            ports = new();
 
-            foreach (var outputProperty in outputProperties)
+            foreach(var field in GetType().GetFields())
             {
-                PortData newPortData = new(Direction.Output);
-                ports.Add(outputProperty.Name, newPortData);
-                Debug.Log($"{GetType().Name} add inputPortData : {outputProperty.Name}, {newPortData.PortGuid}");
+                if(field.IsDefined(typeof(InputAttribute), inherit: true))
+                {
+                    PortData newPortData = new(Direction.Input);
+                    ports.Add(field.Name, newPortData);
+                    Debug.Log($"{GetType()} add inputPortData : {field.Name} {newPortData.PortGuid}");
+                }
+
+                if(field.IsDefined(typeof(OutputAttribute), inherit: true))
+                {
+                    PortData newPortData = new(Direction.Output);
+                    ports.Add(field.Name, newPortData);
+                    Debug.Log($"{GetType().Name} add inputPortData : {field.Name}, {newPortData.PortGuid}");
+                }
+                /*
+                if(field.IsDefined(typeof(NodeFieldAttribute), inherit: true) && field.FieldType.IsGenericType && field.FieldType.GetGenericArguments()[0] == typeof(List<>))
+                {
+                    string bindingPath = $"{field.Name}.Array.data[{choiceIdx}].{}";
+
+
+                }*/
             }
         }
 
@@ -92,6 +99,53 @@ namespace BasDidon.Dialogue.VisualGraphView
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
         }
+    }
+
+    public class BaseNodeElement
+    {
+        [SerializeField] PortCollection ports;
+        public IEnumerable<KeyValuePair<string, PortData>> Ports => ports;
+        public IEnumerable<KeyValuePair<string, PortData>> InputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Input);
+        public IEnumerable<KeyValuePair<string, PortData>> OutputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Output);
+
+        public IEnumerable<string> GetPortGuids() => Ports.Select(pair => pair.Value.PortGuid);
+        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(pair => pair.Value.Direction == direction).Select(pair => pair.Value.PortGuid);
+
+        public void Initialize()
+        {
+            InstantiatePorts();
+        }
+
+        void InstantiatePorts()
+        {
+            ports = new();
+
+            foreach (var field in GetType().GetFields())
+            {
+                if (field.IsDefined(typeof(InputAttribute), inherit: true))
+                {
+                    PortData newPortData = new(Direction.Input);
+                    ports.Add(field.Name, newPortData);
+                    Debug.Log($"{GetType()} add inputPortData : {field.Name} {newPortData.PortGuid}");
+                }
+
+                if (field.IsDefined(typeof(OutputAttribute), inherit: true))
+                {
+                    PortData newPortData = new(Direction.Output);
+                    ports.Add(field.Name, newPortData);
+                    Debug.Log($"{GetType().Name} add inputPortData : {field.Name}, {newPortData.PortGuid}");
+                }
+            }
+        }
+    }
+
+    public abstract class ExecutableNode : BaseNode, IExecutableNode
+    {
+        [Input] public ExecutionFlow input;
+        [Output] public ExecutionFlow output;
+
+        public abstract void OnEnter();
+        public abstract void OnExit();
     }
 
     public interface IExecutableNode
@@ -112,11 +166,14 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [SerializeField]
+    [AttributeUsage(AttributeTargets.Field)]
     public class InputAttribute : PortAttribute{}
 
     [SerializeField]
+    [AttributeUsage(AttributeTargets.Field)]
     public class OutputAttribute : PortAttribute{}
 
     [SerializeField]
+    [AttributeUsage(AttributeTargets.Field)]
     public class NodeFieldAttribute :Attribute{}
 }
