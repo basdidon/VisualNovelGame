@@ -15,7 +15,10 @@ MonoBehaviour:
   <Nodes>k__BackingField:
   - {fileID: 4713878677252141707}
   - {fileID: 3499807080559131251}
-  edges: []
+  edges:
+  - <EdgeGuid>k__BackingField: abc959f3-73c9-44ef-8fc8-36d33ba7f59a
+    <OutputPortGuid>k__BackingField: 7f7d1550-eaa5-420d-abae-46c4d22bbadb
+    <InputPortGuid>k__BackingField: 5d894646-e414-4d4c-8cbb-e24dd43ed100
 --- !u!114 &3499807080559131251
 MonoBehaviour:
   m_ObjectHideFlags: 0

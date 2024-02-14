@@ -32,52 +32,6 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Output] public ExecutionFlow output;
     }
 
-    [Serializable]
-    public class Options : List<Option>, ISerializationCallbackReceiver
-    {
-        [SerializeField, HideInInspector]
-        List<Option> options = new();
-
-        public void OnAfterDeserialize()
-        {
-            options.Clear();
-
-            foreach(var option in this)
-            {
-                options.Add(option);
-            }
-        }
-
-        public void OnBeforeSerialize()
-        {
-            Clear();
-
-            foreach(var option in options)
-            {
-                Add(option);
-            }
-        }
-    }
-
-    [CustomPropertyDrawer(typeof(Options))]
-    public class OptionsEditor : PropertyDrawer
-    {
-        public override VisualElement CreatePropertyGUI(SerializedProperty property)
-        {
-            VisualElement root = new();
-            
-            var list = new PropertyField(property.FindPropertyRelative("options"));
-
-            if(property.FindPropertyRelative("options") == null)
-            {
-                Debug.Log($"list is null");
-            }
-
-            root.Add(list);
-            return root;
-        }
-    }
-
     public class ChoicesNode : ExecutableNode
     {
         [NodeField]
@@ -85,8 +39,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         [TextArea, NodeField]
         public string questionText;
-
-        public Options options;
 
         [NodeField]
         public List<Option> optionList;
