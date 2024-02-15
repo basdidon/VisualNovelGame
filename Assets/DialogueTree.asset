@@ -15,10 +15,20 @@ MonoBehaviour:
   <Nodes>k__BackingField:
   - {fileID: 4713878677252141707}
   - {fileID: 3499807080559131251}
+  - {fileID: 5033288526168618106}
   edges:
-  - <EdgeGuid>k__BackingField: abc959f3-73c9-44ef-8fc8-36d33ba7f59a
+  - <EdgeGuid>k__BackingField: 239b6507-33b6-40c7-93a0-8f7f9d124508
     <OutputPortGuid>k__BackingField: 7f7d1550-eaa5-420d-abae-46c4d22bbadb
     <InputPortGuid>k__BackingField: 5d894646-e414-4d4c-8cbb-e24dd43ed100
+  - <EdgeGuid>k__BackingField: cbec21e7-5c47-4f66-8c07-7a3f9f54e473
+    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+    <InputPortGuid>k__BackingField: 0ad0a3bb-e827-4b88-8e60-4548586c41c0
+  - <EdgeGuid>k__BackingField: e4b84957-c677-4531-9013-debd7483ab4e
+    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+    <InputPortGuid>k__BackingField: 26138381-9ae7-4142-9462-2c8566a76f91
+  - <EdgeGuid>k__BackingField: b5db6689-7148-4bac-89e8-fd3c54d603e2
+    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+    <InputPortGuid>k__BackingField: 80ea7fc4-16f7-423b-a14f-d1b536077cd8
 --- !u!114 &3499807080559131251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33,7 +43,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
   <Id>k__BackingField: 48ed1839-9db8-4a8c-ad75-44f8607a8c0b
-  <GraphPosition>k__BackingField: {x: 559, y: 162}
+  <GraphPosition>k__BackingField: {x: 403, y: 23}
   ports:
     keyData:
     - input
@@ -45,10 +55,39 @@ MonoBehaviour:
       <Direction>k__BackingField: 1
   speakerName: 
   questionText: 
-  options:
-    options: []
-  optionList: []
-  choices: []
+  choices:
+  - <IsEnable>k__BackingField: 0
+    <Name>k__BackingField: new choice
+    <IsEnableInputPortData>k__BackingField:
+      <PortGuid>k__BackingField: de02a7ca-9ceb-4359-97f0-3736cef0df29
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <PortGuid>k__BackingField: cc2aee03-7b59-402b-9545-07d385ac8648
+      <Direction>k__BackingField: 1
+  - <IsEnable>k__BackingField: 0
+    <Name>k__BackingField: new choice
+    <IsEnableInputPortData>k__BackingField:
+      <PortGuid>k__BackingField: 80ea7fc4-16f7-423b-a14f-d1b536077cd8
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <PortGuid>k__BackingField: 3312ff38-9181-4213-82b8-152b1dd0b898
+      <Direction>k__BackingField: 1
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: new choice
+    <IsEnableInputPortData>k__BackingField:
+      <PortGuid>k__BackingField: 0ad0a3bb-e827-4b88-8e60-4548586c41c0
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <PortGuid>k__BackingField: f404d6e5-3e6e-4206-98db-3918b955e822
+      <Direction>k__BackingField: 1
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: new choice
+    <IsEnableInputPortData>k__BackingField:
+      <PortGuid>k__BackingField: 26138381-9ae7-4142-9462-2c8566a76f91
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <PortGuid>k__BackingField: 3b7b4515-12b3-48e8-be78-8b9a89b31742
+      <Direction>k__BackingField: 1
 --- !u!114 &4713878677252141707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,3 +109,25 @@ MonoBehaviour:
     valueData:
     - <PortGuid>k__BackingField: 7f7d1550-eaa5-420d-abae-46c4d22bbadb
       <Direction>k__BackingField: 1
+--- !u!114 &5033288526168618106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd37ee5bf7d9114abe0be01ec46de41, type: 3}
+  m_Name: BooleanNode
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: 92e18573-ae67-4dcc-9e46-7e196921d435
+  <GraphPosition>k__BackingField: {x: 1, y: 313}
+  ports:
+    keyData:
+    - Value
+    valueData:
+    - <PortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+      <Direction>k__BackingField: 1
+  Value: 1

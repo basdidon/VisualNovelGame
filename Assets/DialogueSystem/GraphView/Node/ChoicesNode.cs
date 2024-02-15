@@ -3,33 +3,58 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
-using System.Collections;
-using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
     public record ChoicesRecord
     {
         public DialogueRecord DialogueRecord { get; }
-        public ChoicesNode.Choice Choices { get; }
-        public string[] ChoicesText { get; }
-        public bool[] ChoicesEnable { get; }
+        public ChoiceRecord[] ChoiceRecords { get; }
 
-        public ChoicesRecord(DialogueRecord dialogueRecord, string[] choicesText, bool[] choicesEnable)
+        public ChoicesRecord(DialogueRecord dialogueRecord, ChoiceRecord[] choiceRecords)
         {
             DialogueRecord = dialogueRecord;
-            ChoicesText = choicesText;
-            ChoicesEnable = choicesEnable;
+            ChoiceRecords = choiceRecords;
+        }
+    }
+
+    public record ChoiceRecord
+    {
+        public bool IsEnable { get; }
+        public string ChoiceText { get; }
+
+        public ChoiceRecord(bool isEnable,string choiceText)
+        {
+            IsEnable = isEnable;
+            ChoiceText = choiceText;
         }
     }
 
     [Serializable]
-    public class Option: BaseNodeElement
+    public class Choice
     {
-        [Input] public bool isEnable;
-        [Output] public ExecutionFlow output;
+        [field: SerializeField] public bool IsEnable { get; private set; }
+        [field: SerializeField] public string Name { get; private set; }
+
+        [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
+        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
+
+        public Choice()
+        {
+            IsEnable = true;
+            Name = "new choice";
+            IsEnableInputPortData = new(Direction.Input);
+            OutputFlowPortData = new(Direction.Output);
+        }
+
+        public ChoiceRecord GetRecord(DialogueTree dialogueTree)
+        {
+            var _isEnable = dialogueTree.GetData(IsEnableInputPortData.PortGuid);
+            var isEnable = _isEnable != null ? (bool)_isEnable : IsEnable;
+
+            return new ChoiceRecord(isEnable, Name);
+        }
     }
 
     public class ChoicesNode : ExecutableNode
@@ -40,39 +65,18 @@ namespace BasDidon.Dialogue.VisualGraphView
         [TextArea, NodeField]
         public string questionText;
 
-        [NodeField]
-        public List<Option> optionList;
-
         [SerializeField] List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
 
         public void CreateChoice()
         {
-            Choice choice = new(InstantiatePortData(Direction.Input), InstantiatePortData(Direction.Output));
-            choices.Add(choice);
+            Debug.Log("CreateChoice");
+            choices.Add(new());
         }
 
         public void RemoveChoice(Choice choice)
         {
             choices.Remove(choice);
-        }
-
-        [System.Serializable]
-        public class Choice
-        {
-            [field: SerializeField] public bool IsEnable { get; set; }
-            [field: SerializeField] public string Name { get; private set; }
-
-            [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
-            [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
-
-            public Choice(PortData isEnableInputPortData, PortData outputFlowPortData)
-            {
-                IsEnable = true;
-                Name = "new choice";
-                IsEnableInputPortData = isEnableInputPortData;
-                OutputFlowPortData = outputFlowPortData;
-            }
         }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
@@ -90,11 +94,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Debug.Log("choices node executing");
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
                 new(speakerName, questionText),
-                Choices.Select(c => c.Name).ToArray(),
-                Choices.Select(c => {
-                    var _isEnable = DialogueTree.GetData(c.IsEnableInputPortData.PortGuid);
-                    return _isEnable != null ? (bool)_isEnable : c.IsEnable;
-                }).ToArray()
+                Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
             ));
         }
 

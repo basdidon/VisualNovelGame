@@ -22,7 +22,6 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void AddEdge(EdgeData edgeData)
         {
             edges.Add(edgeData);
-            OnAddEdge?.Invoke(edgeData);
 
             SaveChanges();
         }
@@ -30,13 +29,9 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void RemoveEdge(EdgeData edgeData)
         {
             edges.Remove(edgeData);
-            OnRemoveEdge?.Invoke(edgeData);
 
             SaveChanges();
         }
-
-        public event Action<EdgeData> OnAddEdge;
-        public event Action<EdgeData> OnRemoveEdge;
 
         public void SaveChanges()
         {

@@ -10,16 +10,8 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         [Output] public ExecutionFlow Output;
 
-        // Port
-        /*
-        [field:SerializeField] public PortData OutputFlowPortData { get; private set; }
-        public override void OnInstantiatePortData()
-        {
-            OutputFlowPortData = InstantiatePortData(Direction.Output);
-        }
-        */
         public void OnEnter()
-        {
+        {            
             DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("Output")).First();
         }
 

@@ -19,19 +19,13 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public static GraphViewNode GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : BaseNode
         {
-            var allTypes = Assembly.GetExecutingAssembly().GetTypes();
-            var typesWithAttribute = allTypes
-                .Where(t => t.IsSubclassOf(typeof(GraphViewNode)) && Attribute.IsDefined(t, typeof(CustomGraphViewNodeAttribute)));
-
-            var nodeTypeAttribute = typesWithAttribute
-                .Select(t => new { Type = t, Attribute = (CustomGraphViewNodeAttribute)Attribute.GetCustomAttribute(t, typeof(CustomGraphViewNodeAttribute)) })
-                .SingleOrDefault(item => item.Attribute != null && item.Attribute.Type == nodeData.GetType());
+            var customGraphViewNodeType = CustomGraphViewNodeAttribute.GetGraphViewNodeType(nodeData.GetType());
 
             GraphViewNode instance;
 
-            if (nodeTypeAttribute != null)
+            if (customGraphViewNodeType != null)
             {
-                var nodeType = nodeTypeAttribute.Type;
+                var nodeType = customGraphViewNodeType;
                 instance = Activator.CreateInstance(nodeType) as GraphViewNode;
                 Debug.Log($"GetNodeView {nodeType.Name}");
             }
@@ -48,12 +42,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public static class NodeElementFactory
     {
-        public static VisualElement GetPort<T>(PortData portData, string propertyName, GraphViewNode nodeView) 
+        public static VisualElement GetPort<T>(PortData portData, string propertyName, GraphViewNode nodeView, string bindingPath = null) 
         {
-            return GetPort(typeof(T), portData, propertyName, nodeView);
+            return GetPort(typeof(T), portData, propertyName, nodeView, bindingPath);
         }
 
-        public static VisualElement GetPort(Type type, PortData portData, string propertyName, GraphViewNode nodeView)
+        public static VisualElement GetPort(Type type, PortData portData, string propertyName, GraphViewNode nodeView, string bindingPath = null)
         {
             if (type == typeof(ExecutionFlow))
             {
@@ -61,7 +55,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
             else if (type == typeof(bool))
             {
-                return GetBoolPort(portData, propertyName, nodeView);
+                return GetBoolPort(portData, propertyName, nodeView, bindingPath);
             }
             
 
@@ -70,12 +64,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         static string ToCapitalCase(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return string.Empty;
+            }
             return char.ToUpper(text[0]) + text[1..];
-        }
-
-        static string GetArrayPropertyBindingPath(string arrayFieldName,int index, string subObjectField)
-        {
-            return $"{arrayFieldName}.Array.data[{index}].{subObjectField}";
         }
 
         static VisualElement GetExecutionFlowPort(PortData portData, string propertyName, GraphViewNode nodeView)
@@ -94,22 +87,37 @@ namespace BasDidon.Dialogue.VisualGraphView
             return port;
         }
 
-        static VisualElement GetBoolPort(PortData portData,string propertyName,GraphViewNode nodeView)
+        static VisualElement GetBoolPort(PortData portData, string propertyName, GraphViewNode nodeView, string bindingPath = null)
         {
             var portElement = new VisualElement();
             portElement.style.flexDirection = portData.Direction == Direction.Input ? FlexDirection.Row : FlexDirection.RowReverse;
 
-            var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, Port.Capacity.Multi,typeof(bool));
+            var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, Port.Capacity.Multi, typeof(bool));
             port.viewDataKey = portData.PortGuid;
             port.portName = ToCapitalCase(propertyName);
             portElement.Add(port);
-            
-            var valueToggle = new Toggle()
-            {
-                bindingPath = propertyName,
-            };
 
+            var valueToggle = new Toggle() { bindingPath = bindingPath ?? propertyName };
             portElement.Add(valueToggle);
+
+            if(portData.Direction == Direction.Input)
+            {
+                nodeView.GraphView.OnPortConnect += (onConnectPort) =>
+                {
+                    if (port == onConnectPort)
+                    {
+                        valueToggle.style.display = DisplayStyle.None;
+                    }
+                };
+
+                nodeView.GraphView.OnPortDisconnect += (onDisconnectPort) =>
+                {
+                    if (port == onDisconnectPort)
+                    {
+                        valueToggle.style.display = DisplayStyle.Flex;
+                    }
+                };
+            }
 
             return portElement;
         }

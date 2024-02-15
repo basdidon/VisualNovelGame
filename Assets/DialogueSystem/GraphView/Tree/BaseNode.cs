@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
+using System.Reflection;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -41,12 +42,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public PortData GetPortData(string key) => ports.GetValueOrDefault(key);
 
-        protected PortData InstantiatePortData(Direction direction)
-        {
-            PortData newPortData = new(direction);
-            return newPortData;
-        }
-
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             Id = $"{Guid.NewGuid()}";
@@ -81,13 +76,6 @@ namespace BasDidon.Dialogue.VisualGraphView
                     ports.Add(field.Name, newPortData);
                     Debug.Log($"{GetType().Name} add inputPortData : {field.Name}, {newPortData.PortGuid}");
                 }
-                /*
-                if(field.IsDefined(typeof(NodeFieldAttribute), inherit: true) && field.FieldType.IsGenericType && field.FieldType.GetGenericArguments()[0] == typeof(List<>))
-                {
-                    string bindingPath = $"{field.Name}.Array.data[{choiceIdx}].{}";
-
-
-                }*/
             }
         }
 
@@ -98,44 +86,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             // save node asset
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
-        }
-    }
-
-    public class BaseNodeElement
-    {
-        [SerializeField] PortCollection ports;
-        public IEnumerable<KeyValuePair<string, PortData>> Ports => ports;
-        public IEnumerable<KeyValuePair<string, PortData>> InputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Input);
-        public IEnumerable<KeyValuePair<string, PortData>> OutputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Output);
-
-        public IEnumerable<string> GetPortGuids() => Ports.Select(pair => pair.Value.PortGuid);
-        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(pair => pair.Value.Direction == direction).Select(pair => pair.Value.PortGuid);
-
-        public void Initialize()
-        {
-            InstantiatePorts();
-        }
-
-        void InstantiatePorts()
-        {
-            ports = new();
-
-            foreach (var field in GetType().GetFields())
-            {
-                if (field.IsDefined(typeof(InputAttribute), inherit: true))
-                {
-                    PortData newPortData = new(Direction.Input);
-                    ports.Add(field.Name, newPortData);
-                    Debug.Log($"{GetType()} add inputPortData : {field.Name} {newPortData.PortGuid}");
-                }
-
-                if (field.IsDefined(typeof(OutputAttribute), inherit: true))
-                {
-                    PortData newPortData = new(Direction.Output);
-                    ports.Add(field.Name, newPortData);
-                    Debug.Log($"{GetType().Name} add inputPortData : {field.Name}, {newPortData.PortGuid}");
-                }
-            }
         }
     }
 
@@ -155,25 +105,48 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [SerializeField]
-    public class PortAttribute : Attribute
-    {
-        public string PortGuid { get; }
-
-        public PortAttribute()
-        {
-            PortGuid = Guid.NewGuid().ToString();
-        }
-    }
+    [AttributeUsage(AttributeTargets.Field)]
+    public class InputAttribute : Attribute{}
 
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
-    public class InputAttribute : PortAttribute{}
-
-    [SerializeField]
-    [AttributeUsage(AttributeTargets.Field)]
-    public class OutputAttribute : PortAttribute{}
+    public class OutputAttribute : Attribute{}
 
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class NodeFieldAttribute :Attribute{}
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class CreateNodeMenuAttribute: Attribute
+    {
+        public string menuName;
+
+        public static IEnumerable<Type> GetAllBaseNode()
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (var assembly in assemblies)
+            {
+                var typesWithAttribute = assembly.GetTypes()
+                    .Where(type => GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null);
+
+                foreach (var type in typesWithAttribute)
+                {
+                    yield return type;
+                }
+            }
+
+            
+        }
+
+        public static IEnumerable<Type> GetAllBaseNodes()
+        {
+            var assembly = Assembly.LoadFrom("Assembly-CShape.dll");
+
+            var typesWithAttribute = assembly.GetTypes()
+                .Where(type => GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null);
+
+            return typesWithAttribute;
+        }
+    }
 }

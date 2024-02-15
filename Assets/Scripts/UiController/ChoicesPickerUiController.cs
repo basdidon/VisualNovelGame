@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using BasDidon.Dialogue;
+using BasDidon.Dialogue.VisualGraphView;
 
 public interface IUiController
 {
@@ -18,40 +19,33 @@ public class ChoicesPickerUiController : IUiController
     public ChoicesPickerUiController(VisualElement root)
     {
         Root = root;
-        /*
-        DialogueManager.Instance.OnNewDialogue += (_) =>
-        {
-            Hide();
-        };
-        DialogueManager.Instance.OnSelectChoices += (choices) =>
-        {
-            Display();
-            SetChoices(choices.ChoicesText);
-        };
-        DialogueManager.Instance.OnFinish += Hide;
-        */
     }
 
-    public void SetChoices(string[] choices,bool[] isEnable)
+    public void Clear() 
     {
         // clear old choices
         while (Root[0].childCount > 0)
         {
-            //Debug.Log("Remove()");
             Root[0].RemoveAt(0);
         }
+    }
 
-        for(int i = 0; i < choices.Length; i++)
+    public void SetChoices(ChoiceRecord[] choiceRecords)
+    {
+        Clear();
+
+        for(int i = 0; i < choiceRecords.Length; i++)
         {
             Button btn = new();
             btn.AddToClassList("choice-btn");       // style
             Root[0].Add(btn);                       // add to root
-            btn.text = choices[i];
-            btn.clicked += () => {
+            btn.text = choiceRecords[i].ChoiceText;
+            btn.clicked += () => 
+            {
                 DialogueManager.Instance.SelectChoice(btn.parent.IndexOf(btn));
             };
 
-            if (isEnable[i] == false)
+            if (choiceRecords[i].IsEnable == false)
                 btn.SetEnabled(false);
         }
     }

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public abstract class Character
 {
-    public UiDocumentController UDC => UiDocumentController.Instance;
-    public DialogueUiController DialogueUC => UDC.DialogueUiController;
-    public ChoicesPickerUiController ChoicesPickerUC => UDC.ChoicesPickerUiController;
+    [SerializeField] public string Name;
 
-    public abstract void Talk();
 }

@@ -16,7 +16,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             PortGuid = Guid.NewGuid().ToString();
 
-            Debug.Log($"create port {PortGuid}");
+            //Debug.Log($"create port {PortGuid}");
         }
     }
 }

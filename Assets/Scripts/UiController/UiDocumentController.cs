@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
+using System.Linq;
 using BasDidon.Dialogue;
 using BasDidon.Dialogue.VisualGraphView;
 
@@ -80,7 +81,7 @@ public class UiDocumentController : MonoBehaviour
 
                 DialogueUiController.SetDialogue(ctx.DialogueRecord.SpeakerName ,ctx.DialogueRecord.DialogueText);
 
-                ChoicesPickerUiController.SetChoices(ctx.ChoicesText,ctx.ChoicesEnable);
+                ChoicesPickerUiController.SetChoices(ctx.ChoiceRecords);
                 ChoicesPickerUiController.Display();
             };
             

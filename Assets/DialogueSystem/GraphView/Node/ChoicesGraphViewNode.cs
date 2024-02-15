@@ -8,6 +8,20 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : GraphViewNode
     {
+        /*
+        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T : BaseNode
+            => AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree), this));
+        */
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            Debug.Log("a");
+            base.BuildContextualMenu(evt);
+            
+            /*
+            evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
+            */
+        }
+
         public override void OnDrawNodeView(BaseNode nodeData)
         {
             base.OnDrawNodeView(nodeData);
@@ -16,6 +30,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {
+                    Debug.Log("a");
                     choicesNode.CreateChoice();
 
                     DrawChoicePort(choicesNode.Choices.Last(), choicesNode.Choices.Count() - 1);
@@ -39,31 +54,17 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
-        void DrawChoicePort(ChoicesNode.Choice choice, int choiceIdx)
+        void DrawChoicePort(Choice choice, int choiceIdx)
         {
             VisualElement ChoiceContainer = new();
-            StyleLength styleLenght_8 = new(8);
-            ChoiceContainer.style.marginTop = styleLenght_8;
-            ChoiceContainer.style.backgroundColor = new Color(.08f, .08f, .08f, .5f);
-            ChoiceContainer.style.borderBottomLeftRadius = styleLenght_8;
-            ChoiceContainer.style.borderBottomRightRadius = styleLenght_8;
-            ChoiceContainer.style.borderTopLeftRadius = styleLenght_8;
-            ChoiceContainer.style.borderTopRightRadius = styleLenght_8;
 
             VisualElement PortsContainer = new();
             PortsContainer.style.flexDirection = FlexDirection.Row;
             PortsContainer.style.justifyContent = Justify.SpaceBetween;
             ChoiceContainer.Add(PortsContainer);
 
-            Port isEnablePort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
-            isEnablePort.viewDataKey = choice.IsEnableInputPortData.PortGuid;
-            isEnablePort.portName = string.Empty;
-            //isEnablePort.userData;
-            PortsContainer.Add(isEnablePort);
-
-            var isEnableToggle = new Toggle() { bindingPath = $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField" };
-            isEnableToggle.value = choice.IsEnable;
-            isEnablePort.Add(isEnableToggle);
+            var IsEnablePort = NodeElementFactory.GetPort<bool>(choice.IsEnableInputPortData , string.Empty, this, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField");
+            PortsContainer.Add(IsEnablePort);
 
             // choice output flow port
             Port choicePort = GetOutputFlowPort(choice.OutputFlowPortData.PortGuid);
@@ -80,10 +81,19 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             deleteChoiceBtn.clicked += () =>
             {
-                RemovePort(isEnablePort);
-                //RemovePort(choicePort);
+                //RemovePort(isEnablePort);
+                RemovePort(choicePort);
                 RefreshPorts();
             };
+
+            // Style 
+            StyleLength styleLenght_8 = new(8);
+            ChoiceContainer.style.marginTop = styleLenght_8;
+            ChoiceContainer.style.backgroundColor = new Color(.08f, .08f, .08f, .5f);
+            ChoiceContainer.style.borderBottomLeftRadius = styleLenght_8;
+            ChoiceContainer.style.borderBottomRightRadius = styleLenght_8;
+            ChoiceContainer.style.borderTopLeftRadius = styleLenght_8;
+            ChoiceContainer.style.borderTopRightRadius = styleLenght_8;
         }
     }
 }

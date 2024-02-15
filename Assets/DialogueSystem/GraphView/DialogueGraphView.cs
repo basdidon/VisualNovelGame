@@ -11,7 +11,8 @@ namespace BasDidon.Dialogue.VisualGraphView
     public class DialogueGraphView : GraphView
     {
         public DialogueTree Tree { get; private set; }
-        public GraphViewNode StartNode { get; private set; }
+
+        public readonly string[] nodesPath = { "Assets/" };
 
         public DialogueGraphView(string assetPath)
         {
@@ -60,6 +61,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 edge.viewDataKey = edgeData.EdgeGuid;
 
                 AddElement(edge);
+
+                OnPortConnect(inputPort);
+                OnPortConnect(outputPort);
             }
             
         }
@@ -93,7 +97,15 @@ namespace BasDidon.Dialogue.VisualGraphView
             this.AddManipulator(new RectangleSelector());
 
             this.AddManipulator(SaveContextualMenu());
+
+            var allNodeChild = CreateNodeMenuAttribute.GetAllBaseNode();
+
+            foreach(var child in allNodeChild)
+            {
+                Debug.Log(child.Name);
+            }
         }
+
 
         void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:BaseNode
             =>  AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree),this));
@@ -115,6 +127,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 ev.menu.AppendAction("Save Graph", actionEvent => SaveGraph());
             });
         }
+
+        public event Action<Port> OnPortConnect;
+        public event Action<Port> OnPortDisconnect;
 
         GraphViewChange OnGraphViewChange(GraphViewChange changes)
         {
@@ -140,6 +155,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                     EdgeData edgeData = new(edge.output.viewDataKey, edge.input.viewDataKey);
                     edge.viewDataKey = edgeData.EdgeGuid;
                     Tree.AddEdge(edgeData);
+                    
+                    OnPortConnect?.Invoke(edge.input);
+                    OnPortConnect?.Invoke(edge.output);;
                 }
             }
 
@@ -154,6 +172,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                         {
                             Tree.RemoveEdge(toRemoveEdgeData);
                             Debug.Log("Edge was removed.");
+
+                            OnPortDisconnect?.Invoke(edge.input);
+                            OnPortDisconnect?.Invoke(edge.output);
                         }
                         else
                         {
