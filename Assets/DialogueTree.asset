@@ -146,7 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
   <Id>k__BackingField: 9b3d15b9-8f08-4615-b010-cd142936ddda
-  <GraphPosition>k__BackingField: {x: -58, y: 157}
+  <GraphPosition>k__BackingField: {x: 0, y: 116}
   ports:
     keyData:
     - m_name
