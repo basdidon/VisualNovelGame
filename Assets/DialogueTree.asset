@@ -16,19 +16,20 @@ MonoBehaviour:
   - {fileID: 4713878677252141707}
   - {fileID: 3499807080559131251}
   - {fileID: 5033288526168618106}
+  - {fileID: 7164192854611415260}
   edges:
   - <EdgeGuid>k__BackingField: 239b6507-33b6-40c7-93a0-8f7f9d124508
     <OutputPortGuid>k__BackingField: 7f7d1550-eaa5-420d-abae-46c4d22bbadb
     <InputPortGuid>k__BackingField: 5d894646-e414-4d4c-8cbb-e24dd43ed100
-  - <EdgeGuid>k__BackingField: cbec21e7-5c47-4f66-8c07-7a3f9f54e473
-    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
-    <InputPortGuid>k__BackingField: 0ad0a3bb-e827-4b88-8e60-4548586c41c0
-  - <EdgeGuid>k__BackingField: e4b84957-c677-4531-9013-debd7483ab4e
-    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
-    <InputPortGuid>k__BackingField: 26138381-9ae7-4142-9462-2c8566a76f91
-  - <EdgeGuid>k__BackingField: b5db6689-7148-4bac-89e8-fd3c54d603e2
+  - <EdgeGuid>k__BackingField: f3c9c175-bd0c-41ea-a085-891a1cf7d6e3
     <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
     <InputPortGuid>k__BackingField: 80ea7fc4-16f7-423b-a14f-d1b536077cd8
+  - <EdgeGuid>k__BackingField: 1d483fba-3afa-4fe0-9c61-e35ca2a3638d
+    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+    <InputPortGuid>k__BackingField: 0ad0a3bb-e827-4b88-8e60-4548586c41c0
+  - <EdgeGuid>k__BackingField: 232f05bd-c69b-40b8-a25e-390fde677449
+    <OutputPortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
+    <InputPortGuid>k__BackingField: 26138381-9ae7-4142-9462-2c8566a76f91
 --- !u!114 &3499807080559131251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,3 +132,26 @@ MonoBehaviour:
     - <PortGuid>k__BackingField: 6449ffde-eb0e-47dc-a50f-b1fd639e58e4
       <Direction>k__BackingField: 1
   Value: 1
+--- !u!114 &7164192854611415260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 525dc42cd814b044384f959fd7710f0d, type: 3}
+  m_Name: CharacterNode
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: 9b3d15b9-8f08-4615-b010-cd142936ddda
+  <GraphPosition>k__BackingField: {x: -58, y: 157}
+  ports:
+    keyData:
+    - m_name
+    valueData:
+    - <PortGuid>k__BackingField: 19486ea1-63e8-410d-a069-aeffb3ec9f7b
+      <Direction>k__BackingField: 1
+  m_name: 
+  <Character>k__BackingField: {fileID: 0}

@@ -8,25 +8,13 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : GraphViewNode
     {
-        /*
-        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T : BaseNode
-            => AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree), this));
-        */
-        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
-        {
-            Debug.Log("a");
-            base.BuildContextualMenu(evt);
-            
-            /*
-            evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
-            */
-        }
-
         public override void OnDrawNodeView(BaseNode nodeData)
         {
             base.OnDrawNodeView(nodeData);
             if (nodeData is ChoicesNode choicesNode)
             {
+                
+
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {

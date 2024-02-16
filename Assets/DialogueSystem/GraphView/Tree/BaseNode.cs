@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using System.Reflection;
+using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -42,8 +43,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public PortData GetPortData(string key) => ports.GetValueOrDefault(key);
 
+        //
+
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
+            Debug.Log($"{GetType()} initialize");
             Id = $"{Guid.NewGuid()}";
             GraphPosition = position;
             DialogueTree = dialogueTree;
@@ -120,33 +124,50 @@ namespace BasDidon.Dialogue.VisualGraphView
     public class CreateNodeMenuAttribute: Attribute
     {
         public string menuName;
+        
+        static readonly Assembly[] assemblyToSearch = {
+            Assembly.GetExecutingAssembly(),    // this assembly
+            Assembly.Load("Assembly-CSharp"),   // default assembly in Assets/Scripts
+        };
 
-        public static IEnumerable<Type> GetAllBaseNode()
+        public static IEnumerable<BaseNode> GetAllBaseNode()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var assembly in assemblies)
+            foreach (var assembly in assemblyToSearch)
             {
                 var typesWithAttribute = assembly.GetTypes()
-                    .Where(type => GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null);
+                    .Where(type => type.IsSubclassOf(typeof(BaseNode)) && GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null);
 
                 foreach (var type in typesWithAttribute)
                 {
-                    yield return type;
+                    var instance = ScriptableObject.CreateInstance(type) as BaseNode;
+                    if(instance != null)
+                        yield return instance;
                 }
             }
-
-            
         }
 
-        public static IEnumerable<Type> GetAllBaseNodes()
+        public static void PopulateCreateContextualMenu(DialogueGraphView graphView)
         {
-            var assembly = Assembly.LoadFrom("Assembly-CShape.dll");
+            foreach (var assembly in assemblyToSearch)
+            {
+                var typeMenuNamePair = assembly.GetTypes()
+                    .Where(type => type.IsSubclassOf(typeof(BaseNode)) && GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null)
+                    .Select(type=> new { Type = type, (GetCustomAttribute(type,typeof(CreateNodeMenuAttribute)) as CreateNodeMenuAttribute).menuName });
 
-            var typesWithAttribute = assembly.GetTypes()
-                .Where(type => GetCustomAttribute(type, typeof(CreateNodeMenuAttribute)) != null);
-
-            return typesWithAttribute;
+                foreach (var pair in typeMenuNamePair)
+                {
+                    graphView.AddManipulator(new ContextualMenuManipulator(ev=> { 
+                        ev.menu.AppendAction(pair.menuName, actionEvent => {
+                            // create baseNode
+                            BaseNode baseNode = NodeFactory.CreateNode(pair.Type, actionEvent.eventInfo.localMousePosition, graphView.Tree);
+                            // get nodeView by baseNode
+                            GraphViewNode nodeView = NodeFactory.GetNodeView(baseNode, graphView);
+                            // add nodeView to graph
+                            graphView.AddElement(nodeView);
+                        });
+                    }));
+                }
+            }
         }
     }
 }

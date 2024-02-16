@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {

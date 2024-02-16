@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public abstract class Character
+public class Character:MonoBehaviour
 {
-    [SerializeField] public string Name;
+    public string Name;
 
 }

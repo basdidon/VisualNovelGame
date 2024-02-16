@@ -98,17 +98,18 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             this.AddManipulator(SaveContextualMenu());
 
-            var allNodeChild = CreateNodeMenuAttribute.GetAllBaseNode();
-
-            foreach(var child in allNodeChild)
-            {
-                Debug.Log(child.Name);
-            }
+            CreateNodeMenuAttribute.PopulateCreateContextualMenu(this);
         }
 
-
-        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T:BaseNode
-            =>  AddElement(NodeFactory.GetNodeView(NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree),this));
+        void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T : BaseNode
+        {
+            // create baseNode
+            BaseNode baseNode = NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree);
+            // get nodeView by baseNode
+            GraphViewNode nodeView = NodeFactory.GetNodeView(baseNode, this);
+            // add nodeView to graph
+            AddElement(nodeView);
+        }
         
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
