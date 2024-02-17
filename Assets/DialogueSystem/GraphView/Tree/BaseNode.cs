@@ -61,29 +61,37 @@ namespace BasDidon.Dialogue.VisualGraphView
             SaveChanges();
         }
 
-        protected void InstantiatePorts()
+        public void InstantiatePorts()
         {
+            Debug.Log($"{GetType()} InstantiatePorts()");
             ports = new();
 
-            foreach(var field in GetType().GetFields())
+            var members = GetType().GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            foreach (var member in members)
             {
-                if(field.IsDefined(typeof(InputAttribute), inherit: true))
+                PortData newPortData = null;
+
+                if(member.IsDefined(typeof(InputAttribute), inherit: true))
                 {
-                    PortData newPortData = new(Direction.Input);
-                    ports.Add(field.Name, newPortData);
-                    Debug.Log($"{GetType()} add inputPortData : {field.Name} {newPortData.PortGuid}");
+                    newPortData = new(Direction.Input,typeof(ExecutionFlow));
                 }
 
-                if(field.IsDefined(typeof(OutputAttribute), inherit: true))
+                if(member.IsDefined(typeof(OutputAttribute), inherit: true))
                 {
-                    PortData newPortData = new(Direction.Output);
-                    ports.Add(field.Name, newPortData);
-                    Debug.Log($"{GetType().Name} add inputPortData : {field.Name}, {newPortData.PortGuid}");
+                    newPortData = new(Direction.Output,typeof(ExecutionFlow));
+                    Debug.Log(newPortData.Type);
                 }
+
+                if (newPortData == null)
+                    continue;
+
+                ports.Add(member.Name, newPortData);
+                Debug.Log($"added new {newPortData.Direction} Port : {member.Name} {newPortData.PortGuid}");
             }
         }
 
-        public virtual object ReadValueFromPort(string outputPortGuid) => throw new NotImplementedException();
+        public virtual object GetValue(string outputPortGuid) => throw new NotImplementedException();
 
         public void SaveChanges()
         {

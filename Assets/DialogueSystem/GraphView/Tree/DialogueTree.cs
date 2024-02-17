@@ -50,11 +50,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             };
         }
 
-        public BaseNode GetNodeByPort(PortData portData)
-        {
-            return GetNodeByPort(portData.PortGuid,portData.Direction);
-        }
-
+        public BaseNode GetNodeByPort(PortData portData) => GetNodeByPort(portData.PortGuid,portData.Direction);
         public BaseNode GetNodeByPort(string portGuid,Direction direction)
         {
             return direction switch
@@ -65,6 +61,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             };
         }
 
+        public IEnumerable<T> GetConnectedNodes<T>(PortData portData) => GetConnectedNodes(portData).OfType<T>();
         public IEnumerable<BaseNode> GetConnectedNodes(PortData portData)
         {
             return GetConnectedEdges(portData).Select(e => portData.Direction switch
@@ -75,12 +72,13 @@ namespace BasDidon.Dialogue.VisualGraphView
             });
         }
 
-        public IEnumerable<T> GetConnectedNodes<T>(PortData portData)
+
+        public void OnLoad()
         {
-            return GetConnectedNodes(portData).OfType<T>();
+            ReInitializePorts();
         }
 
-        public object GetData(string inputPortGuid)
+        public object GetValueByPort(string inputPortGuid)
         {
             var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
 
@@ -92,16 +90,15 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             var outputNode = Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Output).Contains(edge.OutputPortGuid));
 
-            if (outputNode == null)
-            {
-                Debug.Log($"not found any port match with {edge.OutputPortGuid}");
-                throw new Exception();
-            }
+            if (outputNode == null) 
+                throw new Exception($"not found any port match with {edge.OutputPortGuid}");
 
-            return outputNode.ReadValueFromPort(edge.OutputPortGuid);
+            return outputNode.GetValue(edge.OutputPortGuid);
         }
 
 #if UNITY_EDITOR
+        public void ReInitializePorts() => Nodes.ForEach(node => node.InstantiatePorts());
+
         public static string GetCurrentProjectBrowserDirectory()
         {
             Type projectWindowUtilType = typeof(ProjectWindowUtil);
@@ -144,4 +141,19 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 #endif
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(DialogueTree))]
+    public class DialogueTreeEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            if (GUILayout.Button("re-initialize"))
+            {
+                (target as DialogueTree).ReInitializePorts();
+            }
+        }
+    }
+#endif
 }

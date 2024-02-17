@@ -29,6 +29,8 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
 
+            Tree.OnLoad();
+
             Debug.Log($"Load {assetPath}");
             foreach (var obj in AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath)) // load all sub assets
             {

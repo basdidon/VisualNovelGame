@@ -44,13 +44,13 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             IsEnable = true;
             Name = "new choice";
-            IsEnableInputPortData = new(Direction.Input);
-            OutputFlowPortData = new(Direction.Output);
+            IsEnableInputPortData = new(Direction.Input,typeof(bool));
+            OutputFlowPortData = new(Direction.Output,typeof(ExecutionFlow));
         }
 
         public ChoiceRecord GetRecord(DialogueTree dialogueTree)
         {
-            var _isEnable = dialogueTree.GetData(IsEnableInputPortData.PortGuid);
+            var _isEnable = dialogueTree.GetValueByPort(IsEnableInputPortData.PortGuid);
             var isEnable = _isEnable != null ? (bool)_isEnable : IsEnable;
 
             return new ChoiceRecord(isEnable, Name);

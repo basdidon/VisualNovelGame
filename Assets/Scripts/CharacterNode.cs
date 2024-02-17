@@ -6,7 +6,12 @@ using BasDidon.Dialogue.VisualGraphView;
 [CreateNodeMenu(menuName = "Character")]
 public class CharacterNode : BaseNode
 {
-    [Output] public string m_name = string.Empty;
+    public List<NPC> NPCs = new() { 
+        new NPC("John"),
+        new NPC("Jimmy"),
+        new NPC("Emma"),
+    };
 
-    [field: SerializeField] public Character Character { get; set; }
+    [Output] public string m_name = string.Empty;
+    [field:Output] public string Papa { get; private set; }
 }

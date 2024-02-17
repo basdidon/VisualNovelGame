@@ -4,7 +4,9 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -28,24 +30,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
         {
-            // create port
-            foreach (var pair in baseNode.Ports)
-            {
-                var property = baseNode.GetType().GetField(pair.Key);
-
-                var port = NodeElementFactory.GetPort(property.FieldType, pair.Value, property.Name, this);
-
-                if (pair.Value.Direction == Direction.Input)
-                {
-                    inputContainer.Add(port);
-                }
-                else
-                {
-                    outputContainer.Add(port);
-                }
-
-                //Debug.Log($"<color=blue>DrawPort</color> {pair.Value.Direction} ({property.FieldType.Name})");
-            }
+            CreatePorts(baseNode.Ports);
 
             var nodeFields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(p => p.IsDefined(typeof(NodeFieldAttribute), inherit: true));
             var nodeProperties = baseNode.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(p => p.IsDefined(typeof(NodeFieldAttribute), inherit: true));
@@ -58,7 +43,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             foreach (var name in names)
             {
-                //Debug.Log(name);
+                Debug.Log(name);
                 var serializeProperty = SerializedObject.FindProperty(name);
                 if(serializeProperty == null)
                 {
@@ -81,6 +66,29 @@ namespace BasDidon.Dialogue.VisualGraphView
             RefreshExpandedState();
         }
 
+        void CreatePorts(IEnumerable<KeyValuePair<string,PortData>> portsWithKey)
+        {
+            // create port
+            foreach (var pair in portsWithKey)
+            {
+                var port = NodeElementFactory.GetPort(pair.Value.Type, pair.Value, pair.Key, this, StringHelper.GetBackingFieldName(pair.Key));
+
+                if (pair.Value.Direction == Direction.Input)
+                {
+                    inputContainer.Add(port);
+                }
+                else
+                {
+                    outputContainer.Add(port);
+                }
+            }
+        }
+
+        void CreateNodeFields()
+        {
+
+        }
+        /*
         public Port GetInputFlowPort(string guid)
         {
             // input port
@@ -99,8 +107,9 @@ namespace BasDidon.Dialogue.VisualGraphView
             outputPort.portColor = Color.yellow;
             outputPort.viewDataKey = guid;
             return outputPort;
-        }
+        }*/
 
+        // prevent from misstyping
         public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
         void DrawHeader()

@@ -8,7 +8,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Output]
         public bool Value;
 
-        public override object ReadValueFromPort(string outputPortGuid)
+        public override object GetValue(string outputPortGuid)
         {
             return Value;
         }

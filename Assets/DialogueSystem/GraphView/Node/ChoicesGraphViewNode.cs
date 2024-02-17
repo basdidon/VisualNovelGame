@@ -47,15 +47,13 @@ namespace BasDidon.Dialogue.VisualGraphView
             VisualElement ChoiceContainer = new();
 
             VisualElement PortsContainer = new();
-            PortsContainer.style.flexDirection = FlexDirection.Row;
-            PortsContainer.style.justifyContent = Justify.SpaceBetween;
             ChoiceContainer.Add(PortsContainer);
 
-            var IsEnablePort = NodeElementFactory.GetPort<bool>(choice.IsEnableInputPortData , string.Empty, this, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField");
+            var IsEnablePort = NodeElementFactory.GetPort(typeof(bool) ,choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this, "value");
             PortsContainer.Add(IsEnablePort);
 
             // choice output flow port
-            Port choicePort = GetOutputFlowPort(choice.OutputFlowPortData.PortGuid);
+            var choicePort = NodeElementFactory.GetPort(typeof(ExecutionFlow), choice.OutputFlowPortData, string.Empty, this);
             PortsContainer.Add(choicePort);
 
             TextField choiceTxtField = new() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
@@ -70,7 +68,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             deleteChoiceBtn.clicked += () =>
             {
                 //RemovePort(isEnablePort);
-                RemovePort(choicePort);
+                //RemovePort(choicePort);
                 RefreshPorts();
             };
 
@@ -82,6 +80,9 @@ namespace BasDidon.Dialogue.VisualGraphView
             ChoiceContainer.style.borderBottomRightRadius = styleLenght_8;
             ChoiceContainer.style.borderTopLeftRadius = styleLenght_8;
             ChoiceContainer.style.borderTopRightRadius = styleLenght_8;
+
+            PortsContainer.style.flexDirection = FlexDirection.Row;
+            PortsContainer.style.justifyContent = Justify.SpaceBetween;
         }
     }
 }
