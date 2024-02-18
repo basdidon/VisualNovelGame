@@ -18,7 +18,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             var allTypes = Assembly.GetExecutingAssembly().GetTypes();
             var typesWithAttribute = allTypes
-                .Where(t => t.IsSubclassOf(typeof(GraphViewNode)) && IsDefined(t, typeof(CustomGraphViewNodeAttribute)));
+                .Where(t => t.IsSubclassOf(typeof(NodeView)) && IsDefined(t, typeof(CustomGraphViewNodeAttribute)));
 
             var nodeTypeAttribute = typesWithAttribute
                 .Select(t => new { Type = t, Attribute = (CustomGraphViewNodeAttribute) GetCustomAttribute(t, typeof(CustomGraphViewNodeAttribute)) })

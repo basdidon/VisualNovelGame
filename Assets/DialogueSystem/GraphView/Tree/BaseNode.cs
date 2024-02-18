@@ -10,12 +10,12 @@ using UnityEngine.UIElements;
 namespace BasDidon.Dialogue.VisualGraphView
 {
     [Serializable]
-    public class PortCollection: SerializedDictionary<string,PortData>{}
+    public class PortCollection : SerializedDictionary<string, PortData> { }
 
     public abstract class BaseNode : ScriptableObject
     {
         [SerializeField] DialogueTree dialogueTree;
-        public DialogueTree DialogueTree 
+        public DialogueTree DialogueTree
         {
             get
             {
@@ -37,7 +37,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public IEnumerable<KeyValuePair<string, PortData>> Ports => ports;
         public IEnumerable<KeyValuePair<string, PortData>> InputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Input);
         public IEnumerable<KeyValuePair<string, PortData>> OutputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Output);
-        
+
         public IEnumerable<string> GetPortGuids() => Ports.Select(pair => pair.Value.PortGuid);
         public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(pair => pair.Value.Direction == direction).Select(pair => pair.Value.PortGuid);
 
@@ -63,31 +63,62 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void InstantiatePorts()
         {
-            Debug.Log($"{GetType()} InstantiatePorts()");
+            Debug.Log($"{GetType().Name} InstantiatePorts()");
             ports = new();
 
             var members = GetType().GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
             foreach (var member in members)
             {
-                PortData newPortData = null;
-
-                if(member.IsDefined(typeof(InputAttribute), inherit: true))
+                if (member.MemberType == MemberTypes.Property || member.MemberType == MemberTypes.Field)
                 {
-                    newPortData = new(Direction.Input,typeof(ExecutionFlow));
+                    Debug.Log($"<color=blue>{member.MemberType} {member.Name}</color>");
                 }
 
-                if(member.IsDefined(typeof(OutputAttribute), inherit: true))
+                if (member.IsDefined(typeof(PortAttribute), inherit: true))
                 {
-                    newPortData = new(Direction.Output,typeof(ExecutionFlow));
-                    Debug.Log(newPortData.Type);
+                    Debug.Log($"{GetType().Name} {member.Name} ({member.MemberType})");
+
+                    // direction
+                    PortAttribute portAttr = member.GetCustomAttribute<PortAttribute>();
+                    // port type
+                    string bindingPath;
+                    Type portType;
+                    if (member.MemberType == MemberTypes.Field)
+                    {
+                        bindingPath = member.Name;
+
+                        if (member.Name.Contains(">k__BackingField"))
+                        {
+                            var propertyName = member.Name.Replace("<", "").Replace(">k__BackingField", "");
+                            var property = GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                            portType = property.PropertyType;
+                            Debug.Log("backingField");
+                        }
+                        else
+                        {
+                            portType = (member as FieldInfo).FieldType;
+                            Debug.Log("field");
+                        }
+                    }
+                    else if (member.MemberType == MemberTypes.Property)
+                    {
+                        bindingPath = $"<{member.Name}>k__BackingField";
+
+                        portType = (member as PropertyInfo).PropertyType;
+                        Debug.Log("property");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+
+                    PortData newPortData = new(portAttr.Direction, portType);
+
+                    ports.Add(bindingPath, newPortData);
+                    Debug.Log($"added new {newPortData.Direction} Port : {member.Name} {newPortData.PortGuid}");
                 }
-
-                if (newPortData == null)
-                    continue;
-
-                ports.Add(member.Name, newPortData);
-                Debug.Log($"added new {newPortData.Direction} Port : {member.Name} {newPortData.PortGuid}");
             }
         }
 
@@ -103,8 +134,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public abstract class ExecutableNode : BaseNode, IExecutableNode
     {
-        [Input] public ExecutionFlow input;
-        [Output] public ExecutionFlow output;
+        [field: SerializeField]
+        [Port(PortDirection.Input)]
+        public ExecutionFlow Input { get; set; }
+        [field: SerializeField]
+        [Port(PortDirection.Output)]
+        public ExecutionFlow Output { get; set; }
 
         public abstract void OnEnter();
         public abstract void OnExit();
@@ -116,6 +151,30 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void OnExit();
     }
 
+    public enum PortDirection
+    {
+        Input,
+        Output
+    }
+
+    [SerializeField]
+    [AttributeUsage(AttributeTargets.Field|AttributeTargets.Property)]
+    public class PortAttribute : Attribute
+    {
+        public Direction Direction { get; }
+        
+        public PortAttribute(PortDirection direction)
+        {
+            Direction = direction switch
+            {
+                PortDirection.Input => Direction.Input,
+                PortDirection.Output => Direction.Output,
+                _ => throw new InvalidOperationException()
+            };
+        }
+    }
+
+    /*
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class InputAttribute : Attribute{}
@@ -123,7 +182,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class OutputAttribute : Attribute{}
-
+    */
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class NodeFieldAttribute :Attribute{}
@@ -169,7 +228,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                             // create baseNode
                             BaseNode baseNode = NodeFactory.CreateNode(pair.Type, actionEvent.eventInfo.localMousePosition, graphView.Tree);
                             // get nodeView by baseNode
-                            GraphViewNode nodeView = NodeFactory.GetNodeView(baseNode, graphView);
+                            NodeView nodeView = NodeFactory.GetNodeView(baseNode, graphView);
                             // add nodeView to graph
                             graphView.AddElement(nodeView);
                         });

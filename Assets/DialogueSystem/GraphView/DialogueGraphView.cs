@@ -108,7 +108,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             // create baseNode
             BaseNode baseNode = NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree);
             // get nodeView by baseNode
-            GraphViewNode nodeView = NodeFactory.GetNodeView(baseNode, this);
+            NodeView nodeView = NodeFactory.GetNodeView(baseNode, this);
             // add nodeView to graph
             AddElement(nodeView);
         }

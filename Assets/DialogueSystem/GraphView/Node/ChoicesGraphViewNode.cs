@@ -6,19 +6,16 @@ using UnityEngine.UIElements;
 namespace BasDidon.Dialogue.VisualGraphView
 {
     [CustomGraphViewNode(typeof(ChoicesNode))]
-    public class ChoicesGraphViewNode : GraphViewNode
+    public class ChoicesGraphViewNode : NodeView
     {
         public override void OnDrawNodeView(BaseNode nodeData)
         {
             base.OnDrawNodeView(nodeData);
             if (nodeData is ChoicesNode choicesNode)
             {
-                
-
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {
-                    Debug.Log("a");
                     choicesNode.CreateChoice();
 
                     DrawChoicePort(choicesNode.Choices.Last(), choicesNode.Choices.Count() - 1);
@@ -49,11 +46,11 @@ namespace BasDidon.Dialogue.VisualGraphView
             VisualElement PortsContainer = new();
             ChoiceContainer.Add(PortsContainer);
 
-            var IsEnablePort = NodeElementFactory.GetPort(typeof(bool) ,choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this, "value");
+            var IsEnablePort = NodeElementFactory.GetPort(choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this, "value");
             PortsContainer.Add(IsEnablePort);
 
             // choice output flow port
-            var choicePort = NodeElementFactory.GetPort(typeof(ExecutionFlow), choice.OutputFlowPortData, string.Empty, this);
+            var choicePort = NodeElementFactory.GetPort(choice.OutputFlowPortData, string.Empty, this);
             PortsContainer.Add(choicePort);
 
             TextField choiceTxtField = new() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };

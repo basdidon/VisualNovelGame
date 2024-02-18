@@ -14,11 +14,11 @@ namespace BasDidon
 
         public static string GetBackingFieldName(string syntax)
         {
-            Regex regex = new(@"<\w+>k__BackingField");
+            Regex regex = new(@"<(?<FieldName>\w+)>k__BackingField");
 
             Match match = regex.Match(syntax);
 
-            return match.Success ? match.Groups[1].Value : syntax;
+            return match.Success ? match.Groups["FieldName"].Value : syntax;
         }
 
         public static string GetValueFromSyntax(string syntax)

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public class GraphViewNode : Node
+    public class NodeView : Node
     {
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
@@ -30,22 +30,33 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
         {
-            CreatePorts(baseNode.Ports);
+            Debug.Log(baseNode.GetType());
 
-            var nodeFields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(p => p.IsDefined(typeof(NodeFieldAttribute), inherit: true));
-            var nodeProperties = baseNode.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(p => p.IsDefined(typeof(NodeFieldAttribute), inherit: true));
-            //Debug.Log($"{baseNode.GetType().Name} field (n) : {nodeFields.Count()} ,properties(n) : {nodeProperties.Count()}");
+            CreatePorts(baseNode);
+            CreateNodeFields(baseNode);
 
-            var fieldsName = nodeFields.Select(nf => nf.Name);
-            var propertiesName = nodeProperties.Select(np => np.Name);
+            RefreshExpandedState();
+        }
 
-            var names = fieldsName.Union(propertiesName);
-
-            foreach (var name in names)
+        void CreatePorts(BaseNode baseNode)
+        {
+            // create port
+            foreach (var pair in baseNode.Ports)
             {
-                Debug.Log(name);
-                var serializeProperty = SerializedObject.FindProperty(name);
-                if(serializeProperty == null)
+                NodeElementFactory.DrawPort(pair.Value, pair.Key, this);
+            }
+        }
+
+        void CreateNodeFields(BaseNode baseNode)
+        {
+            var nodeFieldMembers = baseNode.GetType().GetMembers(BindingFlags.Instance| BindingFlags.NonPublic| BindingFlags.Public)
+                .Where(m => m.IsDefined(typeof(NodeFieldAttribute), inherit: true));
+
+            foreach (var member in nodeFieldMembers)
+            {
+                var serializeProperty = SerializedObject.FindProperty(member.Name);
+
+                if (serializeProperty == null)
                 {
                     Debug.Log($"can't find {name}");
                     continue;
@@ -53,7 +64,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 if (serializeProperty.propertyType == SerializedPropertyType.String)
                 {
-                    //Debug.Log($"{name} : {serializeProperty.stringValue}");
                     var propField = new PropertyField(serializeProperty);
                     extensionContainer.Add(propField);
                 }
@@ -63,51 +73,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
             }
 
-            RefreshExpandedState();
         }
-
-        void CreatePorts(IEnumerable<KeyValuePair<string,PortData>> portsWithKey)
-        {
-            // create port
-            foreach (var pair in portsWithKey)
-            {
-                var port = NodeElementFactory.GetPort(pair.Value.Type, pair.Value, pair.Key, this, StringHelper.GetBackingFieldName(pair.Key));
-
-                if (pair.Value.Direction == Direction.Input)
-                {
-                    inputContainer.Add(port);
-                }
-                else
-                {
-                    outputContainer.Add(port);
-                }
-            }
-        }
-
-        void CreateNodeFields()
-        {
-
-        }
-        /*
-        public Port GetInputFlowPort(string guid)
-        {
-            // input port
-            Port inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ExecutionFlow));
-            inputPort.portName = "input";
-            inputPort.portColor = Color.yellow;
-            inputPort.viewDataKey = guid;
-            return inputPort;
-        }
-
-        public Port GetOutputFlowPort(string guid)
-        {
-            // input port
-            Port outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
-            outputPort.portName = "output";
-            outputPort.portColor = Color.yellow;
-            outputPort.viewDataKey = guid;
-            return outputPort;
-        }*/
 
         // prevent from misstyping
         public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";

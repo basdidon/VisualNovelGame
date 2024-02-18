@@ -5,10 +5,10 @@ using System;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    //[ExecutableNode(false)]
     public class StartNode : BaseNode,IExecutableNode
     {
-        [Output] public ExecutionFlow Output;
+        [field: Port(PortDirection.Output)]
+        public ExecutionFlow Output { get; set; }
 
         public void OnEnter()
         {            
