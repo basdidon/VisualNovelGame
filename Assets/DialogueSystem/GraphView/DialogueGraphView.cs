@@ -29,8 +29,6 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
 
-            Tree.OnLoad();
-
             Debug.Log($"Load {assetPath}");
             foreach (var obj in AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath)) // load all sub assets
             {
@@ -64,8 +62,8 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 AddElement(edge);
 
-                OnPortConnect(inputPort);
-                OnPortConnect(outputPort);
+                OnPortConnect?.Invoke(inputPort);
+                OnPortConnect?.Invoke(outputPort);
             }
             
         }

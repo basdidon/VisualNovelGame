@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
@@ -46,11 +45,11 @@ namespace BasDidon.Dialogue.VisualGraphView
             VisualElement PortsContainer = new();
             ChoiceContainer.Add(PortsContainer);
 
-            var IsEnablePort = NodeElementFactory.GetPort(choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this, "value");
+            var IsEnablePort = NodeElementFactory.GetPort(typeof(bool),choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this);
             PortsContainer.Add(IsEnablePort);
 
             // choice output flow port
-            var choicePort = NodeElementFactory.GetPort(choice.OutputFlowPortData, string.Empty, this);
+            var choicePort = NodeElementFactory.GetPort(typeof(ExecutionFlow),choice.OutputFlowPortData, string.Empty, this);
             PortsContainer.Add(choicePort);
 
             TextField choiceTxtField = new() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };

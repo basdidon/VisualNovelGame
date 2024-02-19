@@ -9,14 +9,13 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         [field: SerializeField] public string PortGuid { get; private set; }
         [field: SerializeField] public Direction Direction { get; private set; }
-        [field: SerializeField] public Type Type { get; private set; }
 
         public PortData(Direction direction, Type type)
         {
             Direction = direction;
 
             PortGuid = Guid.NewGuid().ToString();
-            Type = type;
+            //Type = type;
             //Debug.Log($"create port {PortGuid}");
         }
     }

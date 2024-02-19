@@ -70,49 +70,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             foreach (var member in members)
             {
-                if (member.MemberType == MemberTypes.Property || member.MemberType == MemberTypes.Field)
-                {
-                    Debug.Log($"<color=blue>{member.MemberType} {member.Name}</color>");
-                }
-
                 if (member.IsDefined(typeof(PortAttribute), inherit: true))
                 {
-                    Debug.Log($"{GetType().Name} {member.Name} ({member.MemberType})");
-
-                    // direction
                     PortAttribute portAttr = member.GetCustomAttribute<PortAttribute>();
-                    // port type
-                    string bindingPath;
-                    Type portType;
-                    if (member.MemberType == MemberTypes.Field)
-                    {
-                        bindingPath = member.Name;
-
-                        if (member.Name.Contains(">k__BackingField"))
-                        {
-                            var propertyName = member.Name.Replace("<", "").Replace(">k__BackingField", "");
-                            var property = GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                            portType = property.PropertyType;
-                            Debug.Log("backingField");
-                        }
-                        else
-                        {
-                            portType = (member as FieldInfo).FieldType;
-                            Debug.Log("field");
-                        }
-                    }
-                    else if (member.MemberType == MemberTypes.Property)
-                    {
-                        bindingPath = $"<{member.Name}>k__BackingField";
-
-                        portType = (member as PropertyInfo).PropertyType;
-                        Debug.Log("property");
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException();
-                    }
-
+                    string bindingPath = PortAttribute.GetBindingPath(member);
+                    Type portType = PortAttribute.GetTypeOfMember(member);
 
                     PortData newPortData = new(portAttr.Direction, portType);
 
@@ -130,19 +92,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
         }
-    }
-
-    public abstract class ExecutableNode : BaseNode, IExecutableNode
-    {
-        [field: SerializeField]
-        [Port(PortDirection.Input)]
-        public ExecutionFlow Input { get; set; }
-        [field: SerializeField]
-        [Port(PortDirection.Output)]
-        public ExecutionFlow Output { get; set; }
-
-        public abstract void OnEnter();
-        public abstract void OnExit();
     }
 
     public interface IExecutableNode
@@ -172,17 +121,50 @@ namespace BasDidon.Dialogue.VisualGraphView
                 _ => throw new InvalidOperationException()
             };
         }
+        public static Type GetTypeOfMember(MemberInfo member)
+        {
+            if (!member.IsDefined(typeof(PortAttribute), inherit: true))
+                throw new Exception("The member is not decorated with the PortAttribute.");
+
+            Debug.Log($"{member.DeclaringType.Name} {member.Name} ({member.MemberType})");
+
+            if (member.MemberType == MemberTypes.Property)
+            {
+                return (member as PropertyInfo).PropertyType;
+            }
+            else if (member.MemberType == MemberTypes.Field)
+            {
+                if (member.Name.Contains(">k__BackingField"))
+                {
+                    var propertyName = member.Name.Replace("<", "").Replace(">k__BackingField", "");
+                    var property = member.DeclaringType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    return property.PropertyType;
+                }
+                else
+                {
+                    return (member as FieldInfo).FieldType;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported member type.");
+            }
+        }
+
+        public static string GetBindingPath(MemberInfo member)
+        {
+            if (!member.IsDefined(typeof(PortAttribute), inherit: true))
+                throw new Exception("The member is not decorated with the PortAttribute.");
+
+            return member.MemberType switch
+            {
+                MemberTypes.Property => $"<{member.Name}>k__BackingField",
+                MemberTypes.Field => member.Name,
+                _ => throw new InvalidOperationException("Unsupported member type.")
+            };
+        }
     }
 
-    /*
-    [SerializeField]
-    [AttributeUsage(AttributeTargets.Field)]
-    public class InputAttribute : Attribute{}
-
-    [SerializeField]
-    [AttributeUsage(AttributeTargets.Field)]
-    public class OutputAttribute : Attribute{}
-    */
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class NodeFieldAttribute :Attribute{}
@@ -197,6 +179,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Assembly.Load("Assembly-CSharp"),   // default assembly in Assets/Scripts
         };
 
+        [Obsolete]
         public static IEnumerable<BaseNode> GetAllBaseNode()
         {
             foreach (var assembly in assemblyToSearch)

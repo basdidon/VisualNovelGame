@@ -57,8 +57,11 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public class ChoicesNode : ExecutableNode
+    public class ChoicesNode :BaseNode
     {
+        [Port(PortDirection.Input)]
+        public ExecutionFlow input;
+
         [NodeField]
         public string speakerName;
 
@@ -89,7 +92,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 
         // Execute Logic
-        public override void OnEnter()
+        public void OnEnter()
         {
             Debug.Log("choices node executing");
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
@@ -98,7 +101,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             ));
         }
 
-        public override void OnExit(){}
+        public void OnExit(){}
 
         public void SelectChoice(int idx)
         {

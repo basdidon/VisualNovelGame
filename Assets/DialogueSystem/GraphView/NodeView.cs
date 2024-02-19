@@ -30,7 +30,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
         {
-            Debug.Log(baseNode.GetType());
+            Debug.Log($"StartDrawNode : <color=yellow>{baseNode.GetType().Name}</color>");
 
             CreatePorts(baseNode);
             CreateNodeFields(baseNode);
@@ -43,7 +43,21 @@ namespace BasDidon.Dialogue.VisualGraphView
             // create port
             foreach (var pair in baseNode.Ports)
             {
-                NodeElementFactory.DrawPort(pair.Value, pair.Key, this);
+                var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+                if (baseNode.GetType().GetField(pair.Key,flags) is FieldInfo portField)
+                {
+                    NodeElementFactory.DrawPort(portField.FieldType, pair.Value, pair.Key, this);
+                }
+                else if(baseNode.GetType().GetProperty(pair.Key,flags) is PropertyInfo portProperty)
+                {
+                    NodeElementFactory.DrawPort(portProperty.PropertyType, pair.Value, pair.Key, this);
+                }
+                else
+                {
+                    throw new Exception($"<color=red>{baseNode.GetType().Name}</color> {pair.Key}");
+                }
+
             }
         }
 

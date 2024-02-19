@@ -49,7 +49,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
 
             instance.Initialize(nodeData,graphView);
-            Debug.Log("Factory OnDrawNodeView");
             instance.OnDrawNodeView(nodeData);
             return instance;
         }
@@ -57,36 +56,36 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public static class NodeElementFactory
     {
-        public static void DrawPort(PortData portData,string bindingPath, NodeView nodeView)
+        public static void DrawPort(Type type,PortData portData,string bindingPath, NodeView nodeView)
         {
             if(portData.Direction == Direction.Input)
             {
-                nodeView.inputContainer.Add(GetPort(portData, bindingPath, nodeView));
+                nodeView.inputContainer.Add(GetPort(type,portData, bindingPath, nodeView));
             }
             else // assume portData.Direction == Direction.Output
             {
-                nodeView.outputContainer.Add(GetPort(portData, bindingPath, nodeView));
+                nodeView.outputContainer.Add(GetPort(type,portData, bindingPath, nodeView));
             }
         }
 
-        public static VisualElement GetPort(PortData portData,string bindingPath, NodeView nodeView)
+        public static VisualElement GetPort(Type type,PortData portData,string bindingPath, NodeView nodeView)
         {
             var  propertyName = StringHelper.ToCapitalCase(StringHelper.GetBackingFieldName(bindingPath));
 
-            if (portData.Type == typeof(ExecutionFlow))
+            if (type == typeof(ExecutionFlow))
             {
                 return GetExecutionFlowPort(portData, nodeView, propertyName);
             }
-            else if (portData.Type == typeof(bool))
+            else if (type == typeof(bool))
             {
                 return GetBoolPort(portData, bindingPath, nodeView,  propertyName);
             }
-            else if(portData.Type == typeof(string))
+            else if(type == typeof(string))
             {
                 return GetStringPort(portData, bindingPath, nodeView, propertyName); 
             }
             
-            throw new InvalidOperationException($"{portData.Type.Name} is not supported");
+            throw new InvalidOperationException($"{type.Name} is not supported");
         }
         
         static VisualElement GetExecutionFlowPort(PortData portData, NodeView nodeView, string propertyName)
@@ -107,16 +106,16 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         static VisualElement GetBoolPort(PortData portData, string bindingPath, NodeView nodeView, string propertyName = null)
         {
-            var portElement = new VisualElement();
-            portElement.style.flexDirection = portData.Direction == Direction.Input ? FlexDirection.Row : FlexDirection.RowReverse;
+            //var portElement = new VisualElement();
+            //portElement.style.flexDirection = portData.Direction == Direction.Input ? FlexDirection.Row : FlexDirection.RowReverse;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, Port.Capacity.Multi, typeof(bool));
             port.viewDataKey = portData.PortGuid;
             port.portName =propertyName;
-            portElement.Add(port);
+            //portElement.Add(port);
 
             var valueToggle = new Toggle() { bindingPath = bindingPath};
-            portElement.Add(valueToggle);
+            //portElement.Add(valueToggle);
 
             if(portData.Direction == Direction.Input)
             {
@@ -137,7 +136,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 };
             }
 
-            return portElement;
+            return port;
+
+            //return portElement;
         }
 
 

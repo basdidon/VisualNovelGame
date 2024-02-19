@@ -72,12 +72,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             });
         }
 
-
-        public void OnLoad()
-        {
-            ReInitializePorts();
-        }
-
         public object GetValueByPort(string inputPortGuid)
         {
             var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
@@ -97,8 +91,12 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 
 #if UNITY_EDITOR
-        public void ReInitializePorts() => Nodes.ForEach(node => node.InstantiatePorts());
+        public void ReInitializePorts()
+        {
+            Nodes.ForEach(node => node.InstantiatePorts());
 
+            edges.Clear();
+        }
         public static string GetCurrentProjectBrowserDirectory()
         {
             Type projectWindowUtilType = typeof(ProjectWindowUtil);
