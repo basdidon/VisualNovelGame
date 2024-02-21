@@ -224,7 +224,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 954757473}
-  - component: {fileID: 954757475}
+  - component: {fileID: 954757474}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -247,7 +247,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &954757475
+--- !u!114 &954757474
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,6 +259,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814483ccf7130f242bb459f464c75e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Database:
+    Characters:
+    - <Name>k__BackingField: John
+      <Money>k__BackingField: 1000
+    - <Name>k__BackingField: Leonard
+      <Money>k__BackingField: 50
+    - <Name>k__BackingField: Julia
+      <Money>k__BackingField: 150
 --- !u!1 &1033439908
 GameObject:
   m_ObjectHideFlags: 0

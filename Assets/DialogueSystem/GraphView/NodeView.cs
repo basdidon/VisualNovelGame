@@ -33,6 +33,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Debug.Log($"StartDrawNode : <color=yellow>{baseNode.GetType().Name}</color>");
 
             CreatePorts(baseNode);
+            CreateSelectors(baseNode);
             CreateNodeFields(baseNode);
 
             RefreshExpandedState();
@@ -45,19 +46,35 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
+                var serializeProperty = SerializedObject.FindProperty(pair.Key);
+
                 if (baseNode.GetType().GetField(pair.Key,flags) is FieldInfo portField)
                 {
-                    NodeElementFactory.DrawPort(portField.FieldType, pair.Value, pair.Key, this);
+                    NodeElementFactory.DrawPortWithField(serializeProperty, portField.FieldType, pair.Value, this,StringHelper.ToCapitalCase(StringHelper.GetBackingFieldName(pair.Key)));
+                    //NodeElementFactory.DrawPort(portField.FieldType, pair.Value, pair.Key, this);
                 }
                 else if(baseNode.GetType().GetProperty(pair.Key,flags) is PropertyInfo portProperty)
                 {
-                    NodeElementFactory.DrawPort(portProperty.PropertyType, pair.Value, pair.Key, this);
+                    NodeElementFactory.DrawPortWithField(serializeProperty, portProperty.PropertyType, pair.Value, this, pair.Key);
+                    //NodeElementFactory.DrawPort(portProperty.PropertyType, pair.Value, pair.Key, this);
                 }
                 else
                 {
                     throw new Exception($"<color=red>{baseNode.GetType().Name}</color> {pair.Key}");
                 }
 
+            }
+        }
+
+        void CreateSelectors(BaseNode baseNode)
+        {
+            var selectorMembers = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Where(m => m.IsDefined(typeof(SelectorAttribute), inherit: true));
+
+            foreach (var member in selectorMembers)
+            {
+                EnumField enumField = new(StringHelper.ToCapitalCase(member.Name)) { bindingPath = member.Name };
+                extensionContainer.Add(enumField);
             }
         }
 

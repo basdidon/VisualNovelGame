@@ -21,8 +21,8 @@ MonoBehaviour:
     valueData:
     - <PortGuid>k__BackingField: edf5aa6e-8e33-4325-ae53-91d462bae937
       <Direction>k__BackingField: 0
-  speakerName: 
-  questionText: 
+  speaker: 3
+  questionText: julia ja
   choices:
   - <IsEnable>k__BackingField: 1
     <Name>k__BackingField: new choice
@@ -31,6 +31,14 @@ MonoBehaviour:
       <Direction>k__BackingField: 0
     <OutputFlowPortData>k__BackingField:
       <PortGuid>k__BackingField: ddb6a848-2b4f-4dd7-83f8-bdac94bfcc2b
+      <Direction>k__BackingField: 1
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: new choice
+    <IsEnableInputPortData>k__BackingField:
+      <PortGuid>k__BackingField: ba92e1c9-6b68-458f-9621-a4cf53676272
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <PortGuid>k__BackingField: 7df666cb-da3b-4be1-bdff-699102c92b20
       <Direction>k__BackingField: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -56,7 +64,7 @@ MonoBehaviour:
   - <EdgeGuid>k__BackingField: 4a4517d4-8d92-4788-85a0-b1d42dcd4305
     <OutputPortGuid>k__BackingField: 433b7bd9-283a-4433-9d62-f48b2956b876
     <InputPortGuid>k__BackingField: edf5aa6e-8e33-4325-ae53-91d462bae937
-  - <EdgeGuid>k__BackingField: 32b28ff5-ecaf-43b0-8143-9fa692ec5eef
+  - <EdgeGuid>k__BackingField: 81bee532-4457-4f95-a637-282e8c21b027
     <OutputPortGuid>k__BackingField: 73ca414c-5048-42c0-94fe-14db88467632
     <InputPortGuid>k__BackingField: f138418d-eda0-4e27-b484-3537f852c170
 --- !u!114 &1691619240793827275
@@ -83,8 +91,8 @@ MonoBehaviour:
       <Direction>k__BackingField: 0
     - <PortGuid>k__BackingField: 433b7bd9-283a-4433-9d62-f48b2956b876
       <Direction>k__BackingField: 1
-  SpeakerName: 
-  DialogueText: 
+  speaker: 1
+  DialogueText: adam ja
 --- !u!114 &5175231515406875850
 MonoBehaviour:
   m_ObjectHideFlags: 0

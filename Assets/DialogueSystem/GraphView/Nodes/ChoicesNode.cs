@@ -62,8 +62,8 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Port(PortDirection.Input)]
         public ExecutionFlow input;
 
-        [NodeField]
-        public string speakerName;
+        [Selector]
+        public Characters speaker;
 
         [TextArea, NodeField]
         public string questionText;
@@ -96,7 +96,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             Debug.Log("choices node executing");
             DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
-                new(speakerName, questionText),
+                new(speaker.ToString(), questionText),
                 Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
             ));
         }

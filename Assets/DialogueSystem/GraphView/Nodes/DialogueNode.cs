@@ -23,16 +23,16 @@ namespace BasDidon.Dialogue.VisualGraphView
         [field: Port(PortDirection.Output)]
         public ExecutionFlow Output { get; set; }
 
-        [NodeField]
-        public string SpeakerName;
-
+        [field: Selector]
+        public Characters speaker;
+            
         [TextArea, NodeField]
         public string DialogueText  = string.Empty;
 
         public void OnEnter()
         {
             Debug.Log("dialogue node executing");
-            DialogueManager.Instance.OnNewDialogueEventInvoke(new(SpeakerName, StringHelper.GetValueFromSyntax(DialogueText)));
+            DialogueManager.Instance.OnNewDialogueEventInvoke(new(speaker.ToString(), StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
         public void OnExit(){}
