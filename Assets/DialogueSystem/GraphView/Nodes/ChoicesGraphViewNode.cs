@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor;
 using System;
+using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -15,29 +16,29 @@ namespace BasDidon.Dialogue.VisualGraphView
             base.OnDrawNodeView(nodeData);
             if (nodeData is ChoicesNode choicesNode)
             {
+                var serializedChoices = SerializedObject.FindProperty("choices");
+                if (serializedChoices.isArray)
+                {
+                    for (int i = 0; i < serializedChoices.arraySize; i++)
+                    {
+                        Debug.Log(i);
+                        DrawChoicePort(serializedChoices.GetArrayElementAtIndex(i));
+                    }
+
+                }
+
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {
+                    var choiceProperty = serializedChoices.GetArrayElementAtIndex(serializedChoices.arraySize - 1);
                     choicesNode.CreateChoice();
 
-                    DrawChoicePort(choicesNode.Choices.Last(), choicesNode.Choices.Count() - 1);
+                    DrawChoicePort(choiceProperty);
                     RefreshExpandedState();
                 };
                 mainContainer.Insert(2, addCondition);
 
-                var serializedChoices = SerializedObject.FindProperty("choices");
-                if (serializedChoices.isArray)
-                {
-                    for(int i = 0; i < serializedChoices.arraySize; i++)
-                    {
-                        Debug.Log(i);
-                        var serializedQuestionText = serializedChoices.GetArrayElementAtIndex(i).FindPropertyRelative("<Name>k__BackingField");
-                        if(serializedQuestionText != null)
-                            Debug.Log(serializedQuestionText.stringValue);
 
-                        DrawChoicePort(serializedChoices.GetArrayElementAtIndex(i));
-                    }
-                }
 
                 // output port
                 /*
@@ -53,6 +54,8 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 // start with expanded state
                 RefreshExpandedState();
+
+                SerializedObject.ApplyModifiedProperties();
             }
         }
 
@@ -100,17 +103,28 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         void DrawChoicePort(SerializedProperty serializedChoice)
         {
+            Debug.Log(serializedChoice.isExpanded);
             VisualElement ChoiceContainer = new();
 
             VisualElement PortsContainer = new();
             ChoiceContainer.Add(PortsContainer);
-            /*
+
+            serializedChoice.isExpanded = true;
+
+            var isEnableInputPortSP = serializedChoice.FindPropertyRelative("<IsEnableInputPortData>k__BackingField");
+            string isEnablePortGuid = isEnableInputPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+                
             var IsEnablePort = NodeElementFactory.CreatePortWithField(
                 serializedChoice.FindPropertyRelative("<IsEnable>k__BackingField"),
                 typeof(bool),
-                //new( serializedChoice.FindPropertyRelative("<IsEnableInputPortData>k__BackingField").FindPropertyRelative("<PortGuid>k__BackingField"),
-                this
+                isEnablePortGuid,
+                Direction.Input,
+                this,
+                ""
             );
+
+            PortsContainer.Add(IsEnablePort);
+
             /*
             var IsEnablePort = NodeElementFactory.CreatePort(typeof(bool), choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this);
             PortsContainer.Add(IsEnablePort);
@@ -119,8 +133,19 @@ namespace BasDidon.Dialogue.VisualGraphView
             var choicePort = NodeElementFactory.CreatePort(typeof(ExecutionFlow), choice.OutputFlowPortData, string.Empty, this);
             PortsContainer.Add(choicePort);
             */
-            var choiceText = new PropertyField(serializedChoice.FindPropertyRelative("<Name>k__BackingField"));// TextField() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
+
+            Debug.Log($"[] {serializedChoice.FindPropertyRelative("<Name>k__BackingField").stringValue}");
+            var nameSP = serializedChoice.FindPropertyRelative("<Name>k__BackingField");
+            Debug.Log($"{nameSP.propertyPath}");
+            var choiceText = new PropertyField(nameSP);// TextField() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
+            choiceText.BindProperty(nameSP);
+            var c = new TextField() {
+                bindingPath = nameSP.propertyPath 
+            };
+            c.BindProperty(nameSP);
+
             ChoiceContainer.Add(choiceText);
+            ChoiceContainer.Add(c);
 
             Button deleteChoiceBtn = new() { text = "X" };
             ChoiceContainer.Add(deleteChoiceBtn);

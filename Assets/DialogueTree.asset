@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2831973386241802981
+--- !u!114 &-5102162285817339392
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,37 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
-  m_Name: ChoicesNode
+  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
+  m_Name: DialogueNode
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
-  <Id>k__BackingField: 2fb33080-3f66-4315-97d7-f89b493dcf83
-  <GraphPosition>k__BackingField: {x: 559, y: 136}
+  <Id>k__BackingField: d3dc910d-7e1e-4f41-9160-ed4f28e1c244
+  <GraphPosition>k__BackingField: {x: 328, y: 86}
   ports:
     keyData:
-    - input
+    - <Input>k__BackingField
+    - <Output>k__BackingField
     valueData:
-    - <PortGuid>k__BackingField: edf5aa6e-8e33-4325-ae53-91d462bae937
+    - <PortGuid>k__BackingField: d96da8d2-a30e-40cd-94bb-b935db9e90d4
       <Direction>k__BackingField: 0
-  speaker: 3
-  questionText: julia ja
-  choices:
-  - <IsEnable>k__BackingField: 1
-    <Name>k__BackingField: new choice
-    <IsEnableInputPortData>k__BackingField:
-      <PortGuid>k__BackingField: f138418d-eda0-4e27-b484-3537f852c170
-      <Direction>k__BackingField: 0
-    <OutputFlowPortData>k__BackingField:
-      <PortGuid>k__BackingField: ddb6a848-2b4f-4dd7-83f8-bdac94bfcc2b
+    - <PortGuid>k__BackingField: 4ae5f8c2-3473-45ec-a204-243c1d543261
       <Direction>k__BackingField: 1
-  - <IsEnable>k__BackingField: 1
-    <Name>k__BackingField: new choice
-    <IsEnableInputPortData>k__BackingField:
-      <PortGuid>k__BackingField: ba92e1c9-6b68-458f-9621-a4cf53676272
-      <Direction>k__BackingField: 0
-    <OutputFlowPortData>k__BackingField:
-      <PortGuid>k__BackingField: 7df666cb-da3b-4be1-bdff-699102c92b20
-      <Direction>k__BackingField: 1
+  speaker: 0
+  DialogueText: a
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,47 +39,13 @@ MonoBehaviour:
   m_Name: DialogueTree
   m_EditorClassIdentifier: 
   <Nodes>k__BackingField:
-  - {fileID: 5175231515406875850}
-  - {fileID: 1691619240793827275}
-  - {fileID: 6888421442407701396}
-  - {fileID: -2831973386241802981}
+  - {fileID: 3605803695343044639}
+  - {fileID: -5102162285817339392}
   edges:
-  - <EdgeGuid>k__BackingField: 1291a7ec-8e41-4481-8682-05c0b7dde0f1
-    <OutputPortGuid>k__BackingField: a12e475e-d323-478d-9a9c-18c8c1c8eecc
-    <InputPortGuid>k__BackingField: b5ace4e5-c515-4bae-9877-378a5420d1e0
-  - <EdgeGuid>k__BackingField: 4a4517d4-8d92-4788-85a0-b1d42dcd4305
-    <OutputPortGuid>k__BackingField: 433b7bd9-283a-4433-9d62-f48b2956b876
-    <InputPortGuid>k__BackingField: edf5aa6e-8e33-4325-ae53-91d462bae937
-  - <EdgeGuid>k__BackingField: 81bee532-4457-4f95-a637-282e8c21b027
-    <OutputPortGuid>k__BackingField: 73ca414c-5048-42c0-94fe-14db88467632
-    <InputPortGuid>k__BackingField: f138418d-eda0-4e27-b484-3537f852c170
---- !u!114 &1691619240793827275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f2b735142ac1a3488b08cbe5cbd12e0, type: 3}
-  m_Name: DialogueNode
-  m_EditorClassIdentifier: 
-  dialogueTree: {fileID: 11400000}
-  <Id>k__BackingField: 321de301-f631-4c4d-b6bc-2879357adb84
-  <GraphPosition>k__BackingField: {x: 267, y: 77}
-  ports:
-    keyData:
-    - <Input>k__BackingField
-    - <Output>k__BackingField
-    valueData:
-    - <PortGuid>k__BackingField: b5ace4e5-c515-4bae-9877-378a5420d1e0
-      <Direction>k__BackingField: 0
-    - <PortGuid>k__BackingField: 433b7bd9-283a-4433-9d62-f48b2956b876
-      <Direction>k__BackingField: 1
-  speaker: 1
-  DialogueText: adam ja
---- !u!114 &5175231515406875850
+  - <EdgeGuid>k__BackingField: 41716b5c-a2a9-4c5b-9a15-218adcf9d83a
+    <OutputPortGuid>k__BackingField: 299d0ab1-e3c0-4688-8597-f702ef771c5e
+    <InputPortGuid>k__BackingField: d96da8d2-a30e-40cd-94bb-b935db9e90d4
+--- !u!114 &3605803695343044639
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,40 +58,11 @@ MonoBehaviour:
   m_Name: StartNode
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
-  <Id>k__BackingField: 2574fe3d-2351-4a63-b950-f1a06d5de5a1
-  <GraphPosition>k__BackingField: {x: -67, y: 39}
+  <Id>k__BackingField: c8ee77e6-b23e-44d1-9267-6a849005de32
+  <GraphPosition>k__BackingField: {x: 0, y: 0}
   ports:
     keyData:
     - <Output>k__BackingField
     valueData:
-    - <PortGuid>k__BackingField: a12e475e-d323-478d-9a9c-18c8c1c8eecc
+    - <PortGuid>k__BackingField: 299d0ab1-e3c0-4688-8597-f702ef771c5e
       <Direction>k__BackingField: 1
---- !u!114 &6888421442407701396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edd37ee5bf7d9114abe0be01ec46de41, type: 3}
-  m_Name: BooleanNode
-  m_EditorClassIdentifier: 
-  dialogueTree: {fileID: 11400000}
-  <Id>k__BackingField: 329d61a2-1f97-489b-a5fb-3b98f753ae95
-  <GraphPosition>k__BackingField: {x: 224, y: 309}
-  ports:
-    keyData:
-    - <Value>k__BackingField
-    - <AutoPropertyValue>k__BackingField
-    - field_value
-    valueData:
-    - <PortGuid>k__BackingField: 73ca414c-5048-42c0-94fe-14db88467632
-      <Direction>k__BackingField: 1
-    - <PortGuid>k__BackingField: 7b99e455-97a8-4b1b-9712-47e242a540ed
-      <Direction>k__BackingField: 1
-    - <PortGuid>k__BackingField: 3141d5aa-d33d-4ed9-9937-1bdb2f359a65
-      <Direction>k__BackingField: 1
-  <Value>k__BackingField: 1
-  field_value: 1

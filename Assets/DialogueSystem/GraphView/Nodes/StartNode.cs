@@ -11,8 +11,11 @@ namespace BasDidon.Dialogue.VisualGraphView
         public ExecutionFlow Output { get; set; }
 
         public void OnEnter()
-        {            
-            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("Output")).First();
+        {
+            Debug.Log(GetPortData("<Output>k__BackingField").Direction);
+            var connectedNodes = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("<Output>k__BackingField"));
+            Debug.Log(connectedNodes.Count());
+            DialogueManager.Instance.CurrentNode = connectedNodes.FirstOrDefault();
         }
 
         public void OnExit(){}

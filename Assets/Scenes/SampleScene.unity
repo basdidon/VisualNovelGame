@@ -259,14 +259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814483ccf7130f242bb459f464c75e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Database:
-    Characters:
-    - <Name>k__BackingField: John
-      <Money>k__BackingField: 1000
-    - <Name>k__BackingField: Leonard
-      <Money>k__BackingField: 50
-    - <Name>k__BackingField: Julia
-      <Money>k__BackingField: 150
 --- !u!1 &1033439908
 GameObject:
   m_ObjectHideFlags: 0

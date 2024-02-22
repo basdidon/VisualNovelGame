@@ -42,6 +42,9 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public IEnumerable<EdgeData> GetConnectedEdges(PortData portData)
         {
+            if(portData == null)
+                throw new ArgumentNullException();
+
             return portData.Direction switch
             {
                 Direction.Input => Edges.Where(e => e.InputPortGuid == portData.PortGuid),

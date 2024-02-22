@@ -70,17 +70,46 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
+        // CreatePortWithField
         public static Port CreatePortWithField(SerializedProperty serializedProperty, Type type, PortData portData, NodeView nodeView,string propertyName)
         {
-            Port.Capacity capacity = portData.Direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
+            return CreatePortWithField(serializedProperty, type, portData.PortGuid, portData.Direction, nodeView, propertyName);
+        }
 
-            var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, capacity, type);
-            port.viewDataKey = portData.PortGuid;
-            port.portName = propertyName;
+        public static Port CreatePortWithField(SerializedProperty serializedProperty, Type type, string portGuid, Direction direction, NodeView nodeView, string propertyName)
+        {
+            Type[] usePropotyFieldTypes = new[] { typeof(bool), typeof(string) };
 
-            var propertyField = new PropertyField(serializedProperty,string.Empty);
+            if(type == typeof(ExecutionFlow))
+            {
+                return GetExecutionFlowPort(portGuid,direction,nodeView,propertyName);
+            }
+            else if(usePropotyFieldTypes.Contains(type))
+            {
+                Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
-            if (portData.Direction == Direction.Input)
+                var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, type);
+                port.viewDataKey = portGuid;
+                port.portName = propertyName;
+
+                // add field to port
+                AddFieldToPort(serializedProperty, port, nodeView);
+
+                return port;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+  
+
+        }
+
+        static void AddFieldToPort(SerializedProperty serializedProperty, Port port, NodeView nodeView)
+        {
+            var propertyField = new PropertyField(serializedProperty, string.Empty);
+
+            if (port.direction == Direction.Input)
             {
                 port.Insert(1, propertyField);
 
@@ -104,8 +133,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 port.Add(propertyField);
             }
-
-            return port;
         }
 
         public static void DrawPort(Type type,PortData portData,string bindingPath, NodeView nodeView)
@@ -177,99 +204,27 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             return port;
         }
-        
-        static VisualElement GetExecutionFlowPort(PortData portData, NodeView nodeView, string propertyName)
+
+        // GetExecutionFlowPort
+        static Port GetExecutionFlowPort(PortData portData, NodeView nodeView, string propertyName)
+        {
+            return GetExecutionFlowPort(portData.PortGuid, portData.Direction, nodeView, propertyName);
+        }
+
+        static Port GetExecutionFlowPort(string portGuid,Direction portDirection, NodeView nodeView, string propertyName)
         {
             var port = nodeView.InstantiatePort(
                 Orientation.Horizontal,
-                portData.Direction,
-                portData.Direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi,
+                portDirection,
+                portDirection == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi,
                 typeof(ExecutionFlow)
             );
 
-            port.viewDataKey = portData.PortGuid;
+            port.viewDataKey = portGuid;
             port.portName = propertyName;
             port.portColor = Color.yellow;
 
             return port;
         }
-        /*
-        static Port GetBoolPort(PortData portData, string bindingPath, NodeView nodeView, string propertyName = null)
-        {
-            Port.Capacity capacity = portData.Direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
-
-            var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, capacity, typeof(bool));
-            port.viewDataKey = portData.PortGuid;
-            port.portName = propertyName;
-
-            var valueToggle = new Toggle() { bindingPath = bindingPath};
-
-            if(portData.Direction == Direction.Input)
-            {
-                port.Insert(1, valueToggle);
-
-                nodeView.GraphView.OnPortConnect += (onConnectPort) =>
-                {
-                    if (port == onConnectPort)
-                    {
-                        valueToggle.style.display = DisplayStyle.None;
-                    }
-                };
-
-                nodeView.GraphView.OnPortDisconnect += (onDisconnectPort) =>
-                {
-                    if (port == onDisconnectPort)
-                    {
-                        valueToggle.style.display = DisplayStyle.Flex;
-                    }
-                };
-            }
-            else
-            {
-                port.Add(valueToggle);
-            }
-
-            return port;
-        }
-
-
-        static VisualElement GetStringPort(PortData portData, string bindingPath, NodeView nodeView, string propertyName = null)
-        {
-            var portElement = new VisualElement();
-            portElement.style.flexDirection = portData.Direction == Direction.Input ? FlexDirection.Row : FlexDirection.RowReverse;
-
-            var port = nodeView.InstantiatePort(Orientation.Horizontal, portData.Direction, Port.Capacity.Multi, typeof(string));
-            port.viewDataKey = portData.PortGuid;
-            port.portName = propertyName;
-            portElement.Add(port);
-
-            var textField = new TextField() { bindingPath = bindingPath };
-            portElement.Add(textField);
-
-            if (portData.Direction == Direction.Input)
-            {
-                nodeView.GraphView.OnPortConnect += (onConnectPort) =>
-                {
-                    if (port == onConnectPort)
-                    {
-                        textField.style.display = DisplayStyle.None;
-                    }
-                };
-
-                nodeView.GraphView.OnPortDisconnect += (onDisconnectPort) =>
-                {
-                    if (port == onDisconnectPort)
-                    {
-                        textField.style.display = DisplayStyle.Flex;
-                    }
-                };
-            }
-
-            // style
-            textField.style.flexGrow = 1;
-
-
-            return portElement;
-        }*/
     }
 }
