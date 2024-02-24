@@ -40,19 +40,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             AssetDatabase.Refresh();
         }
 
-        public IEnumerable<EdgeData> GetConnectedEdges(PortData portData)
-        {
-            if(portData == null)
-                throw new ArgumentNullException();
-
-            return portData.Direction switch
-            {
-                Direction.Input => Edges.Where(e => e.InputPortGuid == portData.PortGuid),
-                Direction.Output => Edges.Where(e => e.OutputPortGuid == portData.PortGuid),
-                _ => throw new InvalidOperationException("Invalid port direction.")
-            };
-        }
-
         public BaseNode GetNodeByPort(PortData portData) => GetNodeByPort(portData.PortGuid,portData.Direction);
         public BaseNode GetNodeByPort(string portGuid,Direction direction)
         {
@@ -60,6 +47,29 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 Direction.Input => Nodes.Single(n => n.GetPortGuids(Direction.Input).Contains(portGuid)),
                 Direction.Output => Nodes.Single(n => n.GetPortGuids(Direction.Output).Contains(portGuid)),
+                _ => throw new InvalidOperationException("Invalid port direction.")
+            };
+        }
+
+        // ConnectedEdges
+        public IEnumerable<EdgeData> GetConnectedEdges(PortData portData) => GetConnectedEdges(portData.PortGuid,portData.Direction);
+        public IEnumerable<EdgeData> GetConnectedEdges(string portGuid, Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Input => Edges.Where(e => e.InputPortGuid == portGuid),
+                Direction.Output => Edges.Where(e => e.OutputPortGuid == portGuid),
+                _ => throw new InvalidOperationException("Invalid port direction.")
+            };
+        }
+
+        // ConnectedPorts
+        public IEnumerable<string> GetConnectedPortsGuid(string portGuid, Direction direction)
+        {
+            return direction switch
+            {
+                Direction.Input => GetConnectedEdges(portGuid, direction).Select(e => e.OutputPortGuid),
+                Direction.Output => GetConnectedEdges(portGuid, direction).Select(e => e.InputPortGuid),
                 _ => throw new InvalidOperationException("Invalid port direction.")
             };
         }
@@ -75,22 +85,28 @@ namespace BasDidon.Dialogue.VisualGraphView
             });
         }
 
-        public object GetValueByPort(string inputPortGuid)
+        public T GetInputValue<T>(string inputPortGuid, T defaultValue)
         {
-            var edge = Edges.SingleOrDefault(e => e.InputPortGuid == inputPortGuid);
+            var edges = GetConnectedEdges(inputPortGuid, Direction.Input);
 
-            if (edge == null)
-            {
-                Debug.Log("port is not connect. or have a port with same guid");
-                return default;
-            }
+            if (edges.Count() == 0)
+                return defaultValue;
 
-            var outputNode = Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Output).Contains(edge.OutputPortGuid));
+            if (edges.Count() != 1)
+                throw new Exception();
 
-            if (outputNode == null) 
+            EdgeData edge = edges.First();
+
+            var outputNode = GetNodeByPort(edge.OutputPortGuid, Direction.Output);
+            if (outputNode == null)
                 throw new Exception($"not found any port match with {edge.OutputPortGuid}");
 
-            return outputNode.GetValue(edge.OutputPortGuid);
+            var portValue = outputNode.GetValue(edge.OutputPortGuid);
+            if (portValue is not T)
+                throw new Exception();
+            
+
+            return (T) portValue;
         }
 
 #if UNITY_EDITOR

@@ -5,21 +5,28 @@ using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-
-
     public enum PortDirection
     {
         Input,
         Output
     }
 
+    public enum PortFieldStyle
+    {
+        Show,
+        Disable,
+        Hide
+    }
+
     [SerializeField]
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class PortAttribute : Attribute
     {
         public Direction Direction { get; }
 
-        public PortAttribute(PortDirection direction)
+        public PortFieldStyle PortFieldStyle { get; }
+
+        public PortAttribute(PortDirection direction, PortFieldStyle portFieldStyle = PortFieldStyle.Show)
         {
             Direction = direction switch
             {
@@ -27,7 +34,10 @@ namespace BasDidon.Dialogue.VisualGraphView
                 PortDirection.Output => Direction.Output,
                 _ => throw new InvalidOperationException()
             };
+
+            PortFieldStyle = portFieldStyle;
         }
+
         public static Type GetTypeOfMember(MemberInfo member)
         {
             if (!member.IsDefined(typeof(PortAttribute), inherit: true))

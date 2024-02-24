@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+/*
 public class Character
 {
     public string Name { get; }
@@ -40,3 +40,4 @@ public class NPC: Character
         Love = 0;
     }
 }
+*/

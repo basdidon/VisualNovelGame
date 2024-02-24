@@ -30,8 +30,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {
-                    var choiceProperty = serializedChoices.GetArrayElementAtIndex(serializedChoices.arraySize - 1);
                     choicesNode.CreateChoice();
+                    serializedChoices.serializedObject.Update();
+                    var choiceProperty = serializedChoices.GetArrayElementAtIndex(serializedChoices.arraySize - 1);
 
                     DrawChoicePort(choiceProperty);
                     RefreshExpandedState();
@@ -58,7 +59,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 SerializedObject.ApplyModifiedProperties();
             }
         }
-
+        /*
         void DrawChoicePort(Choice choice, int choiceIdx)
         {
             VisualElement ChoiceContainer = new();
@@ -100,10 +101,9 @@ namespace BasDidon.Dialogue.VisualGraphView
             PortsContainer.style.flexDirection = FlexDirection.Row;
             PortsContainer.style.justifyContent = Justify.SpaceBetween;
         }
-
+        */
         void DrawChoicePort(SerializedProperty serializedChoice)
         {
-            Debug.Log(serializedChoice.isExpanded);
             VisualElement ChoiceContainer = new();
 
             VisualElement PortsContainer = new();
@@ -125,27 +125,26 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             PortsContainer.Add(IsEnablePort);
 
-            /*
-            var IsEnablePort = NodeElementFactory.CreatePort(typeof(bool), choice.IsEnableInputPortData, $"choices.Array.data[{choiceIdx}].<IsEnable>k__BackingField", this);
-            PortsContainer.Add(IsEnablePort);
+            //
+            var outputFlowPortSP = serializedChoice.FindPropertyRelative("<OutputFlowPortData>k__BackingField");
+            string outputFlowPortGuid = outputFlowPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
 
-            // choice output flow port
-            var choicePort = NodeElementFactory.CreatePort(typeof(ExecutionFlow), choice.OutputFlowPortData, string.Empty, this);
-            PortsContainer.Add(choicePort);
-            */
+            var outputFlowPort = NodeElementFactory.CreatePortWithField(
+                serializedChoice.FindPropertyRelative("<Output>k_BackingField"),
+                typeof(ExecutionFlow),
+                outputFlowPortGuid,
+                Direction.Output,
+                this,
+                "Output"
+            );
 
-            Debug.Log($"[] {serializedChoice.FindPropertyRelative("<Name>k__BackingField").stringValue}");
+            PortsContainer.Add(outputFlowPort);
+
             var nameSP = serializedChoice.FindPropertyRelative("<Name>k__BackingField");
-            Debug.Log($"{nameSP.propertyPath}");
-            var choiceText = new PropertyField(nameSP);// TextField() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
+            var choiceText = new PropertyField(nameSP,string.Empty);// TextField() { bindingPath = $"choices.Array.data[{choiceIdx}].<Name>k__BackingField" };
             choiceText.BindProperty(nameSP);
-            var c = new TextField() {
-                bindingPath = nameSP.propertyPath 
-            };
-            c.BindProperty(nameSP);
 
             ChoiceContainer.Add(choiceText);
-            ChoiceContainer.Add(c);
 
             Button deleteChoiceBtn = new() { text = "X" };
             ChoiceContainer.Add(deleteChoiceBtn);

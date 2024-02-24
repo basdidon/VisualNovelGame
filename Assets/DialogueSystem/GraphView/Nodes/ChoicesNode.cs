@@ -44,20 +44,19 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             IsEnable = true;
             Name = "new choice";
-            IsEnableInputPortData = new(Direction.Input,typeof(bool));
-            OutputFlowPortData = new(Direction.Output,typeof(ExecutionFlow));
+            IsEnableInputPortData = new(Direction.Input, "isEnable");
+            OutputFlowPortData = new(Direction.Output,"isEnable");
         }
 
         public ChoiceRecord GetRecord(DialogueTree dialogueTree)
         {
-            var _isEnable = dialogueTree.GetValueByPort(IsEnableInputPortData.PortGuid);
-            var isEnable = _isEnable != null ? (bool)_isEnable : IsEnable;
+            bool isEnable = dialogueTree.GetInputValue(IsEnableInputPortData.PortGuid, IsEnable);
 
             return new ChoiceRecord(isEnable, Name);
         }
     }
 
-    public class ChoicesNode :BaseNode
+    public class ChoicesNode :BaseNode,IExecutableNode
     {
         [Port(PortDirection.Input)]
         public ExecutionFlow input;

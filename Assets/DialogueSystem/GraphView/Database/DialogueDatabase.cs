@@ -27,7 +27,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 _ => throw new Exception(),
             };
         }
-    } 
+    }
 
     [Serializable]
     public class Character

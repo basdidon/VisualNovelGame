@@ -1,14 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
- 
-public enum Characters
-{
-    Sabastian,
-    Emma,
-    Johnny,
-}
 
+/*
 //[CreateAssetMenu(menuName = "Dialogue")]
 public class DialoguesData : ScriptableObject
 {
@@ -54,4 +48,4 @@ public class Sentence
             return;
         }
     }
-}
+}*/

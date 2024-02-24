@@ -21,6 +21,23 @@ namespace BasDidon
             return match.Success ? match.Groups["FieldName"].Value : syntax;
         }
 
+        public static string GetFieldName(string syntax)
+        {
+            Regex regex = new(@"m_(\w+)");
+
+            Match match = regex.Match(syntax);
+
+            
+
+            return ToCapitalCase(match.Success ? match.Groups[1].Value : syntax);
+        }
+
+        /*
+        public static string GetProperyNameByBackingFieldName(string backingFieldName)
+        {
+
+        }
+        */
         public static string GetValueFromSyntax(string syntax)
         {
             // Define a regular expression pattern to extract the character ID

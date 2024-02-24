@@ -6,11 +6,39 @@ using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using System.Reflection;
 using UnityEngine.UIElements;
+using System.Collections;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
     [Serializable]
-    public class PortCollection : SerializedDictionary<string, PortData> { }
+    public class PortDataCollection : List<PortData>, IList<PortData>,ISerializationCallbackReceiver
+    {
+        [SerializeField] List<PortData> portList = new();
+
+        #region ISerializationCallbackReceiver
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            Clear();
+            for (int i = 0; i < portList.Count; i++)
+            {
+                Add(portList[i]);
+            }
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            portList.Clear();
+
+            foreach (var item in this)
+            {
+                portList.Add(item);
+            }
+        }
+        #endregion
+
+        public IEnumerable<PortData> Ports => portList.AsEnumerable();
+        public IEnumerable<string> PortGuids => portList.Select(p => p.PortGuid);
+    }
 
     public abstract class BaseNode : ScriptableObject
     {
@@ -32,19 +60,19 @@ namespace BasDidon.Dialogue.VisualGraphView
         [field: SerializeField] public string Id { get; private set; }
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
+        [SerializeField] PortDataCollection portCollection;
+        public IEnumerable<PortData> Ports => portCollection;
+        public IEnumerable<string> GetPortGuids() => portCollection.Select(p => p.PortGuid);
+        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
+        public PortData GetPortData(string fieldName) => portCollection.FirstOrDefault();
         // Port
-        [SerializeField] PortCollection ports;
+        /*
+        [Obsolete][SerializeField] PortCollection ports;
         public IEnumerable<KeyValuePair<string, PortData>> Ports => ports;
-        public IEnumerable<KeyValuePair<string, PortData>> InputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Input);
-        public IEnumerable<KeyValuePair<string, PortData>> OutputPorts => ports.Where(pair => pair.Value?.Direction == Direction.Output);
-
         public IEnumerable<string> GetPortGuids() => Ports.Select(pair => pair.Value.PortGuid);
         public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(pair => pair.Value.Direction == direction).Select(pair => pair.Value.PortGuid);
-
         public PortData GetPortData(string key) => ports.GetValueOrDefault(key);
-
-        //
-
+        */
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             Debug.Log($"{GetType()} initialize");
@@ -64,27 +92,37 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void InstantiatePorts()
         {
             Debug.Log($"{GetType().Name} InstantiatePorts()");
-            ports = new();
+            //ports = new();
+            portCollection = new();
 
-            var members = GetType().GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var fields = GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            foreach (var member in members)
+            foreach (var field in fields)
             {
-                if (member.IsDefined(typeof(PortAttribute), inherit: true))
+                if (field.IsDefined(typeof(PortAttribute), inherit: true))
                 {
-                    PortAttribute portAttr = member.GetCustomAttribute<PortAttribute>();
-                    string bindingPath = PortAttribute.GetBindingPath(member);
-                    Type portType = PortAttribute.GetTypeOfMember(member);
+                    PortAttribute portAttr = field.GetCustomAttribute<PortAttribute>();
+                    //string bindingPath = PortAttribute.GetBindingPath(field);
 
-                    PortData newPortData = new(portAttr.Direction, portType);
+                    PortData newPortData = new(portAttr.Direction, field.Name);
 
-                    ports.Add(bindingPath, newPortData);
-                    Debug.Log($"added new {newPortData.Direction} Port : {member.Name} {newPortData.PortGuid}");
+                    //ports.Add(bindingPath, newPortData);
+                    portCollection.Add(newPortData);
+                    Debug.Log($"added new {newPortData.Direction} Port : {field.Name} {newPortData.PortGuid}");
                 }
             }
         }
 
         public virtual object GetValue(string outputPortGuid) => throw new NotImplementedException();
+        public T GetInputValue<T>(string portKey, T defaultValue)
+        {
+            var inputPort = GetPortData(portKey);
+            if (inputPort == null)
+                throw new KeyNotFoundException();
+
+            return DialogueTree.GetInputValue(inputPort.PortGuid, defaultValue);
+        }
+        //
 
         public void SaveChanges()
         {

@@ -39,30 +39,41 @@ namespace BasDidon.Dialogue.VisualGraphView
             RefreshExpandedState();
         }
 
+        Type GetFieldOrPropertyType(Type baseClass, string name) => GetFieldOrPropertyType(baseClass, name, out _); 
+        Type GetFieldOrPropertyType(Type baseClass,string name, out bool isField)
+        {
+            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+            if (baseClass.GetField(name, flags) is FieldInfo portField)
+            {
+                isField = true;
+                return portField.FieldType;
+            }
+            else if (baseClass.GetProperty(name, flags) is PropertyInfo portProperty)
+            {
+                isField = false;
+                return portProperty.PropertyType;
+            }
+            else
+            {
+                throw new Exception($"<color=red>{baseClass.GetType().Name}</color> {name}");
+            }
+        }
+
         void CreatePorts(BaseNode baseNode)
         {
             // create port
-            foreach (var pair in baseNode.Ports)
+            foreach (var port in baseNode.Ports)
             {
-                var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                var serializeProperty = SerializedObject.FindProperty(port.FieldName);
+                FieldInfo fieldInfo = baseNode.GetType().GetField(port.FieldName);
+                Type type = fieldInfo.FieldType;
+                string propertyName = StringHelper.GetFieldName(port.FieldName);
 
-                var serializeProperty = SerializedObject.FindProperty(pair.Key);
+                var portAttr = fieldInfo.GetCustomAttribute<PortAttribute>(true);
+                var portFieldStyle = portAttr.PortFieldStyle;
 
-                if (baseNode.GetType().GetField(pair.Key,flags) is FieldInfo portField)
-                {
-                    NodeElementFactory.DrawPortWithField(serializeProperty, portField.FieldType, pair.Value, this,StringHelper.ToCapitalCase(StringHelper.GetBackingFieldName(pair.Key)));
-                    //NodeElementFactory.DrawPort(portField.FieldType, pair.Value, pair.Key, this);
-                }
-                else if(baseNode.GetType().GetProperty(pair.Key,flags) is PropertyInfo portProperty)
-                {
-                    NodeElementFactory.DrawPortWithField(serializeProperty, portProperty.PropertyType, pair.Value, this, pair.Key);
-                    //NodeElementFactory.DrawPort(portProperty.PropertyType, pair.Value, pair.Key, this);
-                }
-                else
-                {
-                    throw new Exception($"<color=red>{baseNode.GetType().Name}</color> {pair.Key}");
-                }
-
+                NodeElementFactory.DrawPortWithField(serializeProperty, type, port, this, propertyName, portFieldStyle);
             }
         }
 
@@ -80,12 +91,14 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         void CreateNodeFields(BaseNode baseNode)
         {
-            var nodeFieldMembers = baseNode.GetType().GetMembers(BindingFlags.Instance| BindingFlags.NonPublic| BindingFlags.Public)
+            Type[] types = new[] { typeof(string), typeof(int) };
+
+            var nodeFields = baseNode.GetType().GetFields(BindingFlags.Instance| BindingFlags.NonPublic| BindingFlags.Public)
                 .Where(m => m.IsDefined(typeof(NodeFieldAttribute), inherit: true));
 
-            foreach (var member in nodeFieldMembers)
+            foreach (var field in nodeFields)
             {
-                var serializeProperty = SerializedObject.FindProperty(member.Name);
+                var serializeProperty = SerializedObject.FindProperty(field.Name);
 
                 if (serializeProperty == null)
                 {
@@ -93,7 +106,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                     continue;
                 }
 
-                if (serializeProperty.propertyType == SerializedPropertyType.String)
+                Type fieldType = GetFieldOrPropertyType(baseNode.GetType(),field.Name);
+
+                if (types.Contains(fieldType))
                 {
                     var propField = new PropertyField(serializeProperty);
                     extensionContainer.Add(propField);
@@ -105,9 +120,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
 
         }
-
-        // prevent from misstyping
-        public string GetPropertyBindingPath(string propertyName) => $"<{propertyName}>k__BackingField";
 
         void DrawHeader()
         {
