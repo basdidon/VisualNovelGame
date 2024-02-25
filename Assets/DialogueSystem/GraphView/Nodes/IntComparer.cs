@@ -14,7 +14,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         LessThanOrEqual
     }
 
-    [CreateNodeMenu(menuName = "Logic/Comparer(int)")]
+    [CreateNodeMenu(menuName = "Logic/Comparer (int)")]
     public class IntComparer : BaseNode
     {
         [Port(PortDirection.Input)]

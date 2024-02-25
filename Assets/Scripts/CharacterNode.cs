@@ -1,5 +1,6 @@
 using UnityEngine;
 using BasDidon.Dialogue.VisualGraphView;
+using BasDidon.Dialogue;
 
 [CreateNodeMenu(menuName = "Character")]
 public class CharacterNode : BaseNode
@@ -14,13 +15,13 @@ public class CharacterNode : BaseNode
 
     public override object GetValue(string outputPortGuid)
     {
-        Character character = DialogueDatabase.GetCharacter(Character);
+        Character character = DialogueManager.Instance.DialogueDatabase.GetCharacter(Character);
 
-        if(GetPortData("m_name").PortGuid == outputPortGuid)
+        if(GetPortData(nameof(m_name)).PortGuid == outputPortGuid)
         {
             return character.Name;
         }
-        else if(GetPortData("money").PortGuid == outputPortGuid)
+        else if(GetPortData(nameof(money)).PortGuid == outputPortGuid)
         {
             return character.Money;
         }

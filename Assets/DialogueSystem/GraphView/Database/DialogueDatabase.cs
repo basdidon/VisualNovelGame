@@ -14,18 +14,24 @@ namespace BasDidon.Dialogue.VisualGraphView
         Julia
     }
 
-    public static class DialogueDatabase
+    public class DialogueDatabase : MonoBehaviour
     {
-        public static Character GetCharacter(Characters character)
+        Dictionary<Characters,Character> characters;
+
+        private void Start()
         {
-            return character switch
+            characters = new Dictionary<Characters, Character>
             {
-                Characters.John => new Character() { Name = "John", Money = 1000 },
-                Characters.Adam => new Character() { Name = "Adam", Money = 0},
-                Characters.Leonard => new Character() { Name = "Leonard", Money = 50 },
-                Characters.Julia => new Character() { Name = "Julia", Money = 150},
-                _ => throw new Exception(),
+                { Characters.John, new Character() { Name = "John", Money = 1000 } },
+                { Characters.Adam, new Character() { Name = "Adam", Money = 0} },
+                { Characters.Leonard, new Character() { Name = "Leonard", Money = 50 } },
+                { Characters.Julia, new Character() { Name = "Julia", Money = 150} },
             };
+        }
+
+        public Character GetCharacter(Characters character)
+        {
+            return characters[character];
         }
     }
 

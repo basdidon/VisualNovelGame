@@ -99,6 +99,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             this.AddManipulator(SaveContextualMenu());
 
             CreateNodeMenuAttribute.PopulateCreateContextualMenu(this);
+            NodeModelAttribute.PopulateCreateContextualMenu(this);
         }
 
         void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T : BaseNode

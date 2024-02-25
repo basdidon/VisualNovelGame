@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
+using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -79,6 +80,30 @@ namespace BasDidon.Dialogue.VisualGraphView
                 MemberTypes.Field => member.Name,
                 _ => throw new InvalidOperationException("Unsupported member type.")
             };
+        }
+
+
+    }
+
+    public static class PortAttributeExtensions
+    {
+        public static IEnumerable<PortData> CreatePortsData(this BaseNode baseNode)
+        { 
+            var fields = baseNode.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (var field in fields)
+            {
+                // Get PortAttribute
+                PortAttribute portAttr = field.GetCustomAttribute<PortAttribute>();
+
+                if (portAttr != null)
+                {
+                    // use Direction from PortAtrribute to create PortData
+                    PortData newPortData = new(portAttr.Direction, field.Name);
+
+                    Debug.Log($"added new {newPortData.Direction} Port : {field.Name} {newPortData.PortGuid}");
+                    yield return newPortData;
+                }
+            }
         }
     }
 }
