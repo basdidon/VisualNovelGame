@@ -9,12 +9,13 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CreateNodeMenu(menuName = "Player")]
     public class Player:BaseNode
     {
-        [Input]
+        [Input(nameof(m_name))]
         public string Name { get; }
         public string m_name;
-        
 
+        [Output(nameof(money))]
         public int Money { get; }
+        public int money;
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -27,7 +28,17 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             FieldName = fieldName;
         }
+    }
 
-        
+    [AttributeUsage(AttributeTargets.Property)]
+    public class OutputAttribute : Attribute
+    {
+        public string FieldName { get; }
+        public bool HasFieldName => !string.IsNullOrEmpty(FieldName);
+
+        public OutputAttribute(string fieldName = null)
+        {
+            FieldName = fieldName;
+        }
     }
 }
