@@ -77,6 +77,9 @@ namespace BasDidon.Dialogue.VisualGraphView
         public IEnumerable<T> GetConnectedNodes<T>(PortData portData) => GetConnectedNodes(portData).OfType<T>();
         public IEnumerable<BaseNode> GetConnectedNodes(PortData portData)
         {
+            if (portData == null)
+                throw new System.ArgumentNullException();
+
             return GetConnectedEdges(portData).Select(e => portData.Direction switch
             {
                 Direction.Input => GetNodeByPort(e.OutputPortGuid,Direction.Output),

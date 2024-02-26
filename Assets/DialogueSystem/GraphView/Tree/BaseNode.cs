@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
+using System.Reflection;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -31,6 +32,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public IEnumerable<PortData> Ports => ports;
         public IEnumerable<string> GetPortGuids() => ports.Select(p => p.PortGuid);
         public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
+        public PortData GetPortDataByGuid(string guid) => ports.FirstOrDefault(p => p.PortGuid == guid);
         public PortData GetPortData(string fieldName) => ports.FirstOrDefault(p=>p.FieldName == fieldName);
 
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
@@ -54,18 +56,33 @@ namespace BasDidon.Dialogue.VisualGraphView
             Debug.Log($"<color=yellow>{GetType().Name}</color> InstantiatePorts()");
             ports = new();
 
-            foreach(var portData in this.CreatePortsData())
+            foreach(var portData in InputAttribute.CreatePortsData(this))
+            {
+                ports.Add(portData);
+            }
+
+            foreach(var portData in OutputAttribute.CreatePortsData(this))
             {
                 ports.Add(portData);
             }
         }
 
-        public virtual object GetValue(string outputPortGuid) => throw new NotImplementedException();
+        public virtual object GetValue(string outputPortGuid) 
+        {
+            var port = GetPortDataByGuid(outputPortGuid);
+            if (port == null) throw new Exception();
+
+            PropertyInfo propertyInfo = GetType().GetProperty(port.FieldName);
+            if (propertyInfo == null) throw new Exception();
+
+            return propertyInfo.GetValue(this);
+        }
+
         public T GetInputValue<T>(string portKey, T defaultValue)
         {
             var inputPort = GetPortData(portKey);
             if (inputPort == null)
-                throw new KeyNotFoundException();
+                throw new KeyNotFoundException($"{portKey}");
 
             return DialogueTree.GetInputValue(inputPort.PortGuid, defaultValue);
         }

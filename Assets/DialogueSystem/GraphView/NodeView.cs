@@ -62,7 +62,36 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         void CreatePorts(BaseNode baseNode)
         {
-            this.CreatePortsView(baseNode);
+            // create ports
+            foreach (var port in baseNode.Ports)
+            {
+                PropertyInfo property = baseNode.GetType().GetProperty(port.FieldName);
+                if (property == null)
+                    continue;
+
+                Type type = property.PropertyType;
+
+                var awesomePortAttr = property.GetCustomAttribute<AwesomePortAttribute>();
+
+                if (awesomePortAttr == null)
+                    continue;
+
+                if (awesomePortAttr.HasFieldName)
+                {
+                    var serializeProperty = SerializedObject.FindProperty(awesomePortAttr.FieldName);
+
+                    if (serializeProperty != null)
+                        NodeElementFactory.DrawPortWithField(serializeProperty, type, port, this, port.FieldName);
+                    else
+                        Debug.LogError(port.FieldName);
+                }
+                else
+                {
+                    // DrawPortWithNoSideField
+                    NodeElementFactory.DrawPort(type, port, this, port.FieldName);
+                }
+
+            }
         }
 
         void CreateSelectors(BaseNode baseNode)

@@ -7,12 +7,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public class StartNode : BaseNode,IExecutableNode
     {
-        [Port(PortDirection.Output)]
-        public ExecutionFlow output;
+        [Output]
+        public ExecutionFlow Output { get; }
 
         public void OnEnter()
         {
-            var connectedNodes = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("output"));
+            var connectedNodes = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData(nameof(Output)));
             Debug.Log(connectedNodes.Count());
             DialogueManager.Instance.CurrentNode = connectedNodes.FirstOrDefault();
         }

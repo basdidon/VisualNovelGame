@@ -10,6 +10,40 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public static class NodeElementFactory
     {
+        public static void DrawPort(Type type, PortData portData, NodeView nodeView, string portName)
+        {
+            VisualElement portContainer = portData.Direction == Direction.Input ? nodeView.inputContainer : nodeView.outputContainer;
+            portContainer.Add(CreatePort(type,portData,nodeView,portName));
+        }
+
+        public static Port CreatePort(Type type, PortData portData, NodeView nodeView, string portName)
+            => CreatePort(type, portData.PortGuid, portData.Direction, nodeView, portName);
+
+        public static Port CreatePort(Type type, string portGuid, Direction direction, NodeView nodeView, string portName)
+        {
+            Type[] usePropotyFieldTypes = new[] { typeof(bool), typeof(string), typeof(int) };
+
+            if (type == typeof(ExecutionFlow))
+            {
+                return GetExecutionFlowPort(portGuid, direction, nodeView, portName);
+            }
+            else if (usePropotyFieldTypes.Contains(type))
+            {
+                Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
+
+                var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, type);
+                port.viewDataKey = portGuid;
+                port.portName = portName;
+
+                return port;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
+        
+        ///
         public static void DrawPortWithField(SerializedProperty serializedProperty, Type type, PortData portData, NodeView nodeView, string propertyName, PortFieldStyle portFieldStyle = PortFieldStyle.Show)
         {
             VisualElement portContainer = portData.Direction == Direction.Input ? nodeView.inputContainer : nodeView.outputContainer;
@@ -50,8 +84,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 throw new InvalidOperationException();
             }
-
-
         }
 
         static void AddFieldToPort(SerializedProperty serializedProperty, Port port, NodeView nodeView)
@@ -61,8 +93,9 @@ namespace BasDidon.Dialogue.VisualGraphView
             
             if (port.direction == Direction.Input)
             {
-                port.Insert(1, propertyField);
+                //port.Insert(1, propertyField);
 
+                port.Add(propertyField);
                 nodeView.GraphView.OnPortConnect += (onConnectPort) =>
                 {
                     if (port == onConnectPort)

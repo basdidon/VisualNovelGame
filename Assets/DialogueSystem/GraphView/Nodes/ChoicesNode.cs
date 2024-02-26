@@ -58,8 +58,8 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class ChoicesNode :BaseNode,IExecutableNode
     {
-        [Port(PortDirection.Input)]
-        public ExecutionFlow input;
+        [Input]
+        public ExecutionFlow Input { get; }
 
         [Selector]
         public Characters speaker;

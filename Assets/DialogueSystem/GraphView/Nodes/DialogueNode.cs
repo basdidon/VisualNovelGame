@@ -17,11 +17,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class DialogueNode : BaseNode, IExecutableNode
     {
-        [Port(PortDirection.Input)]
-        public ExecutionFlow input;
+        [Input]
+        public ExecutionFlow Input { get; }
+        [Output]
+        public ExecutionFlow Output { get; }
 
-        [Port(PortDirection.Output)]
-        public ExecutionFlow output;
 
         [field: Selector]
         public Characters speaker;
@@ -39,7 +39,8 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void Next()
         {
-            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData("output")).FirstOrDefault();
+            var outputPort = GetPortData(nameof(Output));
+            DialogueManager.Instance.CurrentNode = DialogueTree.GetConnectedNodes<IExecutableNode>(outputPort).FirstOrDefault();
         }
     }
 

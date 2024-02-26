@@ -3,7 +3,6 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
-using UnityEditor;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -21,14 +20,15 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [SerializeField]
+    [Obsolete]
     [AttributeUsage(AttributeTargets.Field)]
-    public class PortAttribute : Attribute
+    public class OldPortAttribute : Attribute
     {
         public Direction Direction { get; }
 
         public PortFieldStyle PortFieldStyle { get; }
 
-        public PortAttribute(PortDirection direction, PortFieldStyle portFieldStyle = PortFieldStyle.Show)
+        public OldPortAttribute(PortDirection direction, PortFieldStyle portFieldStyle = PortFieldStyle.Show)
         {
             Direction = direction switch
             {
@@ -42,7 +42,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public static Type GetTypeOfMember(MemberInfo member)
         {
-            if (!member.IsDefined(typeof(PortAttribute), inherit: true))
+            if (!member.IsDefined(typeof(OldPortAttribute), inherit: true))
                 throw new Exception("The member is not decorated with the PortAttribute.");
 
             Debug.Log($"{member.DeclaringType.Name} {member.Name} ({member.MemberType})");
@@ -72,7 +72,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public static string GetBindingPath(MemberInfo member)
         {
-            if (!member.IsDefined(typeof(PortAttribute), inherit: true))
+            if (!member.IsDefined(typeof(OldPortAttribute), inherit: true))
                 throw new Exception("The member is not decorated with the PortAttribute.");
 
             return member.MemberType switch
@@ -83,19 +83,13 @@ namespace BasDidon.Dialogue.VisualGraphView
             };
         }
 
-
-    }
-
-    public static class PortAttributeExtensions
-    {
-        #region Port
-        public static IEnumerable<PortData> CreatePortsData(this BaseNode baseNode)
-        { 
+        public static IEnumerable<PortData> CreatePortsData(BaseNode baseNode)
+        {
             var fields = baseNode.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var field in fields)
             {
                 // Get PortAttribute
-                PortAttribute portAttr = field.GetCustomAttribute<PortAttribute>();
+                OldPortAttribute portAttr = field.GetCustomAttribute<OldPortAttribute>();
 
                 if (portAttr != null)
                 {
@@ -108,7 +102,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
-        public static void CreatePortsView(this NodeView nodeView, BaseNode baseNode)
+        public static void CreatePortsView(NodeView nodeView, BaseNode baseNode)
         {
             // create ports
             foreach (var port in baseNode.Ports)
@@ -118,32 +112,10 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Type type = fieldInfo.FieldType;
                 string propertyName = StringHelper.GetFieldName(port.FieldName);
 
-                var portAttr = fieldInfo.GetCustomAttribute<PortAttribute>(true);
+                var portAttr = fieldInfo.GetCustomAttribute<OldPortAttribute>(true);
                 var portFieldStyle = portAttr.PortFieldStyle;
 
                 NodeElementFactory.DrawPortWithField(serializeProperty, type, port, nodeView, propertyName, portFieldStyle);
-            }
-        }
-
-        #endregion
-
-
-        public static IEnumerable<PortData> CreateInputPortsData(this BaseNode baseNode)
-        {
-            var properties = baseNode.GetType().GetProperties(BindingFlags.GetProperty | BindingFlags.Public);
-            foreach(var property in properties)
-            {
-                // Get PortAttribute
-                PortAttribute portAttr = property.GetCustomAttribute<PortAttribute>();
-
-                if(portAttr != null)
-                {
-                    // use Direction from PortAtrribute to create PortData
-                    PortData newPortData = new(Direction.Input, property.Name);
-
-                    Debug.Log($"added new {newPortData.Direction} Port : {property.Name} {newPortData.PortGuid}");
-                    yield return newPortData;
-                }
             }
         }
     }
