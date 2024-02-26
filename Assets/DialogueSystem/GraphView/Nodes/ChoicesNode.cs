@@ -69,7 +69,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         [SerializeField] List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
-
+         
         public void CreateChoice()
         {
             Debug.Log("CreateChoice");

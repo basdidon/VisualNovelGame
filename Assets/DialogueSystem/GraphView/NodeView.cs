@@ -76,9 +76,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 if (awesomePortAttr == null)
                     continue;
 
-                if (awesomePortAttr.HasFieldName)
+                if (awesomePortAttr.HasBackingFieldName)
                 {
-                    var serializeProperty = SerializedObject.FindProperty(awesomePortAttr.FieldName);
+                    var serializeProperty = SerializedObject.FindProperty(awesomePortAttr.BackingFieldName);
 
                     if (serializeProperty != null)
                         NodeElementFactory.DrawPortWithField(serializeProperty, type, port, this, port.FieldName);

@@ -56,12 +56,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Debug.Log($"<color=yellow>{GetType().Name}</color> InstantiatePorts()");
             ports = new();
 
-            foreach(var portData in InputAttribute.CreatePortsData(this))
-            {
-                ports.Add(portData);
-            }
-
-            foreach(var portData in OutputAttribute.CreatePortsData(this))
+            foreach(var portData in AwesomePortAttribute.CreatePortsData(this))
             {
                 ports.Add(portData);
             }
