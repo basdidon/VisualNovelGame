@@ -108,8 +108,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new ArgumentOutOfRangeException();
 
             var selectedOutputPort = Choices.ElementAt(idx).OutputFlowPortData;
-            var selectedNode = DialogueTree.GetConnectedNodes<IExecutableNode>(selectedOutputPort).FirstOrDefault();
-            DialogueManager.Instance.CurrentNode = selectedNode;
+            DialogueManager.Instance.SetNextNode(selectedOutputPort,DialogueTree);
         }
     }
 }

@@ -8,12 +8,12 @@ using UnityEngine;
 namespace BasDidon.Dialogue.VisualGraphView
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public abstract class AwesomePortAttribute : Attribute
+    public abstract class PortAttribute : Attribute
     {
         public string BackingFieldName { get; }
         public bool HasBackingFieldName => !string.IsNullOrEmpty(BackingFieldName);
 
-        public AwesomePortAttribute(string backingFieldName = null)
+        public PortAttribute(string backingFieldName = null)
         {
             BackingFieldName = backingFieldName;
         }
@@ -45,13 +45,13 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public class InputAttribute : AwesomePortAttribute
+    public class InputAttribute : PortAttribute
     {
         public InputAttribute(string backingFieldName = null) : base(backingFieldName) { }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class OutputAttribute : AwesomePortAttribute
+    public class OutputAttribute : PortAttribute
     {
         public OutputAttribute(string backingFieldName = null) : base(backingFieldName) { }
     }

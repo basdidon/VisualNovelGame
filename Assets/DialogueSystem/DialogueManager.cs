@@ -3,6 +3,7 @@ using System;
 
 namespace BasDidon.Dialogue
 {
+    using System.Linq;
     using VisualGraphView;
 
     public class DialogueManager : MonoBehaviour
@@ -16,7 +17,7 @@ namespace BasDidon.Dialogue
         public IExecutableNode CurrentNode
         {
             get => currentNode;
-            set
+            private set
             {
                 CurrentNode?.OnExit();
                 currentNode = value;
@@ -56,6 +57,14 @@ namespace BasDidon.Dialogue
             }
         }
 
+        public void SetNextNode(PortData outputPort, DialogueTree tree)
+        {
+            if (outputPort == null)
+                throw new ArgumentNullException();
+            var selectedNode = tree.GetConnectedNodes<IExecutableNode>(outputPort).FirstOrDefault();
+            CurrentNode = selectedNode;
+        }
+
         // event for ui
         public event Action<DialogueRecord> OnNewDialogue;
         public event Action<ChoicesRecord> OnSelectChoices;
@@ -88,6 +97,11 @@ namespace BasDidon.Dialogue
             {
                 choicesNode.SelectChoice(choiceIdx);
             }
+        }
+
+        public void SendEvent(string jsonString)
+        {
+            
         }
     }
 }

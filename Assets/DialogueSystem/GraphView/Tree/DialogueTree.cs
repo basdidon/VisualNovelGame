@@ -96,7 +96,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 return defaultValue;
 
             if (edges.Count() != 1)
-                throw new Exception();
+                throw new Exception("edge more than 1");
 
             EdgeData edge = edges.First();
 
@@ -106,7 +106,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             var portValue = outputNode.GetValue(edge.OutputPortGuid);
             if (portValue is not T)
-                throw new Exception();
+                throw new Exception($"port value is not {typeof(T)}");
             
 
             return (T) portValue;

@@ -12,9 +12,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void OnEnter()
         {
-            var connectedNodes = DialogueTree.GetConnectedNodes<IExecutableNode>(GetPortData(nameof(Output)));
-            Debug.Log(connectedNodes.Count());
-            DialogueManager.Instance.CurrentNode = connectedNodes.FirstOrDefault();
+            DialogueManager.Instance.SetNextNode(GetPortData(nameof(Output)), DialogueTree);
         }
 
         public void OnExit(){}

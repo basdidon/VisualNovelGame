@@ -8,26 +8,11 @@ public class CharacterNode : BaseNode
     [Selector]
     public Characters Character;
 
-    [OldPort(PortDirection.Output, PortFieldStyle.Hide)]
-    public string m_name;
-    [OldPort(PortDirection.Output, PortFieldStyle.Hide)]
-    public int money;
+    Character CharacterData => DialogueManager.Instance.DialogueDatabase.GetCharacter(Character);
 
-    public override object GetValue(string outputPortGuid)
-    {
-        Character character = DialogueManager.Instance.DialogueDatabase.GetCharacter(Character);
+    [Output]
+    public string Name => CharacterData.Name;
 
-        if(GetPortData(nameof(m_name)).PortGuid == outputPortGuid)
-        {
-            return character.Name;
-        }
-        else if(GetPortData(nameof(money)).PortGuid == outputPortGuid)
-        {
-            return character.Money;
-        }
-        else
-        {
-            throw new System.InvalidOperationException();
-        }
-    }
+    [Output]
+    public int Money => CharacterData.Money;
 }

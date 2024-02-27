@@ -71,7 +71,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 Type type = property.PropertyType;
 
-                var awesomePortAttr = property.GetCustomAttribute<AwesomePortAttribute>();
+                var awesomePortAttr = property.GetCustomAttribute<PortAttribute>();
 
                 if (awesomePortAttr == null)
                     continue;
