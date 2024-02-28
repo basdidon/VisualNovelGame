@@ -3,6 +3,7 @@ using System;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    /*
     [CreateNodeMenu(menuName = "Logic/BooleanNode")]
     public class BooleanNode : BaseNode
     {
@@ -13,5 +14,5 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             return value;
         }
-    }
+    }*/
 }

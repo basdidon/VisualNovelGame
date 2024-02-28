@@ -7,6 +7,21 @@ namespace BasDidon.Dialogue.VisualGraphView
     public class DialogueEditorWindow : EditorWindow
     {
         DialogueGraphView graphView;
+        public DialogueGraphView DialogueGraphView
+        {
+            get => graphView;
+            set
+            {
+                graphView = value;
+
+                DialogueGraphView.StretchToParentSize();
+                rootVisualElement.Add(DialogueGraphView);
+            }
+        }
+
+        string lastOpenPath = string.Empty;
+
+
         /*
         [MenuItem("Window/Dialogue/Dialogue GraphView")]
         public static void Open()
@@ -16,12 +31,46 @@ namespace BasDidon.Dialogue.VisualGraphView
             editorWindow.titleContent = new GUIContent("Dialogue Graphview");
         }
         */
+
+        // OnEnable call every scene reload, i just reload graphView to this window
+        private void OnEnable()
+        {
+            if (string.IsNullOrEmpty(lastOpenPath))
+                return;
+            LoadFileFromPath(lastOpenPath);
+        }
+
         public void LoadFileFromPath(string path)
         {
-            graphView = new(path);
-            graphView.StretchToParentSize();
-            rootVisualElement.Add(graphView);
+            try
+            {
+                DialogueGraphView = new(path);
+                lastOpenPath = path;
+            }
+            catch
+            {
+                Close();
+            }
+
         }
+
+        public static void OpenWindow(string assetPath)
+        {
+            try
+            {
+                DialogueGraphView graphView = new(assetPath);
+
+                var window = GetWindow<DialogueEditorWindow>();
+                window.DialogueGraphView = graphView;
+            }
+            catch
+            {
+                Debug.LogError("can not open dialogueEditorWindow");
+                throw;
+            }
+
+        }
+
 
         private void OnDestroy()
         {
@@ -29,7 +78,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 EditorUtility.SetDirty(graphView.Tree);
                 AssetDatabase.SaveAssetIfDirty(graphView.Tree);
-                Debug.Log("saved");
+                Debug.Log("saved on destroy");
             }
         }
     }

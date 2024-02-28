@@ -151,9 +151,10 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(DialogueTree)}");
 
-                var window = EditorWindow.GetWindow<DialogueEditorWindow>();
                 string assetPath = AssetDatabase.GetAssetPath(instanceID);
-                window.LoadFileFromPath(assetPath);
+
+                DialogueEditorWindow.OpenWindow(assetPath);
+
             }
 
             // Window should now be open, proceed to next step to open file

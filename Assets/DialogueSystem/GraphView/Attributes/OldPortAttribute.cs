@@ -3,9 +3,11 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
-
+/*
 namespace BasDidon.Dialogue.VisualGraphView
 {
+    using BasDidon;
+
     public enum PortDirection
     {
         Input,
@@ -110,7 +112,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 var serializeProperty = nodeView.SerializedObject.FindProperty(port.FieldName);
                 FieldInfo fieldInfo = baseNode.GetType().GetField(port.FieldName);
                 Type type = fieldInfo.FieldType;
-                string propertyName = StringHelper.GetFieldName(port.FieldName);
+                string propertyName = BasDidon.StringHelper.GetFieldName(port.FieldName);
 
                 var portAttr = fieldInfo.GetCustomAttribute<OldPortAttribute>(true);
                 var portFieldStyle = portAttr.PortFieldStyle;
@@ -119,4 +121,4 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
     }
-}
+}*/

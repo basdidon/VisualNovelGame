@@ -1,3 +1,16 @@
 {
-	"name": "Basdidon.Dialogue"
+    "name": "Basdidon.Dialogue",
+    "rootNamespace": "Basdidon.Dialogue",
+    "references": [
+        "GUID:45755fa792459854a812ff43713e1188"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

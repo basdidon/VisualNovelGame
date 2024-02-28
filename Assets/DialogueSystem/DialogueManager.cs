@@ -68,7 +68,8 @@ namespace BasDidon.Dialogue
         // event for ui
         public event Action<DialogueRecord> OnNewDialogue;
         public event Action<ChoicesRecord> OnSelectChoices;
-        public event Action OnFinish;
+        public event EventAction OnFinish;
+        public event Action<ICustomEvent> OnCustomEvent; 
 
         // forNodeinvoke
         internal void OnNewDialogueEventInvoke(DialogueRecord record)
@@ -103,5 +104,10 @@ namespace BasDidon.Dialogue
         {
             
         }
+    }
+
+    public interface ICustomEvent
+    {
+
     }
 }

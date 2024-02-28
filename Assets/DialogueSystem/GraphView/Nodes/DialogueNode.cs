@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Linq;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -22,8 +21,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Output]
         public ExecutionFlow Output { get; }
 
-
-        [field: Selector]
+        [Selector]
         public Characters speaker;
             
         [TextArea, NodeField]

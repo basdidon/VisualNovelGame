@@ -109,4 +109,16 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     }
 
+    public class EventAction
+    {
+        public string Type { get; }
+        public object Payload { get; }
+
+        public EventAction(string type, object payload)
+        {
+            Type = type;
+            Payload = payload;
+        }
+    }
+
 }

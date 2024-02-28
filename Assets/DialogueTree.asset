@@ -66,7 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
   <Id>k__BackingField: f5a19677-7ea1-48c7-9f07-f097e9aebeed
-  <GraphPosition>k__BackingField: {x: 0, y: 0}
+  <GraphPosition>k__BackingField: {x: 16, y: 77}
   ports:
     portList:
     - <FieldName>k__BackingField: Output

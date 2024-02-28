@@ -10,6 +10,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public class DialogueGraphView : GraphView
     {
+        
         public DialogueTree Tree { get; private set; }
 
         public readonly string[] nodesPath = { "Assets/" };
@@ -119,7 +120,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
             evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
-            evt.menu.AppendAction("Create LogicNode/Boolean", CreateActionEvent<BooleanNode>);
         }
 
         IManipulator SaveContextualMenu()
