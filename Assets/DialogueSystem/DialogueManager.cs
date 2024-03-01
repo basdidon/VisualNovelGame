@@ -10,8 +10,6 @@ namespace BasDidon.Dialogue
     {
         public static DialogueManager Instance { get; private set; }
 
-        [field: SerializeField] public DialogueDatabase DialogueDatabase { get; set; }
-
         IExecutableNode currentNode;
         public IExecutableNode CurrentNode
         {

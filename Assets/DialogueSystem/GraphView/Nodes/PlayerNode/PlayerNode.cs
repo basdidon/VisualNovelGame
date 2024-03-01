@@ -3,7 +3,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     [CreateNodeMenu(menuName = "Player/")]
     public class PlayerNode:BaseNode
     {
-        Player Player => DialogueManager.Instance.DialogueDatabase.Player;
+        Player Player => DialogueDatabase.Instance.Player;
 
         [Output]
         public string Name => Player.Name;

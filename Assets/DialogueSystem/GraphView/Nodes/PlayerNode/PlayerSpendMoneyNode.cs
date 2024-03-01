@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 namespace BasDidon.Dialogue.VisualGraphView
@@ -18,7 +17,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void OnEnter()
         {
             Debug.Log($"spend money : {Cost}");
-            DialogueManager.Instance.DialogueDatabase.Player.SpendMoney(Cost);
+            DialogueDatabase.Instance.Player.SpendMoney(Cost);
 
             DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
         }

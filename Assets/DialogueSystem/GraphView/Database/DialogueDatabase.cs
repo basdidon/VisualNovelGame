@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Reflection;
-using System.Linq;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -17,8 +14,22 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class DialogueDatabase : MonoBehaviour
     {
+        public static DialogueDatabase Instance { get; private set; }
+
         public Player Player;
         Dictionary<Characters,Character> characters;
+
+        private void Awake()
+        {
+            if(Instance != null && Instance != this)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
 
         private void Start()
         {
@@ -31,35 +42,11 @@ namespace BasDidon.Dialogue.VisualGraphView
                 { Characters.Leonard, new Character("Leonard", 50)},
                 { Characters.Julia, new Character("Julia",150) },
             };
-
-            string packageString = "Player/Name";
-            string packageString_2 = "Player/Money";
-            ExecuteSyntax(packageString);
-            ExecuteSyntax(packageString_2);
         }
 
         public Character GetCharacter(Characters character)
         {
             return characters[character];
-        }
-
-        void ExecuteSyntax(string syntax)
-        {
-            // {ModelName}/{GetProppertyName}
-            string[] stringArray = syntax.Split('/');
-            string modelName = stringArray[0];
-            string propertyName = stringArray[1];
-
-            if (modelName == "Player")
-            {
-                if(propertyName == "Name")
-                {
-                    Debug.Log(Player.Name);
-                }else if(propertyName == "Money")
-                {
-                    Debug.Log(Player.Money);
-                }
-            }
         }
     }
 
@@ -78,13 +65,11 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
      
-    [Serializable][Model]
+    [Serializable]
     public class Player : Character
     {
         public Player(string name, int money) : base(name, money) { }
 
-        // Player/SpendMoney:100
-        [Func]
         public void SpendMoney(int cost)
         {
             if (Money < cost)
@@ -93,32 +78,4 @@ namespace BasDidon.Dialogue.VisualGraphView
             Money -= cost;
         }
     }
-
-    public class PlayerController
-    {
-
-    }
-
-    public class ModelAttribute : Attribute
-    {
-
-    }
-
-    public class FuncAttribute : Attribute
-    {
-
-    }
-
-    public class EventAction
-    {
-        public string Type { get; }
-        public object Payload { get; }
-
-        public EventAction(string type, object payload)
-        {
-            Type = type;
-            Payload = payload;
-        }
-    }
-
 }
