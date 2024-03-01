@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public record DialogueRecord
+    public record DialogueRecord : ICustomEvent
     {
         public string SpeakerName { get; }
         public string DialogueText { get; }
@@ -30,15 +30,21 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void OnEnter()
         {
             Debug.Log("dialogue node executing");
-            DialogueManager.Instance.OnNewDialogueEventInvoke(new(speaker.ToString(), StringHelper.GetValueFromSyntax(DialogueText)));
+            DialogueManager.Instance.FireEvent(new DialogueRecord(speaker.ToString(), StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
         public void OnExit(){}
 
-        public void Next()
+        public void Action(IBaseAction action)
         {
-            DialogueManager.Instance.SetNextNode(GetPortData(nameof(Output)), DialogueTree);
+            if(action is NextDialogueAction)
+            {
+                DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+            }
         }
     }
+
+
+    public class NextDialogueAction : IBaseAction{}
 
 }

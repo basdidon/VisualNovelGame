@@ -12,7 +12,6 @@ namespace BasDidon.Dialogue
 
         [field: SerializeField] public DialogueDatabase DialogueDatabase { get; set; }
 
-
         IExecutableNode currentNode;
         public IExecutableNode CurrentNode
         {
@@ -28,7 +27,7 @@ namespace BasDidon.Dialogue
                 else
                 {
                     Debug.Log("finish");
-                    OnFinish?.Invoke();
+                    OnCustomEvent?.Invoke(new DialogueEndEvent());
                 }
             }
         }
@@ -57,57 +56,30 @@ namespace BasDidon.Dialogue
             }
         }
 
-        public void SetNextNode(PortData outputPort, DialogueTree tree)
+        public void ToNextExecutableNode(PortData outputPort, DialogueTree tree)
         {
             if (outputPort == null)
                 throw new ArgumentNullException();
             var selectedNode = tree.GetConnectedNodes<IExecutableNode>(outputPort).FirstOrDefault();
             CurrentNode = selectedNode;
         }
+    
+        public event Action<ICustomEvent> OnCustomEvent;
 
-        // event for ui
-        public event Action<DialogueRecord> OnNewDialogue;
-        public event Action<ChoicesRecord> OnSelectChoices;
-        public event EventAction OnFinish;
-        public event Action<ICustomEvent> OnCustomEvent; 
-
-        // forNodeinvoke
-        internal void OnNewDialogueEventInvoke(DialogueRecord record)
+        // for Node invoke
+        internal void FireEvent(ICustomEvent customEvent)
         {
-            Debug.Log($"OnNewDialogue : {record.SpeakerName ?? "Unknown"}.");
-            OnNewDialogue?.Invoke(record);
-        }
-
-        internal void OnSelectChoicesEvent(ChoicesRecord choicesRecord)
-        {
-            OnSelectChoices?.Invoke(choicesRecord);
+            OnCustomEvent?.Invoke(customEvent);
         }
 
         // user input to node
-        public void NextDialogue()
+        public void ExecuteAction(IBaseAction action)
         {
-            if (CurrentNode is DialogueNode dialogueNode)
-            {
-                dialogueNode.Next();
-            }
-        }
-
-        public void SelectChoice(int choiceIdx)
-        {
-            if (CurrentNode is ChoicesNode choicesNode)
-            {
-                choicesNode.SelectChoice(choiceIdx);
-            }
-        }
-
-        public void SendEvent(string jsonString)
-        {
-            
+            currentNode.Action(action);
         }
     }
 
-    public interface ICustomEvent
-    {
+    public interface ICustomEvent{}
 
-    }
+    public class DialogueEndEvent : ICustomEvent{}
 }

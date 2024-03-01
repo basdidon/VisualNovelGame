@@ -24,7 +24,7 @@ MonoBehaviour:
       <PortGuid>k__BackingField: 194787ed-ae9c-4fb1-a2b8-f5c405ea289c
       <Direction>k__BackingField: 1
   speaker: 0
-  DialogueText: bye
+  DialogueText: see you soon.
 --- !u!114 &-7532542172488403769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
       <PortGuid>k__BackingField: 8a8b404b-2821-416c-a655-12e2fde40780
       <Direction>k__BackingField: 1
   speaker: 0
-  DialogueText: thank
+  DialogueText: thank you
 --- !u!114 &-1713559320789244794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
   questionText: 
   choices:
   - <IsEnable>k__BackingField: 1
-    <Name>k__BackingField: new choice
+    <Name>k__BackingField: ( Leave )
     <IsEnableInputPortData>k__BackingField:
       <FieldName>k__BackingField: isEnable
       <PortGuid>k__BackingField: baa3a406-651b-42e7-a91b-5d0d87b56dd8

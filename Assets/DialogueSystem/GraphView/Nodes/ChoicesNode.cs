@@ -7,7 +7,7 @@ using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public record ChoicesRecord
+    public record ChoicesRecord : ICustomEvent
     {
         public DialogueRecord DialogueRecord { get; }
         public ChoiceRecord[] ChoiceRecords { get; }
@@ -94,21 +94,43 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void OnEnter()
         {
             Debug.Log("choices node executing");
-            DialogueManager.Instance.OnSelectChoicesEvent(new ChoicesRecord(
-                new(speaker.ToString(), questionText),
-                Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
-            ));
+            DialogueManager.Instance.FireEvent(
+                new ChoicesRecord(
+                    new(
+                        speaker.ToString(), 
+                        questionText),
+                    Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
+                )
+            );
         }
 
         public void OnExit(){}
 
-        public void SelectChoice(int idx)
+        public void Action(IBaseAction action)
+        {
+            if(action is SelectChoiceAction select)
+            {
+                SelectChoice(select.ChoiceIndex);
+            }
+        }
+
+        void SelectChoice(int idx)
         {
             if (idx < 0 || idx >= Choices.Count)
                 throw new ArgumentOutOfRangeException();
 
             var selectedOutputPort = Choices.ElementAt(idx).OutputFlowPortData;
-            DialogueManager.Instance.SetNextNode(selectedOutputPort,DialogueTree);
+            DialogueManager.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
+        }
+    }
+
+    public class SelectChoiceAction:IBaseAction
+    {
+        public int ChoiceIndex { get; }
+
+        public SelectChoiceAction(int choiceAction)
+        {
+            ChoiceIndex = choiceAction;
         }
     }
 }

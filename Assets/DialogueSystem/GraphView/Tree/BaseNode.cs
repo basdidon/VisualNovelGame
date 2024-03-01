@@ -95,7 +95,11 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         public void OnEnter();
         public void OnExit();
+
+        public void Action(IBaseAction action);
     }
+
+    public interface IBaseAction{}
 
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]

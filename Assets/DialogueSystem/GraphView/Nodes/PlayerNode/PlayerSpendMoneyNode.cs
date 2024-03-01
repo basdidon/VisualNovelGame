@@ -20,10 +20,12 @@ namespace BasDidon.Dialogue.VisualGraphView
             Debug.Log($"spend money : {Cost}");
             DialogueManager.Instance.DialogueDatabase.Player.SpendMoney(Cost);
 
-            DialogueManager.Instance.SetNextNode(GetPortData(nameof(Output)), DialogueTree);
+            DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
         }
 
         public void OnExit() { }
+
+        public void Action(IBaseAction action){}
     }
 
 }

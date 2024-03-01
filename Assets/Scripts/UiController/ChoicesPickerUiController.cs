@@ -42,7 +42,7 @@ public class ChoicesPickerUiController : IUiController
             btn.text = choiceRecords[i].ChoiceText;
             btn.clicked += () => 
             {
-                DialogueManager.Instance.SelectChoice(btn.parent.IndexOf(btn));
+                DialogueManager.Instance.ExecuteAction(new SelectChoiceAction(btn.parent.IndexOf(btn)));
             };
 
             if (choiceRecords[i].IsEnable == false)

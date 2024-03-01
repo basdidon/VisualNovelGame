@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using BasDidon.Dialogue;
+using BasDidon.Dialogue.VisualGraphView;
 
 public class DialogueUiController: IUiController
 {
@@ -48,7 +49,7 @@ public class DialogueUiController: IUiController
         }
         else
         {
-            DialogueManager.Instance.NextDialogue();
+            DialogueManager.Instance.ExecuteAction(new NextDialogueAction());
         }
     }
 

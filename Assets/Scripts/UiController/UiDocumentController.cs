@@ -67,30 +67,31 @@ public class UiDocumentController : MonoBehaviour
             };
 
             // Dialogue Event
-            DialogueManager.Instance.OnNewDialogue += (ctx) =>
+            DialogueManager.Instance.OnCustomEvent += (ctx) =>
             {
-                TapAction.Enable();
+                if (ctx is DialogueRecord dialogue)
+                {
+                    TapAction.Enable();
 
-                
-                DialogueUiController.SetDialogue(ctx.SpeakerName , ctx.DialogueText);
-                ChoicesPickerUiController.Hide();
-            };
-            
-            DialogueManager.Instance.OnSelectChoices += (ctx) => {
-                TapAction.Disable();
+                    DialogueUiController.SetDialogue(dialogue.SpeakerName, dialogue.DialogueText);
+                    ChoicesPickerUiController.Hide();
+                }
+                else if(ctx is ChoicesRecord choice)
+                {
+                    TapAction.Disable();
 
-                DialogueUiController.SetDialogue(ctx.DialogueRecord.SpeakerName ,ctx.DialogueRecord.DialogueText);
+                    DialogueUiController.SetDialogue(choice.DialogueRecord.SpeakerName, choice.DialogueRecord.DialogueText);
 
-                ChoicesPickerUiController.SetChoices(ctx.ChoiceRecords);
-                ChoicesPickerUiController.Display();
-            };
-            
-            DialogueManager.Instance.OnFinish += () =>
-            {
-                TapAction.Disable();
+                    ChoicesPickerUiController.SetChoices(choice.ChoiceRecords);
+                    ChoicesPickerUiController.Display();
+                }
+                else if(ctx is DialogueEndEvent)
+                {
+                    TapAction.Disable();
 
-                DialogueUiController.Hide();
-                ChoicesPickerUiController.Hide();
+                    DialogueUiController.Hide();
+                    ChoicesPickerUiController.Hide();
+                }
             };
         }
     }
