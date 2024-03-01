@@ -33,7 +33,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         private void Start()
         {
-            Player = new("bas", 1000);
+            Player = new("H8", 1000);
 
             characters = new Dictionary<Characters, Character>
             {
@@ -64,7 +64,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Money = money;
         }
     }
-     
+
     [Serializable]
     public class Player : Character
     {
@@ -76,6 +76,13 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new Exception();
 
             Money -= cost;
+        }
+        public void GainMoney(int moneyToGain)
+        {
+            if(moneyToGain >= 0)
+            {
+                Money += moneyToGain;
+            }
         }
     }
 }

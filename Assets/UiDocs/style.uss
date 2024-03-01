@@ -15,11 +15,13 @@
 }
 
 .choice-btn {
-    font-size: 64px;
+    font-size: 92px;
     padding-left: 24px;
     padding-right: 24px;
     padding-top: 24px;
     padding-bottom: 24px;
+    -unity-font-definition: url('project://database/Assets/Editor%20Default%20Resources/Fonts/FC-Lamoon/FC%20Lamoon%20Light%20ver%201.asset?fileID=11400000&guid=e46e6ae930f7e494c9a8bc4a6b200d19&type=2#FC Lamoon Light ver 1');
+    -unity-font: url('project://database/Assets/Editor%20Default%20Resources/Fonts/FC-Lamoon/FC%20Lamoon%20Light%20ver%201.00.ttf?fileID=12800000&guid=a43dd04a3f51e6f4f8a475a5153cff6f&type=3#FC Lamoon Light ver 1.00');
 }
 
 #Choices-container {

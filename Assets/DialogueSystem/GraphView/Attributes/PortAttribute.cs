@@ -45,11 +45,6 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
     }
 
-    public class InputAttribute : PortAttribute
-    {
-        public InputAttribute(string backingFieldName = null) : base(backingFieldName) { }
-    }
-
     [AttributeUsage(AttributeTargets.Property)]
     public class OutputAttribute : PortAttribute
     {
