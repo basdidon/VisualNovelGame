@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
   <Id>k__BackingField: 8796d98e-b05c-47a0-b9a4-f0aa4d2cc63e
-  <GraphPosition>k__BackingField: {x: 1408, y: 314}
+  <GraphPosition>k__BackingField: {x: 1408, y: 336}
   ports:
     portList:
     - <FieldName>k__BackingField: Input
@@ -39,7 +39,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
   <Id>k__BackingField: c96ca72a-3bd3-495f-9c1b-b1db3ee762b0
-  <GraphPosition>k__BackingField: {x: 1432, y: 562}
+  <GraphPosition>k__BackingField: {x: 1408, y: 562}
   ports:
     portList:
     - <FieldName>k__BackingField: Input

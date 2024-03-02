@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -43,11 +42,5 @@ namespace BasDidon.Dialogue.VisualGraphView
                 yield return newPortData;
             }
         }
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class OutputAttribute : PortAttribute
-    {
-        public OutputAttribute(string backingFieldName = null) : base(backingFieldName) { }
     }
 }

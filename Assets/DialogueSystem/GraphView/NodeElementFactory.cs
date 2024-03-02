@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
@@ -13,6 +10,9 @@ namespace BasDidon.Dialogue.VisualGraphView
         Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName);
         Port CreatePortWithField(SerializedProperty serializedProperty, string portGuid, Direction direction, NodeView nodeView, string propertyName);
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class CustomType : Attribute { }
 
     public static class NodeElementFactory
     {
@@ -47,7 +47,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             return factory.CreatePort(portGuid, direction, nodeView, portName);
         }
         
-        ///
+        /// 
         public static void DrawPortWithField(SerializedProperty serializedProperty, Type type, PortData portData, NodeView nodeView, string propertyName)
         {
             VisualElement portContainer = portData.Direction == Direction.Input ? nodeView.inputContainer : nodeView.outputContainer;

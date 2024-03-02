@@ -7,7 +7,5 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
-    public class SelectorAttribute : Attribute
-    {
-    }
+    public class SelectorAttribute : Attribute{}
 }

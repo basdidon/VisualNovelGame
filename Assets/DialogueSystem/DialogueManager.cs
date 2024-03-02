@@ -1,9 +1,9 @@
 using UnityEngine;
 using System;
+using System.Linq;
 
 namespace BasDidon.Dialogue
 {
-    using System.Linq;
     using VisualGraphView;
 
     public class DialogueManager : MonoBehaviour
@@ -24,7 +24,7 @@ namespace BasDidon.Dialogue
                 }
                 else
                 {
-                    Debug.Log("finish");
+                    Debug.Log("DialogueTree ended.");
                     OnCustomEvent?.Invoke(new DialogueEndEvent());
                 }
             }
@@ -76,8 +76,4 @@ namespace BasDidon.Dialogue
             currentNode.Action(action);
         }
     }
-
-    public interface ICustomEvent{}
-
-    public class DialogueEndEvent : ICustomEvent{}
 }

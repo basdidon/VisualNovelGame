@@ -90,18 +90,4 @@ namespace BasDidon.Dialogue.VisualGraphView
             AssetDatabase.SaveAssetIfDirty(this);
         }
     }
-
-    public interface IExecutableNode
-    {
-        public void OnEnter();
-        public void OnExit();
-
-        public void Action(IBaseAction action);
-    }
-
-    public interface IBaseAction{}
-
-    [SerializeField]
-    [AttributeUsage(AttributeTargets.Field)]
-    public class NodeFieldAttribute :Attribute{}
 }
