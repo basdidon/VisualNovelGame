@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using BasDidon.Dialogue;
-using BasDidon.Dialogue.VisualGraphView;
+using BasDidon.Dialogue.NodeTemplate;
 
 public class DialogueUiController: IUiController
 {

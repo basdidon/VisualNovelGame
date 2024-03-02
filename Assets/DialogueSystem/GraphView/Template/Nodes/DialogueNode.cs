@@ -1,7 +1,9 @@
 using UnityEngine;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace BasDidon.Dialogue.NodeTemplate
 {
+    using VisualGraphView;
+
     public record DialogueRecord : ICustomEvent
     {
         public string SpeakerName { get; }
@@ -21,8 +23,17 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Output]
         public ExecutionFlow Output { get; }
 
-        [Selector]
-        public Characters speaker;
+        [NodeField]
+        public CharacterData speaker;
+        public CharacterData Speaker
+        {
+            get
+            {
+                if (speaker == null)
+                    throw new System.NullReferenceException();
+                return speaker;
+            }
+        }
             
         [TextArea, NodeField]
         public string DialogueText  = string.Empty;
@@ -30,7 +41,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void OnEnter()
         {
             Debug.Log("dialogue node executing");
-            DialogueManager.Instance.FireEvent(new DialogueRecord(speaker.ToString(), StringHelper.GetValueFromSyntax(DialogueText)));
+            DialogueManager.Instance.FireEvent(new DialogueRecord(Speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
         public void OnExit(){}

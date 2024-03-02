@@ -12,20 +12,31 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class CustomType : Attribute { }
+    public class CustomTypeAttribute : Attribute {
+        public IPortFactory PortFactoryType { get; }
+        public CustomTypeAttribute(IPortFactory portFactoryType) 
+        {
+            PortFactoryType = portFactoryType;
+        }
+    }
 
     public static class NodeElementFactory
     {
         // find match Factory class for specific type
         static IPortFactory GetPortFactory(Type type)
         {
-            if(type == typeof(ExecutionFlow))
+            if (type == typeof(ExecutionFlow))
             {
                 return new ExecutionFlowPortFactory();
             }
-            else if(PrimativeTypePortFactory.TryCreateFactory(type,out PrimativeTypePortFactory factory))
+            else if (PrimativeTypePortFactory.TryCreateFactory(type, out PrimativeTypePortFactory factory))
             {
                 return factory;
+            }
+            else if (type.IsDefined(typeof(CustomTypeAttribute), true))
+            {
+                CustomTypeAttribute customTypeAttr = Attribute.GetCustomAttribute(type, typeof(CustomTypeAttribute)) as CustomTypeAttribute;
+                return Activator.CreateInstance(customTypeAttr.PortFactoryType.GetType()) as IPortFactory;
             }
             else
             {

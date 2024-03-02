@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using BasDidon.Dialogue;
-using BasDidon.Dialogue.VisualGraphView;
+using BasDidon.Dialogue.NodeTemplate;
 
 public interface IUiController
 {

@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
-using System.Linq;
 using BasDidon.Dialogue;
+using BasDidon.Dialogue.NodeTemplate;
 using BasDidon.Dialogue.VisualGraphView;
 
 public class UiDocumentController : MonoBehaviour

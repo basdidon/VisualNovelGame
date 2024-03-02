@@ -5,8 +5,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace BasDidon.Dialogue.NodeTemplate
 {
+    using VisualGraphView;
+
     public record ChoicesRecord : ICustomEvent
     {
         public DialogueRecord DialogueRecord { get; }
@@ -61,8 +63,17 @@ namespace BasDidon.Dialogue.VisualGraphView
         [Input]
         public ExecutionFlow Input { get; }
 
-        [Selector]
-        public Characters speaker;
+        [NodeField]
+        public CharacterData speaker;
+        public CharacterData Speaker
+        {
+            get
+            {
+                if (speaker == null)
+                    throw new System.NullReferenceException();
+                return speaker;
+            }
+        }
 
         [TextArea, NodeField]
         public string questionText;
@@ -97,7 +108,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             DialogueManager.Instance.FireEvent(
                 new ChoicesRecord(
                     new(
-                        speaker.ToString(), 
+                        Speaker.Name, 
                         questionText),
                     Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
                 )

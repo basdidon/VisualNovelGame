@@ -1,7 +1,9 @@
 using UnityEngine;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace BasDidon.Dialogue.NodeTemplate
 {
+    using VisualGraphView;
+
     [CreateNodeMenu(menuName = "Player/SpendMoney")]
     public class PlayerSpendMoneyNode : BaseNode, IExecutableNode
     {

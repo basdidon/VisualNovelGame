@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace BasDidon.Dialogue.NodeTemplate
 {
+    using VisualGraphView;
+
     public enum CompareType
     {
         Equal,

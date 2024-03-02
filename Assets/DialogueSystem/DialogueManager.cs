@@ -30,6 +30,8 @@ namespace BasDidon.Dialogue
             }
         }
 
+        public event Action<ICustomEvent> OnCustomEvent;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -61,8 +63,6 @@ namespace BasDidon.Dialogue
             var selectedNode = tree.GetConnectedNodes<IExecutableNode>(outputPort).FirstOrDefault();
             CurrentNode = selectedNode;
         }
-    
-        public event Action<ICustomEvent> OnCustomEvent;
 
         // for Node invoke
         internal void FireEvent(ICustomEvent customEvent)

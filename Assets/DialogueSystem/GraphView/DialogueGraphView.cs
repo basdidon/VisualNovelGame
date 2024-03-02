@@ -117,8 +117,8 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             base.BuildContextualMenu(evt);
 
-            evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
-            evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
+            //evt.menu.AppendAction($"Create DialogueNode", CreateActionEvent<DialogueNode>);
+            //evt.menu.AppendAction($"Create ConditionNode", CreateActionEvent<ChoicesNode>);
         }
 
         IManipulator SaveContextualMenu()

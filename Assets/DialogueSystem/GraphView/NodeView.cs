@@ -108,7 +108,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         void CreateNodeFields(BaseNode baseNode)
         {
-            Type[] types = new[] { typeof(string), typeof(int) };
+            Type[] types = new[] { typeof(string), typeof(int) ,typeof(UnityEngine.Object)};
 
             var nodeFields = baseNode.GetType().GetFields(BindingFlags.Instance| BindingFlags.NonPublic| BindingFlags.Public)
                 .Where(m => m.IsDefined(typeof(NodeFieldAttribute), inherit: true));
@@ -127,6 +127,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 if (types.Contains(fieldType))
                 {
+                    var propField = new PropertyField(serializeProperty);
+                    extensionContainer.Add(propField);
+                }
+                else if(types.Any(t=> fieldType.IsSubclassOf(t)))
+                {
+                    Debug.Log("a");
                     var propField = new PropertyField(serializeProperty);
                     extensionContainer.Add(propField);
                 }

@@ -1,9 +1,7 @@
 {
     "name": "Basdidon.Dialogue",
     "rootNamespace": "BasDidon.Dialogue",
-    "references": [
-        "GUID:45755fa792459854a812ff43713e1188"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

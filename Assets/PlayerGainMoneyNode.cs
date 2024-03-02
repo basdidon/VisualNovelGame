@@ -1,29 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using BasDidon.Dialogue.VisualGraphView;
-using BasDidon.Dialogue;
 
-[CreateNodeMenu(menuName = "Player/GainMoney")]
-public class PlayerGainMoneyNode : BaseNode,IExecutableNode
+namespace BasDidon.Dialogue.NodeTemplate
 {
-    [Input]
-    public ExecutionFlow Input { get; }
-
-    [Output]
-    public ExecutionFlow Output { get; }
-
-    public int moneyToGain;
-    [Input(nameof(moneyToGain))]
-    public int MoneyToGain => GetInputValue(nameof(MoneyToGain), moneyToGain);
-
-    public void Action(IBaseAction action){}
-
-    public void OnEnter()
+    using VisualGraphView;
+    
+    [CreateNodeMenu(menuName = "Player/GainMoney")]
+    public class PlayerGainMoneyNode : BaseNode, IExecutableNode
     {
-        DialogueDatabase.Instance.Player.GainMoney(MoneyToGain);
-        DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)),DialogueTree);
-    }
+        [Input]
+        public ExecutionFlow Input { get; }
 
-    public void OnExit(){}
+        [Output]
+        public ExecutionFlow Output { get; }
+
+        public int moneyToGain;
+        [Input(nameof(moneyToGain))]
+        public int MoneyToGain => GetInputValue(nameof(MoneyToGain), moneyToGain);
+
+        public void Action(IBaseAction action) { }
+
+        public void OnEnter()
+        {
+            DialogueDatabase.Instance.Player.GainMoney(MoneyToGain);
+            DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+        }
+
+        public void OnExit() { }
+    }
 }
