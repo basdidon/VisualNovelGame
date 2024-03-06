@@ -6,9 +6,9 @@ namespace BasDidon.Dialogue
 {
     using VisualGraphView;
 
-    public class DialogueManager : MonoBehaviour
+    public class GraphTreeContorller : MonoBehaviour
     {
-        public static DialogueManager Instance { get; private set; }
+        public static GraphTreeContorller Instance { get; private set; }
 
         IExecutableNode currentNode;
         public IExecutableNode CurrentNode
@@ -44,7 +44,7 @@ namespace BasDidon.Dialogue
             }
         }
 
-        public void StartDialogue(DialogueTree dialogueTree)
+        public void StartGraphTree(DialogueTree dialogueTree)
         {
             if (dialogueTree == null)
             {

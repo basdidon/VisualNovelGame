@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public class DialogueEditorWindow : EditorWindow
+    public class GraphEditorWindow : EditorWindow
     {
         DialogueGraphView graphView;
         public DialogueGraphView DialogueGraphView
@@ -18,25 +18,15 @@ namespace BasDidon.Dialogue.VisualGraphView
                 rootVisualElement.Add(DialogueGraphView);
             }
         }
-
         string lastOpenPath = string.Empty;
-
-
-        /*
-        [MenuItem("Window/Dialogue/Dialogue GraphView")]
-        public static void Open()
-        { 
-            Debug.Log("Open!!");
-            DialogueEditorWindow editorWindow = GetWindow<DialogueEditorWindow>();
-            editorWindow.titleContent = new GUIContent("Dialogue Graphview");
-        }
-        */
 
         // OnEnable call every scene reload, i just reload graphView to this window
         private void OnEnable()
         {
             if (string.IsNullOrEmpty(lastOpenPath))
+            {
                 return;
+            }
             LoadFileFromPath(lastOpenPath);
         }
 
@@ -51,7 +41,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 Close();
             }
-
         }
 
         public static void OpenWindow(string assetPath)
@@ -60,7 +49,8 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 DialogueGraphView graphView = new(assetPath);
 
-                var window = GetWindow<DialogueEditorWindow>();
+                var window = GetWindow<GraphEditorWindow>();
+                window.lastOpenPath = assetPath;
                 window.DialogueGraphView = graphView;
             }
             catch
@@ -68,9 +58,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 Debug.LogError("can not open dialogueEditorWindow");
                 throw;
             }
-
         }
-
 
         private void OnDestroy()
         {

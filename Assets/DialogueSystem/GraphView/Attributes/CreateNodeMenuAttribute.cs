@@ -47,8 +47,12 @@ namespace BasDidon.Dialogue.VisualGraphView
                 {
                     graphView.AddManipulator(new ContextualMenuManipulator(ev => {
                         ev.menu.AppendAction(pair.menuName, actionEvent => {
+                            VisualElement contentViewContainer = graphView.ElementAt(1);
+                            Vector3 screenMousePosition = actionEvent.eventInfo.localMousePosition;
+                            Vector2 worldMousePosition = screenMousePosition - contentViewContainer.transform.position;
+                            worldMousePosition *= 1 / contentViewContainer.transform.scale.x;
                             // create baseNode
-                            BaseNode baseNode = NodeFactory.CreateNode(pair.Type, actionEvent.eventInfo.localMousePosition, graphView.Tree);
+                            BaseNode baseNode = NodeFactory.CreateNode(pair.Type, worldMousePosition, graphView.Tree);
                             // get nodeView by baseNode
                             NodeView nodeView = NodeFactory.GetNodeView(baseNode, graphView);
                             // add nodeView to graph

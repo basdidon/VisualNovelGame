@@ -50,7 +50,7 @@ public class UiDocumentController : MonoBehaviour
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
-                DialogueManager.Instance.StartDialogue(DialogueTree);
+                GraphTreeContorller.Instance.StartGraphTree(DialogueTree);
             };
 
             // ChoicesPicker
@@ -67,7 +67,7 @@ public class UiDocumentController : MonoBehaviour
             };
 
             // Dialogue Event
-            DialogueManager.Instance.OnCustomEvent += (ctx) =>
+            GraphTreeContorller.Instance.OnCustomEvent += (ctx) =>
             {
                 if (ctx is DialogueRecord dialogue)
                 {

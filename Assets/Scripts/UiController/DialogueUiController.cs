@@ -49,7 +49,7 @@ public class DialogueUiController: IUiController
         }
         else
         {
-            DialogueManager.Instance.ExecuteAction(new NextDialogueAction());
+            GraphTreeContorller.Instance.ExecuteAction(new NextDialogueAction());
         }
     }
 

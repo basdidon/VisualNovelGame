@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -14,6 +13,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
+        BaseNode baseNode1;
 
         public void Initialize(BaseNode nodeData, DialogueGraphView graphView)
         {
@@ -21,11 +21,22 @@ namespace BasDidon.Dialogue.VisualGraphView
             SetPosition(new Rect(nodeData.GraphPosition, Vector2.zero));
             viewDataKey = nodeData.Id;
             userData = nodeData;
-            title = name = nodeData.GetType().Name;
-            DrawHeader();
-            
+            name = nodeData.GetType().Name;
+            title = name;
+
+            Label titleLabel = (Label) titleContainer.ElementAt(0);
+            titleLabel.bindingPath = "title";
+
             SerializedObject = new(nodeData);
             mainContainer.Bind(SerializedObject);
+
+            baseNode1 = nodeData;
+        }
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            Selection.activeObject = baseNode1;
         }
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
@@ -71,14 +82,14 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 Type type = property.PropertyType;
 
-                var awesomePortAttr = property.GetCustomAttribute<PortAttribute>();
+                var portAttr = property.GetCustomAttribute<PortAttribute>();
 
-                if (awesomePortAttr == null)
+                if (portAttr == null)
                     continue;
 
-                if (awesomePortAttr.HasBackingFieldName)
+                if (portAttr.HasBackingFieldName)
                 {
-                    var serializeProperty = SerializedObject.FindProperty(awesomePortAttr.BackingFieldName);
+                    var serializeProperty = SerializedObject.FindProperty(portAttr.BackingFieldName);
 
                     if (serializeProperty != null)
                         NodeElementFactory.DrawPortWithField(serializeProperty, type, port, this, port.FieldName);
@@ -132,7 +143,6 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
                 else if(types.Any(t=> fieldType.IsSubclassOf(t)))
                 {
-                    Debug.Log("a");
                     var propField = new PropertyField(serializeProperty);
                     extensionContainer.Add(propField);
                 }
@@ -142,34 +152,6 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
             }
 
-        }
-
-        void DrawHeader()
-        {
-            // textfield
-            TextField dialogueNameTxt = new() { value = title };
-            titleContainer.Insert(1, dialogueNameTxt);
-            dialogueNameTxt.style.display = DisplayStyle.None;
-            // Title
-            VisualElement titleLabel = titleContainer.ElementAt(0);
-
-            // double click event
-            var clickable = new Clickable(ev =>
-            {
-                titleLabel.style.display = DisplayStyle.None;
-                dialogueNameTxt.style.display = DisplayStyle.Flex;
-                dialogueNameTxt.Focus();
-                dialogueNameTxt.value = title;
-                dialogueNameTxt.RegisterCallback<FocusOutEvent>(ev =>
-                {
-                    title = dialogueNameTxt.value;
-                    titleLabel.style.display = DisplayStyle.Flex;
-                    dialogueNameTxt.style.display = DisplayStyle.None;
-                });
-            });
-            clickable.activators.Clear();
-            clickable.activators.Add(new ManipulatorActivationFilter() { button = MouseButton.LeftMouse, clickCount = 2 });  // double click
-            titleLabel.AddManipulator(clickable);
         }
 
         public void RemovePort(Port port)

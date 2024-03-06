@@ -105,7 +105,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void OnEnter()
         {
             Debug.Log("choices node executing");
-            DialogueManager.Instance.FireEvent(
+            GraphTreeContorller.Instance.FireEvent(
                 new ChoicesRecord(
                     new(
                         Speaker.Name, 
@@ -131,7 +131,7 @@ namespace BasDidon.Dialogue.NodeTemplate
                 throw new ArgumentOutOfRangeException();
 
             var selectedOutputPort = Choices.ElementAt(idx).OutputFlowPortData;
-            DialogueManager.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
+            GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
         }
     }
 

@@ -26,9 +26,13 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
 
         [field: SerializeField] public string Id { get; private set; }
+        [SerializeField, HideInInspector] 
+        string title = string.Empty;
+        [field:SerializeField] public string NodeName { get; set; }
+
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
-        [SerializeField] PortDataCollection ports;
+        PortDataCollection ports;
         public IEnumerable<PortData> Ports => ports;
         public IEnumerable<string> GetPortGuids() => ports.Select(p => p.PortGuid);
         public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
@@ -47,8 +51,12 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             dialogueTree.Nodes.Add(this);
             AssetDatabase.AddObjectToAsset(this, dialogueTree);
-
             SaveChanges();
+        }
+
+        private void OnValidate()
+        {
+            title = string.IsNullOrEmpty(NodeName) || string.IsNullOrWhiteSpace(NodeName) ? GetType().Name : NodeName;
         }
 
         public void InstantiatePorts()

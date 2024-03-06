@@ -12,7 +12,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void OnEnter()
         {
-            DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
         }
 
         public void OnExit(){}

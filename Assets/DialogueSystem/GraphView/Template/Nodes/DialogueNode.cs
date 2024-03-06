@@ -41,7 +41,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void OnEnter()
         {
             Debug.Log("dialogue node executing");
-            DialogueManager.Instance.FireEvent(new DialogueRecord(Speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
+            GraphTreeContorller.Instance.FireEvent(new DialogueRecord(Speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
         public void OnExit(){}
@@ -50,7 +50,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         {
             if(action is NextDialogueAction)
             {
-                DialogueManager.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+                GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
             }
         }
     }

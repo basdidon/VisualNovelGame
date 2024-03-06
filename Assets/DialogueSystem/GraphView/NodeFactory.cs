@@ -29,22 +29,22 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             var customGraphViewNodeType = CustomGraphViewNodeAttribute.GetGraphViewNodeType(nodeData.GetType());
 
-            NodeView instance;
+            NodeView nodeView;
 
             if (customGraphViewNodeType != null)
             {
                 var nodeType = customGraphViewNodeType;
-                instance = Activator.CreateInstance(nodeType) as NodeView;
+                nodeView = Activator.CreateInstance(nodeType) as NodeView;
                 Debug.Log($"GetNodeView {nodeType.Name}");
             }
             else
             {
-                instance = Activator.CreateInstance<NodeView>();
+                nodeView = Activator.CreateInstance<NodeView>();
             }
 
-            instance.Initialize(nodeData,graphView);
-            instance.OnDrawNodeView(nodeData);
-            return instance;
+            nodeView.Initialize(nodeData,graphView);
+            nodeView.OnDrawNodeView(nodeData);
+            return nodeView;
         }
     }
 }

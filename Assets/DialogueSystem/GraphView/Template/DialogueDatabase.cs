@@ -5,22 +5,12 @@ using UnityEditor;
 
 namespace BasDidon.Dialogue.NodeTemplate
 {
-    /*
-    public enum Characters
-    {
-        John,
-        Adam,
-        Leonard,
-        Julia
-    }*/
-
     public class DialogueDatabase : MonoBehaviour
     {
         public static DialogueDatabase Instance { get; private set; }
 
         public Player Player;
         Dictionary<string, Character> Characters;
-        //Dictionary<Characters,Character> characters;
 
         private void Awake()
         {
@@ -45,29 +35,13 @@ namespace BasDidon.Dialogue.NodeTemplate
                 var assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 var asset = AssetDatabase.LoadAssetAtPath<CharacterData>(assetPath);
                 Characters.Add(guid, Character.GetCharacterFromCharacterData(asset));
-
-                Debug.Log($"{guid}:{Characters[guid].Name}");
             }
-            Debug.Log(guids.Length);
-            /*
-            characters = new Dictionary<Characters, Character>
-            {
-                { Characters.John, new Character("John",1000)},
-                { Characters.Adam, new Character("Adam",0) },
-                { Characters.Leonard, new Character("Leonard", 50)},
-                { Characters.Julia, new Character("Julia",150) },
-            };*/
         }
 
         public Character GetCharacter(string guid)
         {
             return Characters[guid];
         }
-        /*
-        public Character GetCharacter(Characters character)
-        {
-            return characters[character];
-        }*/
     }
 
     [Serializable]

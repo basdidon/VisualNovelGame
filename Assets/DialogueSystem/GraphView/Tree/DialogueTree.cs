@@ -127,7 +127,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             return obj.ToString();
         }
 
-        [MenuItem("MyMenu/CreateDialogueTree")]
+        [MenuItem("H8 Tools/GraphTree/Create")]
         public static void CreateDialogueTree()
         {
             DialogueTree tree = CreateInstance<DialogueTree>();
@@ -153,7 +153,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 string assetPath = AssetDatabase.GetAssetPath(instanceID);
 
-                DialogueEditorWindow.OpenWindow(assetPath);
+                GraphEditorWindow.OpenWindow(assetPath);
 
             }
 
