@@ -17,6 +17,14 @@ MonoBehaviour:
   title: DialogueNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 1431, y: 336}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: a2596d46-31fe-484f-be84-c7906d4b5e7c
+      <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E40\u0E0A\u0E34\u0E0D\u0E04\u0E23\u0E31\u0E1A"
 --- !u!114 &-5562079095400986896
@@ -36,6 +44,14 @@ MonoBehaviour:
   title: DialogueNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 1431, y: 562}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 46313c5b-f622-4ca0-837c-fe47715c432f
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: a36db4f8-e5b4-4c12-9291-29204681c5bb
+      <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E19\u0E32\u0E22\u0E15\u0E34\u0E14\u0E2B\u0E19\u0E35\u0E49\u0E09\u0E31\u0E19"
 --- !u!114 &-4891420775021915292
@@ -55,6 +71,17 @@ MonoBehaviour:
   title: PlayerSpendMoneyNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 1086, y: 387}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: b6d3f9b4-1f51-4405-9c27-91f523089e94
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: f759f19a-3ad5-41b2-8284-f7349e4a5dc9
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: Cost
+      <PortGuid>k__BackingField: 4fd676b9-3621-445d-ae26-7832bedc18fc
+      <Direction>k__BackingField: 0
   cost: 1500
 --- !u!114 &-4875794130857494698
 MonoBehaviour:
@@ -73,6 +100,17 @@ MonoBehaviour:
   title: IntComparer
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 339, y: 257}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: A
+      <PortGuid>k__BackingField: e798a83f-84c0-4c77-90b6-e860f9139c8c
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: B
+      <PortGuid>k__BackingField: c4add5f5-d401-4e04-9dcf-295347addf2b
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Result
+      <PortGuid>k__BackingField: 9a6c8ce2-d142-4580-b5ed-5d08c9e2ffcc
+      <Direction>k__BackingField: 1
   lhs: 0
   rhs: 300
   compareType: 2
@@ -93,6 +131,14 @@ MonoBehaviour:
   title: PlayerNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 0, y: 322}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Name
+      <PortGuid>k__BackingField: f703b4cf-6bf1-4eca-a2bd-7a5b40658722
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: Money
+      <PortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
+      <Direction>k__BackingField: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,45 +165,42 @@ MonoBehaviour:
   - {fileID: 876815532178079586}
   - {fileID: -5562079095400986896}
   edges:
-  - <EdgeGuid>k__BackingField: 56e48acd-04b7-45e5-9234-9b1c57e72ba4
-    <OutputPortGuid>k__BackingField: dda2377f-2b9e-4ad2-bca9-e0f8617aa7b8
-    <InputPortGuid>k__BackingField: d6e75507-70f5-44e4-b0cf-1e0c8279a027
-  - <EdgeGuid>k__BackingField: f8c6e667-9025-4037-9782-5de37e8c447d
-    <OutputPortGuid>k__BackingField: d88e8ea1-9760-41b3-a73a-3ece13d8e3ed
-    <InputPortGuid>k__BackingField: 3ae70e3c-e04d-4fb8-affe-b09b60592772
-  - <EdgeGuid>k__BackingField: a45c0dd6-287e-4025-916e-f6e0f66e1c82
-    <OutputPortGuid>k__BackingField: 4b0d978d-fb06-4600-a5fa-b48b333c3d8c
-    <InputPortGuid>k__BackingField: 3b32cdff-4689-4136-988f-0a66ea658e35
-  - <EdgeGuid>k__BackingField: 45f920b9-bd6f-4306-b77f-468b24fa779c
-    <OutputPortGuid>k__BackingField: 4b0d978d-fb06-4600-a5fa-b48b333c3d8c
-    <InputPortGuid>k__BackingField: 83fdac52-ee82-4e25-ac7b-3fcca95e0683
-  - <EdgeGuid>k__BackingField: 8255ff12-0630-4170-bd6a-36e312d9ffc3
-    <OutputPortGuid>k__BackingField: 10ec7020-65ef-4fb0-a0f6-83a1d4027a7c
+  - <EdgeGuid>k__BackingField: 057d8c62-5475-450b-8218-f933bc117edf
+    <OutputPortGuid>k__BackingField: adaba793-fb13-47f5-9183-757afea43d2e
+    <InputPortGuid>k__BackingField: e86fbcd1-fe83-4d7c-a8c9-c675b5cafc83
+  - <EdgeGuid>k__BackingField: 8c09ae26-ef88-461b-8877-86f2be146330
+    <OutputPortGuid>k__BackingField: c95e3f6e-0d2f-4674-8c29-bfe9c216403c
+    <InputPortGuid>k__BackingField: 17c20cd2-007b-466a-a71b-8905234c575b
+  - <EdgeGuid>k__BackingField: ed624552-f605-4def-b9bc-e0263ccec506
+    <OutputPortGuid>k__BackingField: 9a6c8ce2-d142-4580-b5ed-5d08c9e2ffcc
     <InputPortGuid>k__BackingField: 9e5d4d71-c1c7-410a-91ed-6dfd49a0c186
-  - <EdgeGuid>k__BackingField: 0c603675-e7ae-4e80-b67a-fcfb97354d0d
-    <OutputPortGuid>k__BackingField: 9438ff8e-d7e0-4183-934e-c8725da36f28
+  - <EdgeGuid>k__BackingField: b0f7bc4c-50ab-4a6c-b6f8-f758bd0f25d1
+    <OutputPortGuid>k__BackingField: 3bc192af-a80b-4241-8a5c-0b2828e1e2a0
     <InputPortGuid>k__BackingField: 78313f5b-159a-494f-91a7-82d96ec5acbb
-  - <EdgeGuid>k__BackingField: f6811aa8-3467-4796-8764-339c86eecfd6
+  - <EdgeGuid>k__BackingField: eb904f4e-f3b3-4dd9-a936-25f1d0808e8a
+    <OutputPortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
+    <InputPortGuid>k__BackingField: e798a83f-84c0-4c77-90b6-e860f9139c8c
+  - <EdgeGuid>k__BackingField: 19b8fcf0-10fd-4e9f-9bfb-7dd5e3007db8
+    <OutputPortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
+    <InputPortGuid>k__BackingField: 8bd287ae-075a-4a63-a435-904ba0a464d4
+  - <EdgeGuid>k__BackingField: 1d734472-b061-40ff-946e-10a84afeb942
     <OutputPortGuid>k__BackingField: f009fd92-776c-4bb3-908d-f6b99103d697
-    <InputPortGuid>k__BackingField: cadb7bed-1766-4db9-ac72-0cf148d6d783
-  - <EdgeGuid>k__BackingField: 7ab15962-8ed8-413d-becc-c32cdfcae64c
-    <OutputPortGuid>k__BackingField: b96b714e-6401-4244-97a9-3ba6c7b30492
-    <InputPortGuid>k__BackingField: fb908ce7-0355-4213-a4a6-abf1f46e1fec
-  - <EdgeGuid>k__BackingField: bf8dfcfc-3e71-4c13-8c1e-16d399c6210c
+    <InputPortGuid>k__BackingField: 520e16b4-4ec4-43dc-bd19-a79a4fcea33b
+  - <EdgeGuid>k__BackingField: 3f55a784-14c9-414d-8235-78a8e21a2d01
     <OutputPortGuid>k__BackingField: 6c292fcf-c3ec-4a12-8622-5b2489327785
-    <InputPortGuid>k__BackingField: 3a4ac0e7-f5d4-4ced-8a83-0568faea62f3
-  - <EdgeGuid>k__BackingField: 2fa62ccf-cfde-4f44-b9b5-ca1b55039a5d
-    <OutputPortGuid>k__BackingField: 23c12e39-8051-4d56-b463-89269c90b3c8
-    <InputPortGuid>k__BackingField: 2aa272ec-2862-4127-96ac-0951bd231f7c
-  - <EdgeGuid>k__BackingField: fd9f04f0-0067-4f32-8f61-99565016b74a
-    <OutputPortGuid>k__BackingField: 84040fe0-996d-4701-bd21-bdcf21002364
-    <InputPortGuid>k__BackingField: 413e0db2-a022-4dd9-b4c0-34cc61658924
-  - <EdgeGuid>k__BackingField: c0cadc68-a539-46bb-a6a1-a1e82331d5ff
-    <OutputPortGuid>k__BackingField: 11551351-a545-45de-ae27-e4e0bc1d9fce
-    <InputPortGuid>k__BackingField: f0b88991-da63-4864-a8e2-e479835833c8
-  - <EdgeGuid>k__BackingField: 6342cfae-7358-4a96-aafc-77ec8a77dd2f
-    <OutputPortGuid>k__BackingField: c315d299-1af7-43de-9202-f3d6236c44b0
-    <InputPortGuid>k__BackingField: f0b88991-da63-4864-a8e2-e479835833c8
+    <InputPortGuid>k__BackingField: b6d3f9b4-1f51-4405-9c27-91f523089e94
+  - <EdgeGuid>k__BackingField: c835f391-728d-4309-bdbf-7d1e9bf262a6
+    <OutputPortGuid>k__BackingField: 9cf2e093-5062-47dd-8588-ad5cefb85605
+    <InputPortGuid>k__BackingField: 46313c5b-f622-4ca0-837c-fe47715c432f
+  - <EdgeGuid>k__BackingField: fd995e7d-2404-45cf-bb48-73a0572b4400
+    <OutputPortGuid>k__BackingField: f759f19a-3ad5-41b2-8284-f7349e4a5dc9
+    <InputPortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
+  - <EdgeGuid>k__BackingField: 6a4f7c2d-f457-41fa-9ab9-2307a322670c
+    <OutputPortGuid>k__BackingField: a8b8db4c-a1fe-4b85-bed1-caa5d1a20f77
+    <InputPortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
+  - <EdgeGuid>k__BackingField: d9a555f2-3850-431f-a5af-591976fddc0f
+    <OutputPortGuid>k__BackingField: b96b714e-6401-4244-97a9-3ba6c7b30492
+    <InputPortGuid>k__BackingField: b28c784d-4b9f-4be7-9740-f1c33771f58c
 --- !u!114 &431486062957122853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +218,11 @@ MonoBehaviour:
   title: StartNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 0, y: 0}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: adaba793-fb13-47f5-9183-757afea43d2e
+      <Direction>k__BackingField: 1
 --- !u!114 &876815532178079586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +239,18 @@ MonoBehaviour:
   <Id>k__BackingField: 09062ec2-8869-496f-88f2-61d1976a5031
   title: PlayerGainMoneyNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 1086, y: 548}
+  <GraphPosition>k__BackingField: {x: 1086, y: 547}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: f841ce8f-4f86-45b7-85be-37bec621d465
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: 9cf2e093-5062-47dd-8588-ad5cefb85605
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: MoneyToGain
+      <PortGuid>k__BackingField: d7743ebf-8781-4e67-bca6-f68ace955f36
+      <Direction>k__BackingField: 0
   moneyToGain: 300
 --- !u!114 &1283514966779007384
 MonoBehaviour:
@@ -210,6 +269,17 @@ MonoBehaviour:
   title: PlayerSpendMoneyNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 1086, y: 255}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 520e16b4-4ec4-43dc-bd19-a79a4fcea33b
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: a8b8db4c-a1fe-4b85-bed1-caa5d1a20f77
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: Cost
+      <PortGuid>k__BackingField: bc8b4f4c-9a17-4cde-abae-b4cb7c6ef5f3
+      <Direction>k__BackingField: 0
   cost: 300
 --- !u!114 &3559540290517981888
 MonoBehaviour:
@@ -228,6 +298,17 @@ MonoBehaviour:
   title: IntComparer
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 339, y: 395}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: A
+      <PortGuid>k__BackingField: 8bd287ae-075a-4a63-a435-904ba0a464d4
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: B
+      <PortGuid>k__BackingField: 71501a02-a4bc-45b7-b7b5-bbbc6d86dedd
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Result
+      <PortGuid>k__BackingField: 3bc192af-a80b-4241-8a5c-0b2828e1e2a0
+      <Direction>k__BackingField: 1
   lhs: 0
   rhs: 1500
   compareType: 2
@@ -247,7 +328,12 @@ MonoBehaviour:
   <Id>k__BackingField: 2b5acff2-f8f8-46ea-bf80-81f0520b79c6
   title: ChoicesNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 708, y: -10}
+  <GraphPosition>k__BackingField: {x: 703, y: -14}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 17c20cd2-007b-466a-a71b-8905234c575b
+      <Direction>k__BackingField: 0
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   questionText: 
   choices:
@@ -293,6 +379,16 @@ MonoBehaviour:
       <FieldName>k__BackingField: isEnable
       <PortGuid>k__BackingField: 23c12e39-8051-4d56-b463-89269c90b3c8
       <Direction>k__BackingField: 1
+  - <IsEnable>k__BackingField: 1
+    <Name>k__BackingField: 5
+    <IsEnableInputPortData>k__BackingField:
+      <FieldName>k__BackingField: isEnable
+      <PortGuid>k__BackingField: 03178889-9641-4184-b18c-dc35fdfdab79
+      <Direction>k__BackingField: 0
+    <OutputFlowPortData>k__BackingField:
+      <FieldName>k__BackingField: isEnable
+      <PortGuid>k__BackingField: d149d8b9-3678-48e0-8a9c-a00977fb67ea
+      <Direction>k__BackingField: 1
 --- !u!114 &4765367660931912236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +406,14 @@ MonoBehaviour:
   title: DialogueNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 1086, y: 55}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: b28c784d-4b9f-4be7-9740-f1c33771f58c
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: d71e9d06-a886-490b-a7f5-5b1a03be9db7
+      <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E41\u0E25\u0E49\u0E27\u0E40\u0E08\u0E2D\u0E01\u0E31\u0E19\u0E1E\u0E48\u0E2D\u0E2B\u0E19\u0E38\u0E48\u0E21"
 --- !u!114 &5781208517519475497
@@ -329,6 +433,14 @@ MonoBehaviour:
   title: DialogueNode
   <NodeName>k__BackingField: 
   <GraphPosition>k__BackingField: {x: 321, y: 0}
+  ports:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: e86fbcd1-fe83-4d7c-a8c9-c675b5cafc83
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: c95e3f6e-0d2f-4674-8c29-bfe9c216403c
+      <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35\u0E09\u0E31\u0E19\u0E0A\u0E37\u0E48\u0E2D\u0E27\u0E48\u0E32
     \u0E08\u0E2D\u0E23\u0E4C\u0E19 \u0E40\u0E1B\u0E47\u0E19\u0E22\u0E32\u0E21\u0E40\u0E1D\u0E49\u0E32\u0E1B\u0E23\u0E30\u0E15\u0E39\u0E41\u0E2B\u0E48\u0E07\u0E19\u0E35\u0E49"

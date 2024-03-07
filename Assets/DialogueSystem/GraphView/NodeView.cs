@@ -164,7 +164,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 port.DisconnectAll();
             }
 
-            //GraphView.RemoveElement(port);
+            GraphView.RemoveElement(port);
         }
     }
 }

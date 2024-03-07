@@ -32,7 +32,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
-        PortDataCollection ports;
+        [SerializeField ,HideInInspector ] PortDataCollection ports;
         public IEnumerable<PortData> Ports => ports;
         public IEnumerable<string> GetPortGuids() => ports.Select(p => p.PortGuid);
         public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
