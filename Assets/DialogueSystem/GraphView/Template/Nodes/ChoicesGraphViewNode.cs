@@ -12,6 +12,37 @@ namespace BasDidon.Dialogue.NodeTemplate
     using System.Collections.Generic;
     using VisualGraphView;
 
+    public class GraphListView : BaseListView
+    {
+        protected override CollectionViewController CreateViewController()
+        {
+            return new GraphListViewController();
+        }
+    }
+
+    public class GraphListViewController : BaseListViewController
+    {
+        protected override void BindItem(VisualElement element, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DestroyItem(VisualElement element)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override VisualElement MakeItem()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void UnbindItem(VisualElement element, int index)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class ListGraphView:VisualElement
     {
         public IList ItemsSource { get; set; }
@@ -29,17 +60,21 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         public void RefreshItems()
         {
-            // Add Button
-            Button addCondition = new() { text = "Add Choice" };
-            Add(addCondition);
-
             // list elements
             VisualElement listElementsContainer = new();
             Add(listElementsContainer);
-            foreach (var item in ItemsSource)
+
+            for(int i = 0; i < ItemsSource.Count; i++)
             {
-                listElementsContainer.Add(MakeItem());
+                var itemView = MakeItem();
+                BindItem?.Invoke(itemView, i);
+
+                listElementsContainer.Add(itemView);
             }
+
+            // Add Button
+            Button addCondition = new() { text = "Add Choice" };
+            Add(addCondition);
         }
     }
 
@@ -58,27 +93,25 @@ namespace BasDidon.Dialogue.NodeTemplate
             base.OnDrawNodeView(nodeData);
             if (nodeData is ChoicesNode choicesNode)
             {
-                VisualElement makeItem() => new Label();
-                void bindItem(VisualElement e, int i) => (e as Label).text = list[i];
-
-                ListGraphView listView = new (list,makeItem,bindItem);
+                List<Choice> choices = new(choicesNode.Choices);
+                ListGraphView listView = new (choices,MakeItem,BindItem);
                 extensionContainer.Add(listView);
-
-                var nodeBorder = mainContainer.Q<VisualElement>("node-border");
-                var selectionBorder = mainContainer.Q<VisualElement>("selection-border");
-
-                //selectionBorder.style.height = nodeBorder.resolvedStyle.height;
-
+                
+                
+                /*
                 var serializedChoices = SerializedObject.FindProperty("choices");
                 if (serializedChoices.isArray)
                 {
+                    
                     for (int i = 0; i < serializedChoices.arraySize; i++)
                     {
+                        /*
                         extensionContainer.Add(ChoiceContainer.GetChoiceContainer(this, serializedChoices, i));
                     }
 
                 }
-
+                        */
+                /*
                 Button addCondition = new() { text = "Add Choice" };
                 addCondition.clicked += () =>
                 {
@@ -91,7 +124,7 @@ namespace BasDidon.Dialogue.NodeTemplate
                     RefreshExpandedState();
                 };
                 mainContainer.Insert(2, addCondition);
-
+                */
                 extensionContainer.style.paddingTop = new StyleLength(4);
                 extensionContainer.style.paddingBottom = new StyleLength(4);
                 extensionContainer.style.paddingLeft = new StyleLength(4);
@@ -102,6 +135,86 @@ namespace BasDidon.Dialogue.NodeTemplate
 
                 SerializedObject.ApplyModifiedProperties();
             }
+        }
+
+        public VisualElement MakeItem()
+        {
+            VisualElement listElement = new();
+            listElement.style.flexDirection = FlexDirection.Column;
+
+            VisualElement PortsContainer = new();
+            listElement.Add(PortsContainer);
+
+            // IsEnablePort
+            var IsEnablePort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            IsEnablePort.name = "is_enable_port";
+            IsEnablePort.portName = string.Empty;
+            PortsContainer.Add(IsEnablePort);
+
+            // OutputFlowPort
+            var outputFlowPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
+            outputFlowPort.name = "output_flow_port";
+            outputFlowPort.portName = string.Empty;
+            outputFlowPort.portColor = Color.yellow;
+            PortsContainer.Add(outputFlowPort);
+
+            // ChoiceText
+            var choiceText = new TextField() {
+                name = "choice_text"
+            };
+            listElement.Add(choiceText);
+
+            // DeleteChoiceButton
+            Button deleteChoiceBtn = new() { text = $"X" };
+            listElement.Add(deleteChoiceBtn);
+
+            deleteChoiceBtn.clicked += () =>
+            {
+                /*
+                SerializedChoices.DeleteArrayElementAtIndex(ChoiceIndex);
+                SerializedChoices.serializedObject.ApplyModifiedProperties();
+                ChoicesNodeView.GraphView.RemoveElement(this);
+                */
+                //ChoicesNodeView.OnDrawNodeView();
+                //SerializedChoices.serializedObject.Update();
+            };
+
+            // Style 
+            style.marginTop = new(2f);
+            style.marginBottom = new(0f);
+            style.marginRight = new(0f);
+            style.marginLeft = new(0f);
+            style.backgroundColor = new Color(.08f, .08f, .08f, .5f);
+            style.borderBottomLeftRadius = new(8);
+            style.borderBottomRightRadius = new(8);
+            style.borderTopLeftRadius = new(8);
+            style.borderTopRightRadius = new(8);
+
+            PortsContainer.style.flexDirection = FlexDirection.Row;
+            PortsContainer.style.justifyContent = Justify.SpaceBetween;
+            
+            return listElement;
+        }
+
+        public void BindItem(VisualElement visualElement,int index)
+        {
+            var serializedChoices = SerializedObject.FindProperty("choices");
+            var SerializedChoice = serializedChoices.GetArrayElementAtIndex(index);
+
+            var isEnableInputPortSP = SerializedChoice.FindPropertyRelative("<IsEnableInputPortData>k__BackingField");
+            string isEnablePortGuid = isEnableInputPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+            var isEnablePort = visualElement.Q<Port>("is_enable_port");
+            isEnablePort.viewDataKey = isEnablePortGuid;
+
+            var outputFlowPortSP = SerializedChoice.FindPropertyRelative("<OutputFlowPortData>k__BackingField");
+            string outputFlowPortGuid = outputFlowPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+            var outputFlowPort = visualElement.Q<Port>("output_flow_port");
+            outputFlowPort.viewDataKey = outputFlowPortGuid;
+
+            // ChoiceText
+            var choiceTextSP = SerializedChoice.FindPropertyRelative("<Name>k__BackingField");
+            var choiceText = visualElement.Q<TextField>("choice_text");
+            choiceText.BindProperty(choiceTextSP);
         }
     }
 

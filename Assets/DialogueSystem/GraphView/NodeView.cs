@@ -13,7 +13,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         public DialogueGraphView GraphView { get; private set; }
         public SerializedObject SerializedObject { get; private set; }
-        BaseNode baseNode1;
+        BaseNode baseNode;
 
         public void Initialize(BaseNode nodeData, DialogueGraphView graphView)
         {
@@ -30,13 +30,13 @@ namespace BasDidon.Dialogue.VisualGraphView
             SerializedObject = new(nodeData);
             mainContainer.Bind(SerializedObject);
 
-            baseNode1 = nodeData;
+            baseNode = nodeData;
         }
 
         public override void OnSelected()
         {
             base.OnSelected();
-            Selection.activeObject = baseNode1;
+            Selection.activeObject = baseNode;
         }
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
