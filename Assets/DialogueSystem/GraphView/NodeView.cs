@@ -154,6 +154,14 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         }
 
+        void CreateListFields(BaseNode baseNode)
+        {
+            var ListFields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(f => f.IsDefined(typeof(ListFieldAttribute), inherit: true));
+
+
+        }
+
         public void RemovePort(Port port)
         {
             Debug.Log("removing port");

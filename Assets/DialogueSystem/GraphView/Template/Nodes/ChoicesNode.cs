@@ -58,6 +58,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         }
     }
 
+    [CreateNodeMenu(menuName = "ChoicesNode")]
     public class ChoicesNode :BaseNode,IExecutableNode
     {
         [Input]
@@ -78,7 +79,8 @@ namespace BasDidon.Dialogue.NodeTemplate
         [TextArea, NodeField]
         public string questionText;
 
-        [SerializeField] List<Choice> choices;
+        [ListField(typeof(ChoicesGraphViewNode))]
+        List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
          
         public void CreateChoice()
@@ -90,6 +92,11 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void RemoveChoice(Choice choice)
         {
             choices.Remove(choice);
+        }
+
+        public void RemoveChoiceAt(int index)
+        {
+            choices.RemoveAt(index);
         }
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
