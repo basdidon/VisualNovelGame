@@ -47,7 +47,7 @@ namespace BasDidon.Dialogue.NodeTemplate
             IsEnable = true;
             Name = "new choice";
             IsEnableInputPortData = new(Direction.Input, "isEnable");
-            OutputFlowPortData = new(Direction.Output,"isEnable");
+            OutputFlowPortData = new(Direction.Output,"OutputFlow");
         }
 
         public ChoiceRecord GetRecord(DialogueTree dialogueTree)
@@ -79,7 +79,10 @@ namespace BasDidon.Dialogue.NodeTemplate
         [TextArea, NodeField]
         public string questionText;
 
-        [ListField(typeof(ChoicesGraphViewNode))]
+        ListElement<Choice> new_choices;
+
+        [SerializeField]
+        [ListField(typeof(ChoicesGraphListView))]
         List<Choice> choices;
         public IReadOnlyList<Choice> Choices => choices;
          

@@ -10,84 +10,136 @@ namespace BasDidon.Dialogue.NodeTemplate
 {
     using VisualGraphView;
 
-    public class GraphListView : VisualElement
+    public class ChoicesGraphListView : GraphListView
     {
-        public SerializedProperty SerializedProperty { get; }
-        public NodeView NodeView { get; }
-        Func<Action<int>,int, VisualElement> MakeItem;
-        Action<VisualElement, int> BindItem;
-        public event Action OnAddItem;
-        public event Action<int> OnRemoveItem;
-
-        public GraphListView(
-            SerializedProperty serializedPropertyList, 
-            NodeView nodeView, 
-            Func<Action<int>,int,VisualElement> makeItem,
-            Action<VisualElement,int> bindItem,
-            Action onAddItem = null,
-            Action<int> onRemoveItem = null
-            )
+        public ChoicesGraphListView(SerializedProperty serializedProperty,NodeView nodeView) : base(serializedProperty, nodeView)
         {
-            SerializedProperty = serializedPropertyList;
-            NodeView = nodeView;
-            MakeItem = makeItem;
-            BindItem = bindItem;
-            OnAddItem = onAddItem;
-            OnRemoveItem = onRemoveItem;
 
-            MakeContainer();
-
-            this.TrackPropertyValue(serializedPropertyList, OnPropertyValueChanged);
         }
 
-        void OnPropertyValueChanged(SerializedProperty changed)
+        public override VisualElement MakeItem(int i)
         {
-            RefreshItems();
-        }
+            VisualElement listElement = new();
+            listElement.style.flexDirection = FlexDirection.Column;
 
-        VisualElement listElementsContainer;
+            VisualElement PortsContainer = new();
+            listElement.Add(PortsContainer);
 
-        void MakeContainer()
-        {
-            listElementsContainer = new();
-            Add(listElementsContainer);
+            // IsEnablePort
+            var IsEnablePort = NodeView.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            IsEnablePort.name = "is_enable_port";
+            IsEnablePort.portName = string.Empty;
+            PortsContainer.Add(IsEnablePort);
 
-            // Add Button
-            Button addCondition = new() { text = "Add Choice" };
-            Add(addCondition);
-
-            addCondition.clicked += () => OnAddItem?.Invoke();
-
-            RefreshItems();
-        }
-
-        public void RefreshItems()
-        {
-            for (int i = 0; i < SerializedProperty.arraySize; i++)
+            // IsEnableToggle
+            Toggle IsEnableToggle = new()
             {
-                VisualElement itemView;
-                if (i < listElementsContainer.childCount)
-                {
-                    itemView = listElementsContainer.ElementAt(i);
-                }
-                else
-                {
-                    itemView = MakeItem?.Invoke(OnRemoveItem,i);
-                    listElementsContainer.Add(itemView);
-                }
+                name = "is_enable_toggle"
+            };
+            IsEnablePort.Add(IsEnableToggle);
 
-                itemView.Unbind();
-                BindItem?.Invoke(itemView, i);
-
-            }
-
-            while (SerializedProperty.arraySize < listElementsContainer.childCount)
+            GraphView.OnPortConnect += port =>
             {
-                listElementsContainer.RemoveAt(SerializedProperty.arraySize);
-            }
+                if (port.viewDataKey == IsEnablePort.viewDataKey)
+                {
+                    IsEnableToggle.style.display = DisplayStyle.None;
+                }
+            };
+
+            GraphView.OnPortDisconnect += port =>
+            {
+                if (port.viewDataKey == IsEnablePort.viewDataKey)
+                {
+                    IsEnableToggle.style.display = DisplayStyle.Flex;
+                }
+            };
+
+            // OutputFlowPort
+            var outputFlowPort = NodeView.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(ExecutionFlow));
+            outputFlowPort.name = "output_flow_port";
+            outputFlowPort.portName = string.Empty;
+            outputFlowPort.portColor = Color.yellow;
+            PortsContainer.Add(outputFlowPort);
+
+            // ChoiceText
+            var choiceText = new TextField()
+            {
+                name = "choice_text"
+            };
+            listElement.Add(choiceText);
+
+            // DeleteChoiceButton
+            Button deleteChoiceBtn = new()
+            {
+                text = "X",
+                name = "delete_choice_btn"
+            };
+            listElement.Add(deleteChoiceBtn);
+
+            deleteChoiceBtn.clicked += () => OnRemoveItem(i);
+            deleteChoiceBtn.text = $"X {i}";
+
+            // Style 
+            style.marginTop = new(2f);
+            style.marginBottom = new(0f);
+            style.marginRight = new(0f);
+            style.marginLeft = new(0f);
+            style.backgroundColor = new Color(.08f, .08f, .08f, .5f);
+            style.borderBottomLeftRadius = new(8);
+            style.borderBottomRightRadius = new(8);
+            style.borderTopLeftRadius = new(8);
+            style.borderTopRightRadius = new(8);
+
+            PortsContainer.style.flexDirection = FlexDirection.Row;
+            PortsContainer.style.justifyContent = Justify.SpaceBetween;
+
+            return listElement;
+        }
+
+        public override void BindItem(VisualElement e, int index)
+        {
+            var SerializedChoice = SerializedProperty.GetArrayElementAtIndex(index);
+
+            var isEnableInputPortSP = SerializedChoice.FindPropertyRelative("<IsEnableInputPortData>k__BackingField");
+            string isEnablePortGuid = isEnableInputPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+            var isEnablePort = e.Q<Port>("is_enable_port");
+            isEnablePort.viewDataKey = isEnablePortGuid;
+
+            var isEnableSP = SerializedChoice.FindPropertyRelative("<IsEnable>k__BackingField");
+            var isEnableToggle = e.Q<Toggle>("is_enable_toggle");
+            isEnableToggle.BindProperty(isEnableSP);
+
+            var outputFlowPortSP = SerializedChoice.FindPropertyRelative("<OutputFlowPortData>k__BackingField");
+            string outputFlowPortGuid = outputFlowPortSP.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+            var outputFlowPort = e.Q<Port>("output_flow_port");
+            outputFlowPort.viewDataKey = outputFlowPortGuid;
+
+            // ChoiceText
+            var choiceTextSP = SerializedChoice.FindPropertyRelative("<Name>k__BackingField");
+            var choiceText = e.Q<TextField>("choice_text");
+            choiceText.BindProperty(choiceTextSP);
+        }
+
+
+        public override void OnAddItem()
+        {
+            SerializedProperty.InsertArrayElementAtIndex(SerializedProperty.arraySize);
+            var serializedChoice = SerializedProperty.GetArrayElementAtIndex(SerializedProperty.arraySize - 1);
+
+            var isEnableInputPortSP = serializedChoice.FindPropertyRelative("<IsEnableInputPortData>k__BackingField");
+            
+
+
+            //ChoicesNode.CreateChoice();
+        }
+
+        public override void OnRemoveItem(int index)
+        {
+            //ChoicesNode.RemoveChoiceAt(index);
         }
     }
 
+    /*
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : NodeView
     {
@@ -211,5 +263,5 @@ namespace BasDidon.Dialogue.NodeTemplate
             var choiceText = visualElement.Q<TextField>("choice_text");
             choiceText.BindProperty(choiceTextSP);
         }
-    }
+    }*/
 }

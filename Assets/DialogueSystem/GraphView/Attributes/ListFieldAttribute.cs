@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace BasDidon.Dialogue
 {
-    [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]
     public class ListFieldAttribute : Attribute
     {
+        public Type CreatorType { get; }
         public ListFieldAttribute(Type type)
         {
-
+            CreatorType = type;
         }
     }
 }

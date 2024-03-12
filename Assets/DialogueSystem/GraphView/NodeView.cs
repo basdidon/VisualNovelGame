@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System;
 using System.Reflection;
+using System.Collections;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -46,6 +47,39 @@ namespace BasDidon.Dialogue.VisualGraphView
             CreatePorts(baseNode);
             CreateSelectors(baseNode);
             CreateNodeFields(baseNode);
+            CreateListFields(baseNode);
+
+            var fields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            foreach(var field in fields)
+            {
+                if(field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>))
+                {
+                    Type[] genericArguments = field.FieldType.GetGenericArguments();
+                    Type listElementType = typeof(ListElement<>).MakeGenericType(genericArguments);
+
+                    object fieldValue = field.GetValue(baseNode) as IList;
+                    /*
+                    fieldValue
+                    ListElement<> a = Convert.ChangeType(fieldValue, listElementType);
+                    if(fieldValue is IList<> list)
+                    {
+                        Debug.Log($"Hooray {list.Count}");
+                    }
+                    else
+                    {
+                        Debug.Log("-------------");
+
+                    }
+                    var fieldsInGenericType = listElementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    */
+                }
+            }
+            
+            var typesWithGeneric = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(f => f.FieldType.IsGenericType && f.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>));
+
+            Debug.Log($"-> {typesWithGeneric.Count()}");
 
             RefreshExpandedState();
         }
@@ -112,9 +146,14 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             foreach (var member in selectorMembers)
             {
-                EnumField enumField = new(StringHelper.ToCapitalCase(member.Name)) { bindingPath = member.Name };
-                extensionContainer.Add(enumField);
+                CreateSelector(member);
             }
+        }
+
+        void CreateSelector(FieldInfo fieldInfo)
+        {
+            EnumField enumField = new(StringHelper.ToCapitalCase(fieldInfo.Name)) { bindingPath = fieldInfo.Name };
+            extensionContainer.Add(enumField);
         }
 
         void CreateNodeFields(BaseNode baseNode)
@@ -126,32 +165,28 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             foreach (var field in nodeFields)
             {
-                var serializeProperty = SerializedObject.FindProperty(field.Name);
-
-                if (serializeProperty == null)
-                {
-                    Debug.Log($"can't find {name}");
-                    continue;
-                }
-
-                Type fieldType = GetFieldOrPropertyType(baseNode.GetType(),field.Name);
-
-                if (types.Contains(fieldType))
-                {
-                    var propField = new PropertyField(serializeProperty);
-                    extensionContainer.Add(propField);
-                }
-                else if(types.Any(t=> fieldType.IsSubclassOf(t)))
-                {
-                    var propField = new PropertyField(serializeProperty);
-                    extensionContainer.Add(propField);
-                }
-                else
-                {
-                    throw new System.InvalidOperationException();
-                }
+                CreateNodeField(field);
             }
+        }
 
+        void CreateNodeField(FieldInfo fieldInfo)
+        {
+            var serializeProperty = SerializedObject.FindProperty(fieldInfo.Name);
+
+            if (serializeProperty == null)
+                throw new NullReferenceException($"can't find {fieldInfo.Name}");
+
+            Type fieldType = GetFieldOrPropertyType(baseNode.GetType(), fieldInfo.Name);
+
+            if (NodeFieldAttribute.supportedTypes.Contains(fieldType) || NodeFieldAttribute.supportedTypes.Any(t=>fieldType.IsSubclassOf(t)))
+            {
+                var propField = new PropertyField(serializeProperty);
+                extensionContainer.Add(propField);
+            }
+            else
+            {
+                throw new System.InvalidOperationException();
+            }
         }
 
         void CreateListFields(BaseNode baseNode)
@@ -160,6 +195,25 @@ namespace BasDidon.Dialogue.VisualGraphView
                 .Where(f => f.IsDefined(typeof(ListFieldAttribute), inherit: true));
 
 
+            Debug.Log(ListFields.Count());
+
+            foreach(var listField in ListFields)
+            {
+                CreateListField(listField);
+            }
+        }
+
+        void CreateListField(FieldInfo fieldInfo)
+        {
+            ListFieldAttribute attr = fieldInfo.GetCustomAttribute<ListFieldAttribute>(true);
+            var serializeProperty = SerializedObject.FindProperty(fieldInfo.Name);
+
+            if (serializeProperty == null)
+                throw new NullReferenceException($"can't find {fieldInfo.Name}");
+
+            Debug.Log("a");
+            var listview = GraphListViewFactory.GetGraphListView(attr.CreatorType,serializeProperty,this);
+            extensionContainer.Add(listview);
         }
 
         public void RemovePort(Port port)
@@ -174,5 +228,81 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             GraphView.RemoveElement(port);
         }
+    }
+
+    public static class GraphListViewFactory
+    {
+        public static GraphListView GetGraphListView(Type type,SerializedProperty serializedProperty, NodeView nodeView)
+        {
+            return Activator.CreateInstance(type,new object[] {serializedProperty,nodeView}) as GraphListView;
+        }
+    }
+
+    public abstract class GraphListView : VisualElement
+    {
+        public SerializedProperty SerializedProperty { get; }
+        public NodeView NodeView { get; }
+        public DialogueGraphView GraphView => NodeView.GraphView;
+
+        public GraphListView(SerializedProperty serializedPropertyList, NodeView nodeView)
+        {
+            SerializedProperty = serializedPropertyList;
+            NodeView = nodeView;
+
+            MakeListContainer();
+
+            this.TrackPropertyValue(serializedPropertyList, OnPropertyValueChanged);
+        }
+
+        void OnPropertyValueChanged(SerializedProperty changed)
+        {
+            RefreshItems();
+        }
+
+        VisualElement listElementsContainer;
+
+        void MakeListContainer()
+        {
+            listElementsContainer = new();
+            Add(listElementsContainer);
+
+            // Add Button
+            Button addElementBtn = new() { text = "Add Choice" };
+            Add(addElementBtn);
+
+            addElementBtn.clicked += () => OnAddItem();
+
+            RefreshItems();
+        }
+
+        public void RefreshItems()
+        {
+            for (int i = 0; i < SerializedProperty.arraySize; i++)
+            {
+                VisualElement itemView;
+                if (i < listElementsContainer.childCount)
+                {
+                    itemView = listElementsContainer.ElementAt(i);
+                }
+                else
+                {
+                    itemView = MakeItem(i);
+                    listElementsContainer.Add(itemView);
+                }
+
+                itemView.Unbind();
+                BindItem(itemView, i);
+            }
+
+            while (SerializedProperty.arraySize < listElementsContainer.childCount)
+            {
+                listElementsContainer.RemoveAt(SerializedProperty.arraySize);
+            }
+        }
+
+        public abstract VisualElement MakeItem(int i);
+        public abstract void BindItem(VisualElement e, int index);
+        public abstract void OnAddItem();
+        public abstract void OnRemoveItem(int index);
     }
 }
