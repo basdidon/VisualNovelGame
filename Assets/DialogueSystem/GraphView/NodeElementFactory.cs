@@ -9,6 +9,9 @@ namespace BasDidon.Dialogue.VisualGraphView
     {
         Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName);
         Port CreatePortWithField(SerializedProperty serializedProperty, string portGuid, Direction direction, NodeView nodeView, string propertyName);
+        //
+        Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName);
+        Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName);
     }
 
     [AttributeUsage(AttributeTargets.Class)]

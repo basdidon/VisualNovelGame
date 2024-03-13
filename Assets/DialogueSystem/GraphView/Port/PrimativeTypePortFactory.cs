@@ -82,5 +82,49 @@ namespace BasDidon.Dialogue.VisualGraphView
                 port.Add(propertyField);
             }
         }
+
+        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName)
+        {
+            Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
+
+            var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
+            port.portName = portName;
+
+            return port;
+        }
+
+        public Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName)
+        {
+            var port = CreateUnbindPort(direction, nodeView, propertyName);
+            var propertyField = new PropertyField();
+
+            if (port.direction == Direction.Input)
+            {
+                //port.Insert(1, propertyField);
+
+                port.Add(propertyField);
+                nodeView.GraphView.OnPortConnect += (onConnectPort) =>
+                {
+                    if (port == onConnectPort)
+                    {
+                        propertyField.style.display = DisplayStyle.None;
+                    }
+                };
+
+                nodeView.GraphView.OnPortDisconnect += (onDisconnectPort) =>
+                {
+                    if (port == onDisconnectPort)
+                    {
+                        propertyField.style.display = DisplayStyle.Flex;
+                    }
+                };
+            }
+            else
+            {
+                port.Add(propertyField);
+            }
+
+            return port;
+        }
     }
 }

@@ -78,8 +78,13 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [TextArea, NodeField]
         public string questionText;
-
+        /*
+        [SerializeField]
         ListElement<Choice> new_choices;
+        */
+
+        [SerializeField]
+        List<Item> items = new (){ new(),new() };
 
         [SerializeField]
         [ListField(typeof(ChoicesGraphListView))]

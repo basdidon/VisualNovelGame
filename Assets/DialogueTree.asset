@@ -20,10 +20,10 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
+      <PortGuid>k__BackingField: cddc8b5b-6d3c-43d7-a15d-e49d1f384ff7
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: a2596d46-31fe-484f-be84-c7906d4b5e7c
+      <PortGuid>k__BackingField: b615bb50-b29c-4a08-b2b0-02ee5a028628
       <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E40\u0E0A\u0E34\u0E0D\u0E04\u0E23\u0E31\u0E1A"
@@ -47,10 +47,10 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: 46313c5b-f622-4ca0-837c-fe47715c432f
+      <PortGuid>k__BackingField: e549f339-6c88-41ef-b8a2-3a4f04a3f065
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: a36db4f8-e5b4-4c12-9291-29204681c5bb
+      <PortGuid>k__BackingField: 1dc1973e-b118-40ee-9725-6ba3ebd20e66
       <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E19\u0E32\u0E22\u0E15\u0E34\u0E14\u0E2B\u0E19\u0E35\u0E49\u0E09\u0E31\u0E19"
@@ -74,13 +74,13 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: b6d3f9b4-1f51-4405-9c27-91f523089e94
+      <PortGuid>k__BackingField: de1b156b-839d-4055-930c-298c9a0a13e3
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: f759f19a-3ad5-41b2-8284-f7349e4a5dc9
+      <PortGuid>k__BackingField: 991dbe48-d360-47a7-8bc3-c4ca0a33fbf0
       <Direction>k__BackingField: 1
     - <FieldName>k__BackingField: Cost
-      <PortGuid>k__BackingField: 4fd676b9-3621-445d-ae26-7832bedc18fc
+      <PortGuid>k__BackingField: 1b178c83-9488-4bc5-a5e0-bff304b5d919
       <Direction>k__BackingField: 0
   cost: 1500
 --- !u!114 &-4875794130857494698
@@ -103,13 +103,13 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: A
-      <PortGuid>k__BackingField: e798a83f-84c0-4c77-90b6-e860f9139c8c
+      <PortGuid>k__BackingField: 01417e2c-a131-4494-99dd-bbf775265336
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: B
-      <PortGuid>k__BackingField: c4add5f5-d401-4e04-9dcf-295347addf2b
+      <PortGuid>k__BackingField: 3633aab1-7bd6-4f29-8c0e-77aed65c8331
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Result
-      <PortGuid>k__BackingField: 9a6c8ce2-d142-4580-b5ed-5d08c9e2ffcc
+      <PortGuid>k__BackingField: 2c8aebea-d5aa-49d8-9a00-71795d82f18b
       <Direction>k__BackingField: 1
   lhs: 0
   rhs: 300
@@ -134,10 +134,10 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Name
-      <PortGuid>k__BackingField: f703b4cf-6bf1-4eca-a2bd-7a5b40658722
+      <PortGuid>k__BackingField: 4149e4f8-7c1e-4f61-92de-150023e2e6c9
       <Direction>k__BackingField: 1
     - <FieldName>k__BackingField: Money
-      <PortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
+      <PortGuid>k__BackingField: 3f04e5ef-89cc-4854-b9ed-3ffb70554f6d
       <Direction>k__BackingField: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -164,46 +164,7 @@ MonoBehaviour:
   - {fileID: -4742922549514474887}
   - {fileID: 876815532178079586}
   - {fileID: -5562079095400986896}
-  edges:
-  - <EdgeGuid>k__BackingField: 057d8c62-5475-450b-8218-f933bc117edf
-    <OutputPortGuid>k__BackingField: adaba793-fb13-47f5-9183-757afea43d2e
-    <InputPortGuid>k__BackingField: e86fbcd1-fe83-4d7c-a8c9-c675b5cafc83
-  - <EdgeGuid>k__BackingField: 8c09ae26-ef88-461b-8877-86f2be146330
-    <OutputPortGuid>k__BackingField: c95e3f6e-0d2f-4674-8c29-bfe9c216403c
-    <InputPortGuid>k__BackingField: 17c20cd2-007b-466a-a71b-8905234c575b
-  - <EdgeGuid>k__BackingField: eb904f4e-f3b3-4dd9-a936-25f1d0808e8a
-    <OutputPortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
-    <InputPortGuid>k__BackingField: e798a83f-84c0-4c77-90b6-e860f9139c8c
-  - <EdgeGuid>k__BackingField: 19b8fcf0-10fd-4e9f-9bfb-7dd5e3007db8
-    <OutputPortGuid>k__BackingField: cb0b21e5-1de3-42fa-b874-dd6e476dffa2
-    <InputPortGuid>k__BackingField: 8bd287ae-075a-4a63-a435-904ba0a464d4
-  - <EdgeGuid>k__BackingField: c835f391-728d-4309-bdbf-7d1e9bf262a6
-    <OutputPortGuid>k__BackingField: 9cf2e093-5062-47dd-8588-ad5cefb85605
-    <InputPortGuid>k__BackingField: 46313c5b-f622-4ca0-837c-fe47715c432f
-  - <EdgeGuid>k__BackingField: fd995e7d-2404-45cf-bb48-73a0572b4400
-    <OutputPortGuid>k__BackingField: f759f19a-3ad5-41b2-8284-f7349e4a5dc9
-    <InputPortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
-  - <EdgeGuid>k__BackingField: 6a4f7c2d-f457-41fa-9ab9-2307a322670c
-    <OutputPortGuid>k__BackingField: a8b8db4c-a1fe-4b85-bed1-caa5d1a20f77
-    <InputPortGuid>k__BackingField: 5b2b0ddc-80c1-42ba-a1f4-890f25f2e61c
-  - <EdgeGuid>k__BackingField: 4aa8ffcd-55ca-48f7-bc42-58f23c98f186
-    <OutputPortGuid>k__BackingField: 6c292fcf-c3ec-4a12-8622-5b2489327785
-    <InputPortGuid>k__BackingField: b6d3f9b4-1f51-4405-9c27-91f523089e94
-  - <EdgeGuid>k__BackingField: f2621d6e-a236-49c8-a31c-ed8e537640f5
-    <OutputPortGuid>k__BackingField: f009fd92-776c-4bb3-908d-f6b99103d697
-    <InputPortGuid>k__BackingField: 520e16b4-4ec4-43dc-bd19-a79a4fcea33b
-  - <EdgeGuid>k__BackingField: 9d6aa5d2-56f5-4509-848d-6ceb139b445d
-    <OutputPortGuid>k__BackingField: b96b714e-6401-4244-97a9-3ba6c7b30492
-    <InputPortGuid>k__BackingField: b28c784d-4b9f-4be7-9740-f1c33771f58c
-  - <EdgeGuid>k__BackingField: 0c2b6d64-7641-40be-9845-d0ce7fcd9f40
-    <OutputPortGuid>k__BackingField: 23c12e39-8051-4d56-b463-89269c90b3c8
-    <InputPortGuid>k__BackingField: f841ce8f-4f86-45b7-85be-37bec621d465
-  - <EdgeGuid>k__BackingField: 90caee1f-d6e7-4ac3-afbe-daabff1f0932
-    <OutputPortGuid>k__BackingField: 9a6c8ce2-d142-4580-b5ed-5d08c9e2ffcc
-    <InputPortGuid>k__BackingField: 9e5d4d71-c1c7-410a-91ed-6dfd49a0c186
-  - <EdgeGuid>k__BackingField: 9b9f9680-880b-4c5f-81c8-01a86a344706
-    <OutputPortGuid>k__BackingField: 3bc192af-a80b-4241-8a5c-0b2828e1e2a0
-    <InputPortGuid>k__BackingField: 78313f5b-159a-494f-91a7-82d96ec5acbb
+  edges: []
 --- !u!114 &431486062957122853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +185,7 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: adaba793-fb13-47f5-9183-757afea43d2e
+      <PortGuid>k__BackingField: 1ce7e416-8a4e-406a-8b5b-a4517ab15e68
       <Direction>k__BackingField: 1
 --- !u!114 &876815532178079586
 MonoBehaviour:
@@ -246,13 +207,13 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: f841ce8f-4f86-45b7-85be-37bec621d465
+      <PortGuid>k__BackingField: 847b68b3-c4b8-488b-87f4-37e431b891d5
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: 9cf2e093-5062-47dd-8588-ad5cefb85605
+      <PortGuid>k__BackingField: 1f4224af-0547-4c91-a5ff-bf89bda226e1
       <Direction>k__BackingField: 1
     - <FieldName>k__BackingField: MoneyToGain
-      <PortGuid>k__BackingField: d7743ebf-8781-4e67-bca6-f68ace955f36
+      <PortGuid>k__BackingField: 177b4666-962c-4f58-8d56-e257844865d2
       <Direction>k__BackingField: 0
   moneyToGain: 300
 --- !u!114 &1283514966779007384
@@ -275,13 +236,13 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: 520e16b4-4ec4-43dc-bd19-a79a4fcea33b
+      <PortGuid>k__BackingField: b486dfb1-ca38-4dcc-b0b1-e64c128c3629
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: a8b8db4c-a1fe-4b85-bed1-caa5d1a20f77
+      <PortGuid>k__BackingField: bd81f44b-f61e-48a0-a009-2345df71ee9f
       <Direction>k__BackingField: 1
     - <FieldName>k__BackingField: Cost
-      <PortGuid>k__BackingField: bc8b4f4c-9a17-4cde-abae-b4cb7c6ef5f3
+      <PortGuid>k__BackingField: e8a3135a-f430-41d1-923c-73cbdad28cc0
       <Direction>k__BackingField: 0
   cost: 300
 --- !u!114 &3559540290517981888
@@ -304,13 +265,13 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: A
-      <PortGuid>k__BackingField: 8bd287ae-075a-4a63-a435-904ba0a464d4
+      <PortGuid>k__BackingField: 8c47ddec-2396-47d4-b9ee-4d690e39333b
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: B
-      <PortGuid>k__BackingField: 71501a02-a4bc-45b7-b7b5-bbbc6d86dedd
+      <PortGuid>k__BackingField: 108e7bea-de01-4e6d-9611-52bf9dfe4072
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Result
-      <PortGuid>k__BackingField: 3bc192af-a80b-4241-8a5c-0b2828e1e2a0
+      <PortGuid>k__BackingField: 1807acb8-c0fb-4f90-8f69-27732bbe3eed
       <Direction>k__BackingField: 1
   lhs: 0
   rhs: 1500
@@ -335,10 +296,25 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: 17c20cd2-007b-466a-a71b-8905234c575b
+      <PortGuid>k__BackingField: d4e37221-35f3-4da2-9f9e-d428267c9899
       <Direction>k__BackingField: 0
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   questionText: 
+  items:
+  - ports:
+      portList:
+      - <FieldName>k__BackingField: Input
+        <PortGuid>k__BackingField: 41136c8f-40b9-4f5e-8c2d-84d7f4aa5a67
+        <Direction>k__BackingField: 0
+    isEnable: 0
+    name: 
+  - ports:
+      portList:
+      - <FieldName>k__BackingField: Input
+        <PortGuid>k__BackingField: 86b59b88-2b49-4b76-a858-a00432b355fe
+        <Direction>k__BackingField: 0
+    isEnable: 0
+    name: 
   choices:
   - <IsEnable>k__BackingField: 1
     <Name>k__BackingField: "\u0E44\u0E21\u0E48\u0E2A\u0E19\u0E43\u0E08"
@@ -422,10 +398,10 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: b28c784d-4b9f-4be7-9740-f1c33771f58c
+      <PortGuid>k__BackingField: 406587ad-47ae-4651-9999-b00e33d21784
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: d71e9d06-a886-490b-a7f5-5b1a03be9db7
+      <PortGuid>k__BackingField: 888f7741-6bf6-41e1-ba67-467bc1da8eff
       <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E41\u0E25\u0E49\u0E27\u0E40\u0E08\u0E2D\u0E01\u0E31\u0E19\u0E1E\u0E48\u0E2D\u0E2B\u0E19\u0E38\u0E48\u0E21"
@@ -449,10 +425,10 @@ MonoBehaviour:
   ports:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: e86fbcd1-fe83-4d7c-a8c9-c675b5cafc83
+      <PortGuid>k__BackingField: 77dde9ef-a514-47d7-8018-88ad40acf72c
       <Direction>k__BackingField: 0
     - <FieldName>k__BackingField: Output
-      <PortGuid>k__BackingField: c95e3f6e-0d2f-4674-8c29-bfe9c216403c
+      <PortGuid>k__BackingField: c6e4355a-d64a-4b61-9632-8971ac260a7e
       <Direction>k__BackingField: 1
   speaker: {fileID: 11400000, guid: aff5fcccca7de2546a6b3b8f871df56b, type: 2}
   DialogueText: "\u0E2A\u0E27\u0E31\u0E2A\u0E14\u0E35\u0E09\u0E31\u0E19\u0E0A\u0E37\u0E48\u0E2D\u0E27\u0E48\u0E32

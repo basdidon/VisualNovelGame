@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using System.Reflection;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -51,37 +52,62 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             var fields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-            foreach(var field in fields)
-            {
-                if(field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>))
+            foreach (var field in fields)
+            {   
+                if (typeof(IList).IsAssignableFrom(field.FieldType) && field.FieldType.GetGenericTypeDefinition() == typeof(List<>) && field.FieldType.GetGenericArguments()[0].IsSubclassOf(typeof(ListElement)))
                 {
-                    Type[] genericArguments = field.FieldType.GetGenericArguments();
-                    Type listElementType = typeof(ListElement<>).MakeGenericType(genericArguments);
+                    var value = field.GetValue(baseNode) as IList;
 
-                    object fieldValue = field.GetValue(baseNode) as IList;
-                    /*
-                    fieldValue
-                    ListElement<> a = Convert.ChangeType(fieldValue, listElementType);
-                    if(fieldValue is IList<> list)
-                    {
-                        Debug.Log($"Hooray {list.Count}");
-                    }
-                    else
-                    {
-                        Debug.Log("-------------");
+                    Debug.Log($"---->{field.FieldType} {field.Name}");
+                    Debug.Log($"----> {value.Count}");
 
-                    }
-                    var fieldsInGenericType = listElementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    */
+                    var newList = new NewGraphListView(SerializedObject.FindProperty(field.Name), this, field.FieldType.GetGenericArguments()[0]);
+                    extensionContainer.Add(newList);
+                    RefreshExpandedState();
+                    //BaseGraphList baseGraphList = new();
                 }
+                /*
+            if(field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                Type[] genericArguments = field.FieldType.GetGenericArguments();
+                Type listElementType = typeof(ListElement<>).MakeGenericType(genericArguments);
+
+                object fieldValue = field.GetValue(baseNode) as IList;
+
+                var choicesProp = SerializedObject.FindProperty("new_choices");
+                var choicesPropEnumerator = choicesProp.GetEnumerator();
+
+                var counter = 0;
+                while (choicesPropEnumerator.MoveNext())
+                {
+                    var cur = choicesPropEnumerator.Current;
+
+                }
+
+                /*
+                fieldValue
+                ListElement<> a = Convert.ChangeType(fieldValue, listElementType);
+                if(fieldValue is IList<> list)
+                {
+                    Debug.Log($"Hooray {list.Count}");
+                }
+                else
+                {
+                    Debug.Log("-------------");
+
+                }
+                var fieldsInGenericType = listElementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
             }
-            
-            var typesWithGeneric = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(f => f.FieldType.IsGenericType && f.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>));
+        }
 
-            Debug.Log($"-> {typesWithGeneric.Count()}");
+        var typesWithGeneric = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(f => f.FieldType.IsGenericType && f.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>));
 
-            RefreshExpandedState();
+        Debug.Log($"-> {typesWithGeneric.Count()}");
+
+        RefreshExpandedState();*/
+            }
         }
 
         Type GetFieldOrPropertyType(Type baseClass, string name) => GetFieldOrPropertyType(baseClass, name, out _); 
@@ -211,7 +237,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             if (serializeProperty == null)
                 throw new NullReferenceException($"can't find {fieldInfo.Name}");
 
-            Debug.Log("a");
             var listview = GraphListViewFactory.GetGraphListView(attr.CreatorType,serializeProperty,this);
             extensionContainer.Add(listview);
         }
@@ -236,6 +261,148 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             return Activator.CreateInstance(type,new object[] {serializedProperty,nodeView}) as GraphListView;
         }
+    }
+
+    public class BaseGraphList : VisualElement
+    {
+        public VisualElement PortsContainer { get; }
+        public VisualElement InputContainer { get; }
+        public VisualElement OutputContainer { get; }
+        public VisualElement ContentContainer { get; }
+
+        public BaseGraphList()
+        {
+            PortsContainer = new();
+            PortsContainer.style.flexDirection = FlexDirection.Row;
+            Add(PortsContainer);
+
+            InputContainer = new();
+            InputContainer.style.flexGrow = 1;
+            PortsContainer.Add(InputContainer);
+
+            OutputContainer = new();
+            OutputContainer.style.flexGrow = 1;
+            PortsContainer.Add(OutputContainer);
+
+            ContentContainer = new();
+            Add(ContentContainer);  
+        }
+    }
+
+    public class NewGraphListView : VisualElement
+    {
+        public SerializedProperty SerializedProperty { get; }
+        public NodeView NodeView { get; }
+        public DialogueGraphView GraphView => NodeView.GraphView;
+        public Type Type { get; }
+
+        public NewGraphListView(SerializedProperty serializedPropertyList, NodeView nodeView, Type type)
+        {
+            SerializedProperty = serializedPropertyList;
+            NodeView = nodeView;
+            Type = type;
+
+            MakeListContainer();
+
+            this.TrackPropertyValue(serializedPropertyList, OnPropertyValueChanged);
+        }
+
+        void OnPropertyValueChanged(SerializedProperty changed)
+        {
+            RefreshItems();
+        }
+
+        VisualElement listElementsContainer;
+
+        void MakeListContainer()
+        {
+            listElementsContainer = new();
+            Add(listElementsContainer);
+
+            // Add Button
+            Button addElementBtn = new() { text = "Add Choice" };
+            Add(addElementBtn);
+
+            //addElementBtn.clicked += () => OnAddItem();
+
+            RefreshItems();
+        }
+
+        public void RefreshItems()
+        {
+            for (int i = 0; i < SerializedProperty.arraySize; i++)
+            {
+                VisualElement itemView;
+                if (i < listElementsContainer.childCount)
+                {
+                    itemView = listElementsContainer.ElementAt(i);
+                }
+                else
+                {
+                    itemView = MakeItem(i);
+                    listElementsContainer.Add(itemView);
+                }
+
+                itemView.Unbind();
+                //BindItem(itemView, i);
+            }
+
+            while (SerializedProperty.arraySize < listElementsContainer.childCount)
+            {
+                listElementsContainer.RemoveAt(SerializedProperty.arraySize);
+            }
+        }
+
+        public VisualElement MakeItem(int i)
+        {
+            var listElement = new BaseGraphList();
+
+            var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach(var propertyInfo in propertiesInfo)
+            {
+                Debug.Log($"{Type.Name} {propertyInfo.Name}");
+
+                if (propertyInfo.IsDefined(typeof(PortAttribute), true))
+                {
+                    PortAttribute portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
+
+                    Port port = PortAttribute.CreateUnbindPort(propertyInfo, NodeView);
+                    if (portAttr.Direction == Direction.Input)
+                    {
+                        listElement.InputContainer.Add(port);
+                    }
+                    else
+                    {
+                        listElement.OutputContainer.Add(port);
+                    }
+                }
+            }
+
+            listElement.ContentContainer.Add(new Label() { text = $"{i}" });
+
+            return listElement;
+        }
+
+        public void BindItem(VisualElement e,int index)
+        {
+            var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var propertyInfo in propertiesInfo)
+            {
+                Debug.Log($"{Type.Name} {propertyInfo.Name}");
+
+                if (propertyInfo.IsDefined(typeof(PortAttribute), true))
+                {
+                    //SerializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("ports").
+                }
+            }
+        }
+        /*
+        public abstract void BindItem(VisualElement e, int index);
+        public abstract void OnAddItem();
+        public abstract void OnRemoveItem(int index);*/
+
     }
 
     public abstract class GraphListView : VisualElement

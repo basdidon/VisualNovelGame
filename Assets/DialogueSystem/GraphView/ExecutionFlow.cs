@@ -29,5 +29,25 @@ namespace BasDidon.Dialogue.VisualGraphView
         {
             return CreatePort(portGuid,direction,nodeView,propertyName);
         }
+
+        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName)
+        {
+            var port = nodeView.InstantiatePort(
+                Orientation.Horizontal,
+                direction,
+                direction == Direction.Output ? Port.Capacity.Single : Port.Capacity.Multi,
+                typeof(ExecutionFlow)
+            );
+
+            port.portName = portName;
+            port.portColor = Color.yellow;
+
+            return port;
+        }
+
+        public Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName)
+        {
+            return CreateUnbindPort(direction, nodeView, propertyName);
+        }
     }
 }
