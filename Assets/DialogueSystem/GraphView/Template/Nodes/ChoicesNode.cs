@@ -34,11 +34,21 @@ namespace BasDidon.Dialogue.NodeTemplate
     }
 
     [Serializable]
-    public class Choice
+    public class Choice:ListElement
     {
-        [field: SerializeField] public bool IsEnable { get; private set; }
-        [field: SerializeField] public string Name { get; private set; }
+        [Input(nameof(isEnable))]
+        public bool IsEnable { get; private set; }
+        public bool isEnable = true;
 
+        [Output]
+        public ExecutionFlow Output { get; }
+
+        [TextArea]
+        [NodeField]
+        public string name = "new choice";
+
+        [field: SerializeField] public string Name { get; private set; }
+        /*
         [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
         [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
 
@@ -49,10 +59,10 @@ namespace BasDidon.Dialogue.NodeTemplate
             IsEnableInputPortData = new(Direction.Input, "isEnable");
             OutputFlowPortData = new(Direction.Output,"OutputFlow");
         }
-
+        */
         public ChoiceRecord GetRecord(DialogueTree dialogueTree)
         {
-            bool isEnable = dialogueTree.GetInputValue(IsEnableInputPortData.PortGuid, IsEnable);
+            bool isEnable = dialogueTree.GetInputValue(nameof(IsEnable), IsEnable);
 
             return new ChoiceRecord(isEnable, Name);
         }
@@ -84,11 +94,10 @@ namespace BasDidon.Dialogue.NodeTemplate
         */
 
         [SerializeField]
-        List<Item> items = new (){ new(),new() };
+        List<Item> items = new ();
 
         [SerializeField]
-        [ListField(typeof(ChoicesGraphListView))]
-        List<Choice> choices;
+        List<Choice> choices = new();
         public IReadOnlyList<Choice> Choices => choices;
          
         public void CreateChoice()
@@ -112,6 +121,9 @@ namespace BasDidon.Dialogue.NodeTemplate
             base.Initialize(position, dialogueTree);
 
             choices = new();
+            choices.Add(new());
+            items = new();
+            items.Add(new() { name = "name"});
 
             SaveChanges();
         }
@@ -145,7 +157,7 @@ namespace BasDidon.Dialogue.NodeTemplate
             if (idx < 0 || idx >= Choices.Count)
                 throw new ArgumentOutOfRangeException();
 
-            var selectedOutputPort = Choices.ElementAt(idx).OutputFlowPortData;
+            var selectedOutputPort = Choices.ElementAt(idx).GetPortData("Output");
             GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
         }
     }

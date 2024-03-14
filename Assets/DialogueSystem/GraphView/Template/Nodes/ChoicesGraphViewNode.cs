@@ -9,7 +9,7 @@ using UnityEditor.Experimental.GraphView;
 namespace BasDidon.Dialogue.NodeTemplate
 {
     using VisualGraphView;
-
+    /*
     public class ChoicesGraphListView : GraphListView
     {
         public ChoicesGraphListView(SerializedProperty serializedProperty,NodeView nodeView) : base(serializedProperty, nodeView)
@@ -138,7 +138,7 @@ namespace BasDidon.Dialogue.NodeTemplate
             //ChoicesNode.RemoveChoiceAt(index);
         }
     }
-
+    */
     /*
     [CustomGraphViewNode(typeof(ChoicesNode))]
     public class ChoicesGraphViewNode : NodeView

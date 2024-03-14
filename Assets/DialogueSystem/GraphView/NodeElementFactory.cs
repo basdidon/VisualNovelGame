@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
@@ -12,6 +13,32 @@ namespace BasDidon.Dialogue.VisualGraphView
         //
         Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName);
         Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName);
+        void BindPort(VisualElement e, string fieldName, string portGuid, PortAttribute portAttr, SerializedProperty serializedProperty = null);
+    }
+
+    public class PortFactoryUtils
+    {
+        // find match Factory class for specific type
+        public static IPortFactory GetPortFactory(Type type)
+        {
+            if (type == typeof(ExecutionFlow))
+            {
+                return new ExecutionFlowPortFactory();
+            }
+            else if (PrimativeTypePortFactory.TryCreateFactory(type, out PrimativeTypePortFactory factory))
+            {
+                return factory;
+            }
+            else if (type.IsDefined(typeof(CustomTypeAttribute), true))
+            {
+                CustomTypeAttribute customTypeAttr = Attribute.GetCustomAttribute(type, typeof(CustomTypeAttribute)) as CustomTypeAttribute;
+                return Activator.CreateInstance(customTypeAttr.PortFactoryType.GetType()) as IPortFactory;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
@@ -22,9 +49,10 @@ namespace BasDidon.Dialogue.VisualGraphView
             PortFactoryType = portFactoryType;
         }
     }
-
+    /*
     public static class NodeElementFactory
     {
+        /*
         // find match Factory class for specific type
         static IPortFactory GetPortFactory(Type type)
         {
@@ -46,13 +74,13 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new InvalidOperationException();
             }
         }
-
-        public static void DrawPort(Type type, PortData portData, NodeView nodeView, string portName)
+        
+        public static void DrawPort(PropertyInfo propertyInfo, PortData portData, NodeView nodeView)
         {
             VisualElement portContainer = portData.Direction == Direction.Input ? nodeView.inputContainer : nodeView.outputContainer;
-            portContainer.Add(CreatePort(type,portData,nodeView,portName));
+            portContainer.Add(PortAttribute.CreatePort(propertyInfo,nodeView,portData));
         }
-
+        
         public static Port CreatePort(Type type, PortData portData, NodeView nodeView, string portName)
             => CreatePort(type, portData.PortGuid, portData.Direction, nodeView, portName);
         public static Port CreatePort(Type type, string portGuid, Direction direction, NodeView nodeView, string portName)
@@ -62,12 +90,12 @@ namespace BasDidon.Dialogue.VisualGraphView
         }
         
         /// 
-        public static void DrawPortWithField(SerializedProperty serializedProperty, Type type, PortData portData, NodeView nodeView, string propertyName)
+        public static void DrawPortWithField(SerializedProperty serializedProperty, PropertyInfo propertyInfo, PortData portData, NodeView nodeView, string propertyName)
         {
             VisualElement portContainer = portData.Direction == Direction.Input ? nodeView.inputContainer : nodeView.outputContainer;
             portContainer.Add(CreatePortWithField(serializedProperty, type, portData, nodeView, propertyName));
         }
-
+        
         // CreatePortWithField
         public static Port CreatePortWithField(SerializedProperty serializedProperty, Type type, PortData portData, NodeView nodeView, string propertyName)
             => CreatePortWithField(serializedProperty, type, portData.PortGuid, portData.Direction, nodeView, propertyName);
@@ -77,5 +105,5 @@ namespace BasDidon.Dialogue.VisualGraphView
             return factory.CreatePortWithField(serializedProperty, portGuid, direction, nodeView, propertyName);
         }
 
-    }
+    }*/
 }

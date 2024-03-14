@@ -19,33 +19,29 @@ namespace BasDidon.Dialogue.VisualGraphView
             BackingFieldName = backingFieldName;
         }
 
+        public void GG()
+        {
+            this.GetDescription();
+        }
+
         public static bool TryGetDirectionFromPropertyInfo(PropertyInfo propertyInfo, out Direction direction)
         {
-            bool isInput = propertyInfo.IsDefined(typeof(InputAttribute));
-            bool isOutput = propertyInfo.IsDefined(typeof(OutputAttribute));
-
-            if (isInput ^ isOutput) // XOR
+            if (propertyInfo.IsDefined(typeof(PortAttribute)))
             {
-                direction = default;
-                return false;
+                PortAttribute portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
+                direction = portAttr.Direction;
+                return true;
             }
 
-            if (isInput)
-            {
-                direction = Direction.Input;
-            }
-            else
-            {
-                direction = Direction.Output;
-            }
-
-            return true;
+            direction = default;
+            return false;
         }
 
         public static IEnumerable<PortData> CreatePortsData(ListElement listElement) => CreatePortsData(listElement.GetType());
         public static IEnumerable<PortData> CreatePortsData(BaseNode baseNode) => CreatePortsData(baseNode.GetType());
         static IEnumerable<PortData> CreatePortsData(Type type)
         {
+            Debug.Log(type.Name);
             var properties = type.GetProperties(BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var property in properties)
@@ -57,6 +53,10 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                     Debug.Log($"added new {newPortData.Direction} Port : {property.Name} {newPortData.PortGuid}");
                     yield return newPortData;
+                }
+                else
+                {
+                    Debug.Log($"not match : {property.Name}");
                 }
 
             }
@@ -78,7 +78,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             if (portAttr.HasBackingFieldName)
             {
-                return portFactory.CreateUnbindPortWithField(portAttr.Direction, nodeView, propertyInfo.Name);
+                return portFactory.CreateUnbindPortWithField(portAttr.Direction, nodeView, portAttr.BackingFieldName);
             }
             else
             {
@@ -127,12 +127,44 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
             else if (type.IsDefined(typeof(CustomTypeAttribute), true))
             {
-                CustomTypeAttribute customTypeAttr = Attribute.GetCustomAttribute(type, typeof(CustomTypeAttribute)) as CustomTypeAttribute;
+                CustomTypeAttribute customTypeAttr = GetCustomAttribute(type, typeof(CustomTypeAttribute)) as CustomTypeAttribute;
                 return Activator.CreateInstance(customTypeAttr.PortFactoryType.GetType()) as IPortFactory;
             }
             else
             {
                 throw new InvalidOperationException();
+            }
+        }
+    }
+
+    public static class AttributeExtensions
+    {
+
+        public static string GetDescription(this PortAttribute attribute)
+        {
+            return attribute != null ? "Happy x3" : string.Empty;
+        }
+
+        public static Port CreatePort(this PortAttribute portAttr, PropertyInfo propertyInfo, NodeView nodeView, PortData portData, SerializedObject serializedObject = null)
+        {
+            if (propertyInfo == null)
+                throw new ArgumentNullException();
+
+            Type type = propertyInfo.PropertyType;
+            IPortFactory portFactory = PortFactoryUtils.GetPortFactory(type);
+
+            if (serializedObject != null && portAttr.HasBackingFieldName)
+            {
+                var serializeProperty = serializedObject.FindProperty(portAttr.BackingFieldName);
+
+                if (serializeProperty == null)
+                    throw new NullReferenceException();
+                else
+                    return portFactory.CreatePortWithField(serializeProperty, portData.PortGuid, portData.Direction, nodeView, propertyInfo.Name);
+            }
+            else
+            {
+                return portFactory.CreatePort(portData.PortGuid, portData.Direction, nodeView, propertyInfo.Name);
             }
         }
     }

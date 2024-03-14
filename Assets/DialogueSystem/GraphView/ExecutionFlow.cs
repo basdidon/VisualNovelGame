@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -9,6 +10,11 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class ExecutionFlowPortFactory : IPortFactory
     {
+        public void BindPort(VisualElement e, string fieldName, string portGuid, PortAttribute portAttr,SerializedProperty serializedProperty = null)
+        {
+            return;
+        }
+
         public Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName)
         {
             var port = nodeView.InstantiatePort(
@@ -40,6 +46,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             );
 
             port.portName = portName;
+            port.name = portName;
             port.portColor = Color.yellow;
 
             return port;

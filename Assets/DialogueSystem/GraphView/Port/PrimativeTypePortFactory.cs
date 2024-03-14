@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace BasDidon.Dialogue.VisualGraphView
@@ -88,7 +89,8 @@ namespace BasDidon.Dialogue.VisualGraphView
             Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
-            port.portName = portName;
+            port.portName = StringHelper.ToCapitalCase(portName);
+            port.name = portName;
 
             return port;
         }
@@ -96,7 +98,12 @@ namespace BasDidon.Dialogue.VisualGraphView
         public Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName)
         {
             var port = CreateUnbindPort(direction, nodeView, propertyName);
-            var propertyField = new PropertyField();
+            var propertyField = new PropertyField()
+            {
+                name = $"{propertyName}_BackingField",
+                label = string.Empty
+            };
+            
 
             if (port.direction == Direction.Input)
             {
@@ -125,6 +132,34 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
 
             return port;
+        }
+
+        public void BindPort(VisualElement e,string fieldName,string portGuid,PortAttribute portAttr, SerializedProperty serializedProperty = null)
+        {
+            var port = e.Q<Port>(fieldName);
+            if (port != null)
+            {
+                port.viewDataKey = portGuid ?? string.Empty;//?? throw new KeyNotFoundException();
+            }
+
+            Debug.Log($"{portAttr.HasBackingFieldName}:{serializedProperty != null}");
+
+            if (portAttr.HasBackingFieldName && serializedProperty != null)
+            {
+                Debug.Log("pass");
+                var backingElementName = $"{portAttr.BackingFieldName}_BackingField";
+                var backingFieldElement = e.Q<PropertyField>(backingElementName);
+                if (backingFieldElement != null)
+                {
+                    Debug.Log("pass x2");
+                    backingFieldElement.BindProperty(serializedProperty);
+                }
+                else
+                {
+
+                }
+
+            }
         }
     }
 }

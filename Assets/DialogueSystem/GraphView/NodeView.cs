@@ -48,7 +48,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             CreatePorts(baseNode);
             CreateSelectors(baseNode);
             CreateNodeFields(baseNode);
-            CreateListFields(baseNode);
+            //CreateListFields(baseNode);
 
             var fields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -64,50 +64,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                     var newList = new NewGraphListView(SerializedObject.FindProperty(field.Name), this, field.FieldType.GetGenericArguments()[0]);
                     extensionContainer.Add(newList);
                     RefreshExpandedState();
-                    //BaseGraphList baseGraphList = new();
                 }
-                /*
-            if(field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>))
-            {
-                Type[] genericArguments = field.FieldType.GetGenericArguments();
-                Type listElementType = typeof(ListElement<>).MakeGenericType(genericArguments);
-
-                object fieldValue = field.GetValue(baseNode) as IList;
-
-                var choicesProp = SerializedObject.FindProperty("new_choices");
-                var choicesPropEnumerator = choicesProp.GetEnumerator();
-
-                var counter = 0;
-                while (choicesPropEnumerator.MoveNext())
-                {
-                    var cur = choicesPropEnumerator.Current;
-
-                }
-
-                /*
-                fieldValue
-                ListElement<> a = Convert.ChangeType(fieldValue, listElementType);
-                if(fieldValue is IList<> list)
-                {
-                    Debug.Log($"Hooray {list.Count}");
-                }
-                else
-                {
-                    Debug.Log("-------------");
-
-                }
-                var fieldsInGenericType = listElementType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
             }
-        }
-
-        var typesWithGeneric = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(f => f.FieldType.IsGenericType && f.FieldType.GetGenericTypeDefinition() == typeof(ListElement<>));
-
-        Debug.Log($"-> {typesWithGeneric.Count()}");
-
-        RefreshExpandedState();*/
-            }
+            RefreshExpandedState();
         }
 
         Type GetFieldOrPropertyType(Type baseClass, string name) => GetFieldOrPropertyType(baseClass, name, out _); 
@@ -134,34 +93,20 @@ namespace BasDidon.Dialogue.VisualGraphView
         void CreatePorts(BaseNode baseNode)
         {
             // create ports
-            foreach (var port in baseNode.Ports)
+            foreach (var portData in baseNode.Ports)
             {
-                PropertyInfo property = baseNode.GetType().GetProperty(port.FieldName);
+                PropertyInfo property = baseNode.GetType().GetProperty(portData.FieldName);
                 if (property == null)
                     continue;
 
-                Type type = property.PropertyType;
-
-                var portAttr = property.GetCustomAttribute<PortAttribute>();
-
-                if (portAttr == null)
-                    continue;
-
-                if (portAttr.HasBackingFieldName)
+                if (property.IsDefined(typeof(PortAttribute)))
                 {
-                    var serializeProperty = SerializedObject.FindProperty(portAttr.BackingFieldName);
+                    var portAttr = property.GetCustomAttribute<PortAttribute>();
+                    VisualElement portContainer = portData.Direction == Direction.Input ? inputContainer : outputContainer;
+                    Port port = portAttr.CreatePort(property, this, portData,SerializedObject);
 
-                    if (serializeProperty != null)
-                        NodeElementFactory.DrawPortWithField(serializeProperty, type, port, this, port.FieldName);
-                    else
-                        Debug.LogError(port.FieldName);
+                    portContainer.Add(port);
                 }
-                else
-                {
-                    // DrawPortWithNoSideField
-                    NodeElementFactory.DrawPort(type, port, this, port.FieldName);
-                }
-
             }
         }
 
@@ -194,7 +139,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 CreateNodeField(field);
             }
         }
-
+        
         void CreateNodeField(FieldInfo fieldInfo)
         {
             var serializeProperty = SerializedObject.FindProperty(fieldInfo.Name);
@@ -214,7 +159,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new System.InvalidOperationException();
             }
         }
-
+        /*
         void CreateListFields(BaseNode baseNode)
         {
             var ListFields = baseNode.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -240,7 +185,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             var listview = GraphListViewFactory.GetGraphListView(attr.CreatorType,serializeProperty,this);
             extensionContainer.Add(listview);
         }
-
+        */
         public void RemovePort(Port port)
         {
             Debug.Log("removing port");
@@ -254,14 +199,14 @@ namespace BasDidon.Dialogue.VisualGraphView
             GraphView.RemoveElement(port);
         }
     }
-
+    /*
     public static class GraphListViewFactory
     {
         public static GraphListView GetGraphListView(Type type,SerializedProperty serializedProperty, NodeView nodeView)
         {
             return Activator.CreateInstance(type,new object[] {serializedProperty,nodeView}) as GraphListView;
         }
-    }
+    }*/
 
     public class BaseGraphList : VisualElement
     {
@@ -286,6 +231,18 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             ContentContainer = new();
             Add(ContentContainer);  
+        }
+
+        public void AddPort(Port portToAdd)
+        {
+            if(portToAdd.direction == Direction.Input)
+            {
+                InputContainer.Add(portToAdd);
+            }
+            else
+            {
+                OutputContainer.Add(portToAdd);
+            }
         }
     }
 
@@ -344,7 +301,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
 
                 itemView.Unbind();
-                //BindItem(itemView, i);
+                BindItem(itemView, i);
             }
 
             while (SerializedProperty.arraySize < listElementsContainer.childCount)
@@ -365,17 +322,9 @@ namespace BasDidon.Dialogue.VisualGraphView
 
                 if (propertyInfo.IsDefined(typeof(PortAttribute), true))
                 {
-                    PortAttribute portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
-
                     Port port = PortAttribute.CreateUnbindPort(propertyInfo, NodeView);
-                    if (portAttr.Direction == Direction.Input)
-                    {
-                        listElement.InputContainer.Add(port);
-                    }
-                    else
-                    {
-                        listElement.OutputContainer.Add(port);
-                    }
+                    listElement.AddPort(port);
+                    
                 }
             }
 
@@ -387,14 +336,44 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void BindItem(VisualElement e,int index)
         {
             var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
             foreach (var propertyInfo in propertiesInfo)
             {
+                var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
                 Debug.Log($"{Type.Name} {propertyInfo.Name}");
 
                 if (propertyInfo.IsDefined(typeof(PortAttribute), true))
                 {
-                    //SerializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("ports").
+                    var itemSP = SerializedProperty.GetArrayElementAtIndex(index);
+                    var portsSP = itemSP.FindPropertyRelative("ports");
+                    var portListSP = portsSP.FindPropertyRelative("portList");
+
+                    if (portListSP.isArray)
+                    {
+                        Debug.Log($"isArray {portListSP.arraySize}");
+                        for (int i = 0; i < portListSP.arraySize; i++)
+                        {
+                            var portData = portListSP.GetArrayElementAtIndex(i);
+                            var fieldName = portData.FindPropertyRelative("<FieldName>k__BackingField").stringValue;
+                            if (fieldName == propertyInfo.Name)
+                            {
+                                var portGuid= portData.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+
+                                Debug.Log($"s: {fieldName} {portGuid}");
+                                var portFactory = PortFactoryUtils.GetPortFactory(propertyInfo.PropertyType);
+                                if (portAttr.HasBackingFieldName)
+                                {
+                                    Debug.Log($"HasBackingField");
+                                    var backingFieldSP = itemSP.FindPropertyRelative(portAttr.BackingFieldName);
+                                    portFactory.BindPort(e, fieldName, portGuid, portAttr, backingFieldSP);
+                                }
+                                else
+                                {
+                                    portFactory.BindPort(e,fieldName,portGuid,portAttr);
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
         }
@@ -404,7 +383,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         public abstract void OnRemoveItem(int index);*/
 
     }
-
+    /*
     public abstract class GraphListView : VisualElement
     {
         public SerializedProperty SerializedProperty { get; }
@@ -471,5 +450,5 @@ namespace BasDidon.Dialogue.VisualGraphView
         public abstract void BindItem(VisualElement e, int index);
         public abstract void OnAddItem();
         public abstract void OnRemoveItem(int index);
-    }
+    }*/
 }

@@ -26,7 +26,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [Serializable]
-    public class PortDataCollection : ICollection<PortData>//,ISerializationCallbackReceiver
+    public class PortDataCollection : ICollection<PortData>
     {
         [SerializeField] List<PortData> portList = new();
 
@@ -45,11 +45,28 @@ namespace BasDidon.Dialogue.VisualGraphView
         public IEnumerator<PortData> GetEnumerator() => portList.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        public int IndexOf(PortData item)
+        {
+            return portList.IndexOf(item);
+        }
+
+        public void Insert(int index, PortData item)
+        {
+            portList.Insert(index, item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            portList.RemoveAt(index);
+        }
+
         public IEnumerable<PortData> Ports => portList.AsEnumerable();
         public IEnumerable<string> PortGuids => portList.Select(p => p.PortGuid);
 
         public int Count => portList.Count;
         public bool IsReadOnly => true;
+
+        public PortData this[int index] { get => portList[index]; set => portList[index] = value; }
     }
 
 }
