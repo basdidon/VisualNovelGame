@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
@@ -32,13 +33,33 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         [field: SerializeField] public Vector2 GraphPosition { get; set; }             // position on graphview
 
-        [SerializeField ,HideInInspector ] PortDataCollection ports;
-        public IEnumerable<PortData> Ports => ports;
-        public IEnumerable<string> GetPortGuids() => ports.Select(p => p.PortGuid);
-        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
-        public PortData GetPortDataByGuid(string guid) => ports.FirstOrDefault(p => p.PortGuid == guid);
-        public PortData GetPortData(string fieldName) => ports.FirstOrDefault(p=>p.FieldName == fieldName);
+        [SerializeField ,HideInInspector ] PortDataCollection portCollection;
 
+        // set to private later
+        [SerializeReference]
+        protected List<IListElements> listElementCollection;
+
+        public IEnumerable<PortData> Ports
+        {
+            get
+            {
+                Debug.Log(GetType());
+                if(listElementCollection == null)
+                    Debug.Log("GG");
+                
+                var LEC = listElementCollection?.Where(e=>e.GetPorts().Count() > 0).SelectMany(e => e.GetPorts());
+                
+                return       portCollection.Ports.Union(LEC);
+
+            }
+        }
+        public IEnumerable<string> GetPortGuids() => Ports.Select(p => p.PortGuid);
+        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p=>p.Direction == direction).Select(p => p.PortGuid);
+        public PortData GetPortDataByGuid(string guid) => Ports.FirstOrDefault(p => p.PortGuid == guid);
+        public PortData GetPortData(string fieldName) => Ports.FirstOrDefault(p=>p.FieldName == fieldName);
+
+        public event Func<string,object> OnGetValue;
+        
         public virtual void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             Debug.Log($"{GetType()} initialize");
@@ -46,8 +67,12 @@ namespace BasDidon.Dialogue.VisualGraphView
             GraphPosition = position;
             DialogueTree = dialogueTree;
             name = GetType().Name;
+            title = GetType().Name;
 
             InstantiatePorts();
+
+            listElementCollection = new();
+            Debug.Log($"c {listElementCollection.Count}");
 
             dialogueTree.Nodes.Add(this);
             AssetDatabase.AddObjectToAsset(this, dialogueTree);
@@ -61,12 +86,13 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         public void InstantiatePorts()
         {
+            Debug.Log("d");
             Debug.Log($"<color=yellow>{GetType().Name}</color> InstantiatePorts()");
-            ports = new();
+            portCollection = new();
 
             foreach(var portData in PortAttribute.CreatePortsData(this))
             {
-                ports.Add(portData);
+                portCollection.Add(portData);
             }
         }
 
@@ -81,7 +107,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             return propertyInfo.GetValue(this);
         }
 
-        public T GetInputValue<T>(string portKey, T defaultValue)
+        protected  T GetInputValue<T>(string portKey, T defaultValue)
         {
             var inputPort = GetPortData(portKey);
             if (inputPort == null)

@@ -37,6 +37,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
+            Debug.Log($"@ {portName} {portGuid}");
             port.viewDataKey = portGuid;
             port.portName = portName;
 
@@ -107,8 +108,6 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             if (port.direction == Direction.Input)
             {
-                //port.Insert(1, propertyField);
-
                 port.Add(propertyField);
                 nodeView.GraphView.OnPortConnect += (onConnectPort) =>
                 {
@@ -134,24 +133,24 @@ namespace BasDidon.Dialogue.VisualGraphView
             return port;
         }
 
-        public void BindPort(VisualElement e,string fieldName,string portGuid,PortAttribute portAttr, SerializedProperty serializedProperty = null)
+        public void BindPort(VisualElement e,string propertyName,string portGuid,PortAttribute portAttr, SerializedProperty serializedProperty = null)
         {
-            var port = e.Q<Port>(fieldName);
+            var port = e.Q<Port>(propertyName);
             if (port != null)
             {
                 port.viewDataKey = portGuid ?? string.Empty;//?? throw new KeyNotFoundException();
             }
-
-            Debug.Log($"{portAttr.HasBackingFieldName}:{serializedProperty != null}");
+            else
+            {
+                Debug.LogError(propertyName);
+            }
 
             if (portAttr.HasBackingFieldName && serializedProperty != null)
             {
-                Debug.Log("pass");
-                var backingElementName = $"{portAttr.BackingFieldName}_BackingField";
+                var backingElementName = $"{propertyName}_BackingField";
                 var backingFieldElement = e.Q<PropertyField>(backingElementName);
                 if (backingFieldElement != null)
                 {
-                    Debug.Log("pass x2");
                     backingFieldElement.BindProperty(serializedProperty);
                 }
                 else

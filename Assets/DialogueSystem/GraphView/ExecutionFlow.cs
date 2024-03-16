@@ -10,13 +10,22 @@ namespace BasDidon.Dialogue.VisualGraphView
 
     public class ExecutionFlowPortFactory : IPortFactory
     {
-        public void BindPort(VisualElement e, string fieldName, string portGuid, PortAttribute portAttr,SerializedProperty serializedProperty = null)
+        public void BindPort(VisualElement e, string propertyName, string portGuid, PortAttribute portAttr,SerializedProperty serializedProperty = null)
         {
-            return;
+            Port port = e.Q<Port>(propertyName);
+            if(port != null)
+            {
+                port.viewDataKey = portGuid;
+            }
+            else
+            {
+                Debug.LogError($"Port {propertyName} is not found.");
+            }
         }
 
         public Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName)
         {
+            Debug.Log($"Create Port ({GetType().Name}) : [{portName}] {portGuid}");
             var port = nodeView.InstantiatePort(
                 Orientation.Horizontal,
                 direction,
@@ -36,7 +45,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             return CreatePort(portGuid,direction,nodeView,propertyName);
         }
 
-        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName)
+        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string propertyName)
         {
             var port = nodeView.InstantiatePort(
                 Orientation.Horizontal,
@@ -45,8 +54,8 @@ namespace BasDidon.Dialogue.VisualGraphView
                 typeof(ExecutionFlow)
             );
 
-            port.portName = portName;
-            port.name = portName;
+            port.portName = propertyName;
+            port.name = propertyName;
             port.portColor = Color.yellow;
 
             return port;

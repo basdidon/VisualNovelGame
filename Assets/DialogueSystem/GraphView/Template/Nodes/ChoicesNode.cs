@@ -34,41 +34,29 @@ namespace BasDidon.Dialogue.NodeTemplate
     }
 
     [Serializable]
-    public class Choice:ListElement
+    public class Choice : BaseListElement
     {
         [Input(nameof(isEnable))]
-        public bool IsEnable { get; private set; }
+        public bool IsEnable => GetInputValue(nameof(IsEnable),isEnable);
         public bool isEnable = true;
 
         [Output]
         public ExecutionFlow Output { get; }
 
+        [Output]
+        public bool True => true;
+
         [TextArea]
         [NodeField]
         public string name = "new choice";
 
-        [field: SerializeField] public string Name { get; private set; }
-        /*
-        [field: SerializeField] public PortData IsEnableInputPortData { get; private set; }
-        [field: SerializeField] public PortData OutputFlowPortData { get; private set; }
-
-        public Choice()
-        {
-            IsEnable = true;
-            Name = "new choice";
-            IsEnableInputPortData = new(Direction.Input, "isEnable");
-            OutputFlowPortData = new(Direction.Output,"OutputFlow");
-        }
-        */
         public ChoiceRecord GetRecord(DialogueTree dialogueTree)
         {
-            bool isEnable = dialogueTree.GetInputValue(nameof(IsEnable), IsEnable);
-
-            return new ChoiceRecord(isEnable, Name);
+            return new ChoiceRecord(IsEnable, name);
         }
     }
 
-    [CreateNodeMenu(menuName = "ChoicesNode")]
+    [CreateNodeMenu(menuName = nameof(ChoicesNode))]
     public class ChoicesNode :BaseNode,IExecutableNode
     {
         [Input]
@@ -88,43 +76,32 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [TextArea, NodeField]
         public string questionText;
-        /*
-        [SerializeField]
-        ListElement<Choice> new_choices;
-        */
 
         [SerializeField]
-        List<Item> items = new ();
+        ListElements<Choice> choices;
 
-        [SerializeField]
-        List<Choice> choices = new();
-        public IReadOnlyList<Choice> Choices => choices;
-         
         public void CreateChoice()
         {
             Debug.Log("CreateChoice");
-            choices.Add(new());
+            Debug.Log(DialogueTree == null);
+            var c = new Choice();
+            c.Initialize(this);
+            choices.Add(c);
         }
 
-        public void RemoveChoice(Choice choice)
-        {
-            choices.Remove(choice);
-        }
-
-        public void RemoveChoiceAt(int index)
-        {
-            choices.RemoveAt(index);
-        }
+        public void RemoveChoice(Choice choice) => choices.Remove(choice);
+        public void RemoveChoiceAt(int index) => choices.RemoveAt(index);       
 
         public override void Initialize(Vector2 position, DialogueTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
 
-            choices = new();
-            choices.Add(new());
-            items = new();
-            items.Add(new() { name = "name"});
+            //choices = new();
+            choices = new(this);
+            CreateChoice();
 
+            listElementCollection.Add(choices);
+             
             SaveChanges();
         }
 
@@ -137,7 +114,7 @@ namespace BasDidon.Dialogue.NodeTemplate
                     new(
                         Speaker.Name, 
                         questionText),
-                    Choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
+                    choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
                 )
             );
         }
@@ -154,10 +131,10 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         void SelectChoice(int idx)
         {
-            if (idx < 0 || idx >= Choices.Count)
+            if (idx < 0 || idx >= choices.Count)
                 throw new ArgumentOutOfRangeException();
 
-            var selectedOutputPort = Choices.ElementAt(idx).GetPortData("Output");
+            var selectedOutputPort = choices.ElementAt(idx).GetPortData("Output");
             GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
         }
     }

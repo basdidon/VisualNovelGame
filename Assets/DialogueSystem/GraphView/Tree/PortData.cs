@@ -26,9 +26,9 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
     [Serializable]
-    public class PortDataCollection : ICollection<PortData>
+    public class PortDataCollection //: ICollection<PortData>
     {
-        [SerializeField] List<PortData> portList = new();
+        [SerializeField]List<PortData> portList = new();
 
         public void Add(PortData item)
         {
@@ -38,35 +38,42 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
+
         public void Clear() => portList.Clear();
-        public bool Contains(PortData item) => portList.Contains(item);
-        public void CopyTo(PortData[] array, int arrayIndex) => portList.CopyTo(array, arrayIndex);
-        public bool Remove(PortData item) => portList.Remove(item);
-        public IEnumerator<PortData> GetEnumerator() => portList.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        public int IndexOf(PortData item)
-        {
-            return portList.IndexOf(item);
-        }
-
-        public void Insert(int index, PortData item)
-        {
-            portList.Insert(index, item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            portList.RemoveAt(index);
-        }
 
         public IEnumerable<PortData> Ports => portList.AsEnumerable();
         public IEnumerable<string> PortGuids => portList.Select(p => p.PortGuid);
+        public IEnumerable<string> GetPortGuids() => portList.Select(p => p.PortGuid);
+        public IEnumerable<string> GetPortGuids(Direction direction) => Ports.Where(p => p.Direction == direction).Select(p => p.PortGuid);
+        public PortData GetPortDataByGuid(string guid) => portList.FirstOrDefault(p => p.PortGuid == guid);
+        public PortData GetPortData(string fieldName) => portList.FirstOrDefault(p => p.FieldName == fieldName);
 
         public int Count => portList.Count;
         public bool IsReadOnly => true;
 
-        public PortData this[int index] { get => portList[index]; set => portList[index] = value; }
+    }
+    /*
+    [System.Serializable]
+    public class NodePortDataCollection :PortDataCollection
+    {
+        List<ListElementPortDataCollection> listElementPortCollection = new();
+
+        public void AddListElement(ListElementPortDataCollection collection)
+        {
+            listElementPortCollection.Add(collection);
+        }
+
+        public IEnumerable<string> GetPortsGuid()
+        {
+            var listElementportsGuid = listElementPortCollection.SelectMany(c => c.PortGuids);
+
+            return PortGuids.Union(listElementportsGuid);
+        }
     }
 
+    [System.Serializable]
+    public class ListElementPortDataCollection : PortDataCollection
+    {
+
+    }*/
 }

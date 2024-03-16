@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
-using System.Reflection;
 using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
@@ -40,13 +40,14 @@ namespace BasDidon.Dialogue.VisualGraphView
             AssetDatabase.Refresh();
         }
 
+        // return null if not found
         public BaseNode GetNodeByPort(PortData portData) => GetNodeByPort(portData.PortGuid,portData.Direction);
         public BaseNode GetNodeByPort(string portGuid,Direction direction)
         {
             return direction switch
             {
-                Direction.Input => Nodes.Single(n => n.GetPortGuids(Direction.Input).Contains(portGuid)),
-                Direction.Output => Nodes.Single(n => n.GetPortGuids(Direction.Output).Contains(portGuid)),
+                Direction.Input => Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Input).Contains(portGuid)),
+                Direction.Output => Nodes.SingleOrDefault(n => n.GetPortGuids(Direction.Output).Contains(portGuid)),
                 _ => throw new InvalidOperationException("Invalid port direction.")
             };
         }

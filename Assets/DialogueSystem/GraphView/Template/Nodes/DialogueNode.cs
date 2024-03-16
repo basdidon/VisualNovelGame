@@ -16,6 +16,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         }
     }
 
+    [CreateNodeMenu(menuName = nameof(DialogueNode))]
     public class DialogueNode : BaseNode, IExecutableNode
     {
         [Input]
