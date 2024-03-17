@@ -50,7 +50,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         [NodeField]
         public string name = "new choice";
 
-        public ChoiceRecord GetRecord(DialogueTree dialogueTree)
+        public ChoiceRecord GetRecord(GraphTree dialogueTree)
         {
             return new ChoiceRecord(IsEnable, name);
         }
@@ -64,15 +64,6 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [NodeField]
         public CharacterData speaker;
-        public CharacterData Speaker
-        {
-            get
-            {
-                if (speaker == null)
-                    throw new System.NullReferenceException();
-                return speaker;
-            }
-        }
 
         [TextArea, NodeField]
         public string questionText;
@@ -83,7 +74,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void CreateChoice()
         {
             Debug.Log("CreateChoice");
-            Debug.Log(DialogueTree == null);
+            Debug.Log(GraphTree == null);
             var c = new Choice();
             c.Initialize(this);
             choices.Add(c);
@@ -92,15 +83,13 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void RemoveChoice(Choice choice) => choices.Remove(choice);
         public void RemoveChoiceAt(int index) => choices.RemoveAt(index);       
 
-        public override void Initialize(Vector2 position, DialogueTree dialogueTree)
+        public override void Initialize(Vector2 position, GraphTree dialogueTree)
         {
             base.Initialize(position, dialogueTree);
 
             //choices = new();
             choices = new(this);
             CreateChoice();
-
-            listElementCollection.Add(choices);
              
             SaveChanges();
         }
@@ -112,9 +101,9 @@ namespace BasDidon.Dialogue.NodeTemplate
             GraphTreeContorller.Instance.FireEvent(
                 new ChoicesRecord(
                     new(
-                        Speaker.Name, 
+                        speaker.Name, 
                         questionText),
-                    choices.Select(c => c.GetRecord(DialogueTree)).ToArray()
+                    choices.Select(c => c.GetRecord(GraphTree)).ToArray()
                 )
             );
         }
@@ -135,7 +124,7 @@ namespace BasDidon.Dialogue.NodeTemplate
                 throw new ArgumentOutOfRangeException();
 
             var selectedOutputPort = choices.ElementAt(idx).GetPortData("Output");
-            GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, DialogueTree);
+            GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, GraphTree);
         }
     }
 

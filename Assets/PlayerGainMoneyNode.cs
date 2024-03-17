@@ -22,7 +22,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void OnEnter()
         {
             DialogueDatabase.Instance.Player.GainMoney(MoneyToGain);
-            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
         }
 
         public void OnExit() { }

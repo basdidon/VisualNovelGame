@@ -51,7 +51,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         {
             if(action is NextDialogueAction)
             {
-                GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+                GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
             }
         }
     }

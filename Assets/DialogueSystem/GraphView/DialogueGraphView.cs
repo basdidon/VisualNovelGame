@@ -11,7 +11,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     public class DialogueGraphView : GraphView
     {
         
-        public DialogueTree Tree { get; private set; }
+        public GraphTree Tree { get; private set; }
 
         public readonly string[] nodesPath = { "Assets/" };
 
@@ -28,7 +28,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
         void LoadAsset(string assetPath)
         {
-            Tree = AssetDatabase.LoadAssetAtPath<DialogueTree>(assetPath);
+            Tree = AssetDatabase.LoadAssetAtPath<GraphTree>(assetPath);
 
             Debug.Log($"Load {assetPath}");
             foreach (var obj in AssetDatabase.LoadAllAssetRepresentationsAtPath(assetPath)) // load all sub assets

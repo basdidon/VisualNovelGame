@@ -9,7 +9,7 @@ using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {
-    public class DialogueTree : ScriptableObject
+    public class GraphTree : ScriptableObject
     {
         [field: SerializeField] public List<BaseNode> Nodes { get; private set; } = new();
         [SerializeField] List<EdgeData> edges = new();
@@ -22,14 +22,12 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void AddEdge(EdgeData edgeData)
         {
             edges.Add(edgeData);
-
             SaveChanges();
         }
 
         public void RemoveEdge(EdgeData edgeData)
         {
             edges.Remove(edgeData);
-
             SaveChanges();
         }
 
@@ -131,7 +129,7 @@ namespace BasDidon.Dialogue.VisualGraphView
         [MenuItem("H8 Tools/GraphTree/Create")]
         public static void CreateDialogueTree()
         {
-            DialogueTree tree = CreateInstance<DialogueTree>();
+            GraphTree tree = CreateInstance<GraphTree>();
             var currentDirectory = GetCurrentProjectBrowserDirectory();
 
             var uniquePath = AssetDatabase.GenerateUniqueAssetPath($"{currentDirectory}/DialogueTree.asset");
@@ -148,9 +146,9 @@ namespace BasDidon.Dialogue.VisualGraphView
         [OnOpenAsset(0)]
         public static bool OpenDialogueEditorWindow(int instanceID, int line)
         {
-            if (EditorUtility.InstanceIDToObject(instanceID).GetType() == typeof(DialogueTree))
+            if (EditorUtility.InstanceIDToObject(instanceID).GetType() == typeof(GraphTree))
             {
-                Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(DialogueTree)}");
+                Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(GraphTree)}");
 
                 string assetPath = AssetDatabase.GetAssetPath(instanceID);
 
@@ -165,7 +163,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(DialogueTree))]
+    [CustomEditor(typeof(GraphTree))]
     public class DialogueTreeEditor : Editor
     {
         public override void OnInspectorGUI()
@@ -173,7 +171,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             base.OnInspectorGUI();
             if (GUILayout.Button("re-initialize"))
             {
-                (target as DialogueTree).ReInitializePorts();
+                (target as GraphTree).ReInitializePorts();
             }
         }
     }

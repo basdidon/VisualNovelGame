@@ -21,7 +21,7 @@ public class UiDocumentController : MonoBehaviour
     public ChoicesPickerUiController ChoicesPickerUiController { get; private set; }
 
     // debug dialogue tree
-    [field: SerializeField] public DialogueTree DialogueTree { get; set; }
+    [field: SerializeField] public GraphTree DialogueTree { get; set; }
 
     // Input
     [field:SerializeField] InputActionReference TapInputAction { get; set; }

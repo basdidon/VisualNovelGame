@@ -21,7 +21,7 @@ namespace BasDidon.Dialogue.NodeTemplate
             Debug.Log($"spend money : {Cost}");
             DialogueDatabase.Instance.Player.SpendMoney(Cost);
 
-            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), DialogueTree);
+            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
         }
 
         public void OnExit() { }

@@ -19,6 +19,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             InputPortGuid = inputPortGuid;
         }
 
-        public static EdgeData GetEdgeData(DialogueTree dialogueTree, string edgeGuid) => dialogueTree.Edges.First(e => e.EdgeGuid == edgeGuid);
+        public static EdgeData GetEdgeData(GraphTree dialogueTree, string edgeGuid) => dialogueTree.Edges.First(e => e.EdgeGuid == edgeGuid);
     }
 }

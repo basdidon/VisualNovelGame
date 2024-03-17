@@ -5,7 +5,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 {
     public static class NodeFactory
     {
-        public static BaseNode CreateNode(Type type, Vector2 position, DialogueTree dialogueTree)
+        public static BaseNode CreateNode(Type type, Vector2 position, GraphTree dialogueTree)
         {
             BaseNode nodeData = (BaseNode) ScriptableObject.CreateInstance(type);
             if(nodeData != null)
@@ -17,7 +17,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             throw new Exception();
         }
-        public static BaseNode CreateNode<T>(Vector2 position, DialogueTree dialogueTree) where T : BaseNode
+        public static BaseNode CreateNode<T>(Vector2 position, GraphTree dialogueTree) where T : BaseNode
         {
             var nodeData = ScriptableObject.CreateInstance<T>();
             nodeData.Initialize(position, dialogueTree);

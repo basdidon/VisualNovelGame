@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdd986decf041141a6f2e2e3d24e25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DialogueTree>k__BackingField: {fileID: 0}
+  <DialogueTree>k__BackingField: {fileID: 11400000, guid: 5eb8376b61c078846899cb7d24c5b393, type: 2}
   <TapInputAction>k__BackingField: {fileID: 1027717850900299178, guid: ffaadf679290887408afd991aeac8720, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

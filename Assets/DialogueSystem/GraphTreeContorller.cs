@@ -20,11 +20,12 @@ namespace BasDidon.Dialogue
                 currentNode = value;
                 if (CurrentNode != null)
                 {
+                    Debug.Log($"<color=yellow>{CurrentNode.GetType().Name}</color> is Executing.");
                     CurrentNode.OnEnter();
                 }
                 else
                 {
-                    Debug.Log("DialogueTree ended.");
+                    Debug.Log("GraphTree ended.");
                     OnCustomEvent?.Invoke(new DialogueEndEvent());
                 }
             }
@@ -44,7 +45,7 @@ namespace BasDidon.Dialogue
             }
         }
 
-        public void StartGraphTree(DialogueTree dialogueTree)
+        public void StartGraphTree(GraphTree dialogueTree)
         {
             if (dialogueTree == null)
             {
@@ -56,7 +57,7 @@ namespace BasDidon.Dialogue
             }
         }
 
-        public void ToNextExecutableNode(PortData outputPort, DialogueTree tree)
+        public void ToNextExecutableNode(PortData outputPort, GraphTree tree)
         {
             if (outputPort == null)
                 throw new ArgumentNullException();

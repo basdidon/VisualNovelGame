@@ -1,0 +1,147 @@
+﻿using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.UIElements;
+using System;
+using System.Reflection;
+
+namespace BasDidon.Dialogue.VisualGraphView
+{
+    public class GraphListView : VisualElement
+    {
+        public SerializedProperty SerializedProperty { get; }
+        public NodeView NodeView { get; }
+        public DialogueGraphView GraphView => NodeView.GraphView;
+        public Type Type { get; }
+
+        public GraphListView(SerializedProperty serializedPropertyList, NodeView nodeView, Type type)
+        {
+            SerializedProperty = serializedPropertyList.FindPropertyRelative("listElements");
+            NodeView = nodeView;
+            Type = type;
+
+            MakeListContainer();
+
+            this.TrackPropertyValue(serializedPropertyList, OnPropertyValueChanged);
+        }
+
+        void OnPropertyValueChanged(SerializedProperty changed)
+        {
+            RefreshItems();
+        }
+
+        VisualElement listElementsContainer;
+
+        void MakeListContainer()
+        {
+            listElementsContainer = new();
+            Add(listElementsContainer);
+
+            // Add Button
+            Button addElementBtn = new() { text = "Add Choice" };
+            Add(addElementBtn);
+
+            //addElementBtn.clicked += () => OnAddItem();
+
+            RefreshItems();
+        }
+
+        public void RefreshItems()
+        {
+            for (int i = 0; i < SerializedProperty.arraySize; i++)
+            {
+                VisualElement itemView;
+                if (i < listElementsContainer.childCount)
+                {
+                    itemView = listElementsContainer.ElementAt(i);
+                }
+                else
+                {
+                    itemView = MakeItem(i);
+                    listElementsContainer.Add(itemView);
+                }
+
+                itemView.Unbind();
+                BindItem(itemView, i);
+            }
+
+            while (SerializedProperty.arraySize < listElementsContainer.childCount)
+            {
+                listElementsContainer.RemoveAt(SerializedProperty.arraySize);
+            }
+        }
+
+        public VisualElement MakeItem(int i)
+        {
+            var listElement = new BaseGraphList();
+
+            var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach(var propertyInfo in propertiesInfo)
+            {
+                if (propertyInfo.IsDefined(typeof(PortAttribute), true))
+                {
+                    var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
+                    Port port = portAttr.CreateUnbindPort(propertyInfo, NodeView);
+                    listElement.AddPort(port);
+                    
+                }
+            }
+
+            listElement.ContentContainer.Add(new Label() { text = $"{i}" });
+
+            return listElement;
+        }
+
+        public void BindItem(VisualElement e,int index)
+        {
+            var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var propertyInfo in propertiesInfo)
+            {
+                var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
+
+                if (propertyInfo.IsDefined(typeof(PortAttribute), true))
+                {
+                    var itemSP = SerializedProperty.GetArrayElementAtIndex(index);
+                    var portsSP = itemSP.FindPropertyRelative("portCollection");
+                    var portCollectionSP = portsSP.FindPropertyRelative("portList");
+                    Debug.Log($"------[ {propertyInfo.Name} {portCollectionSP.isArray} ]-------");
+
+                    if (portCollectionSP.isArray)
+                    {
+                        Debug.Log(portCollectionSP.arraySize);
+                        for (int i = 0; i < portCollectionSP.arraySize; i++)
+                        {
+                            var portData = portCollectionSP.GetArrayElementAtIndex(i);
+                            var fieldName = portData.FindPropertyRelative("<FieldName>k__BackingField").stringValue;
+                            Debug.Log(fieldName);
+                            if (fieldName == propertyInfo.Name)
+                            {
+                                var portGuid= portData.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
+
+                                Debug.Log($"<color=blue>Binding {SerializedProperty.name}[{index}].{fieldName}</color> {portGuid}");
+                                var portFactory = PortFactoryUtils.GetPortFactory(propertyInfo.PropertyType);
+                                if (portAttr.HasBackingFieldName)
+                                {
+                                    var backingFieldSP = itemSP.FindPropertyRelative(portAttr.BackingFieldName);
+                                    portFactory.BindPort(e,fieldName, portGuid, portAttr, backingFieldSP);
+                                }
+                                else
+                                {
+                                    portFactory.BindPort(e,fieldName,portGuid,portAttr);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        /*
+        public abstract void BindItem(VisualElement e, int index);
+        public abstract void OnAddItem();
+        public abstract void OnRemoveItem(int index);*/
+
+    }
+}
