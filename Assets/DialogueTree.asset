@@ -38,7 +38,7 @@ MonoBehaviour:
           <PortGuid>k__BackingField: 47443909-40cd-4100-a6b5-a2ba4a49ccce
           <Direction>k__BackingField: 1
       isEnable: 1
-      name: new choice
+      name: aaaaaaaaaa
 --- !u!114 &-4830870222859784770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   <Id>k__BackingField: ca2a78dd-e98c-48c1-b830-1de68b4dc8a1
   title: DialogueNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 727, y: 96}
+  <GraphPosition>k__BackingField: {x: 769, y: 123}
   portCollection:
     portList:
     - <FieldName>k__BackingField: Input

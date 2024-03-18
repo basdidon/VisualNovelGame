@@ -12,7 +12,7 @@ namespace BasDidon.Dialogue.VisualGraphView
     public class NodeView : Node
     {
         public DialogueGraphView GraphView { get; private set; }
-        public SerializedObject SerializedObject { get; private set; }
+        public SerializedObject SerializeObject { get; private set; }
         BaseNode baseNode;
 
         public void Initialize(BaseNode nodeData, DialogueGraphView graphView)
@@ -27,8 +27,8 @@ namespace BasDidon.Dialogue.VisualGraphView
             Label titleLabel = (Label) titleContainer.ElementAt(0);
             titleLabel.bindingPath = "title";
 
-            SerializedObject = new(nodeData);
-            mainContainer.Bind(SerializedObject);
+            SerializeObject = new(nodeData);
+            mainContainer.Bind(SerializeObject);
 
             baseNode = nodeData;
         }
@@ -56,27 +56,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             RefreshExpandedState();
         }
 
-        Type GetFieldOrPropertyType(Type baseClass, string name) => GetFieldOrPropertyType(baseClass, name, out _); 
-        Type GetFieldOrPropertyType(Type baseClass,string name, out bool isField)
-        {
-            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
-            if (baseClass.GetField(name, flags) is FieldInfo portField)
-            {
-                isField = true;
-                return portField.FieldType;
-            }
-            else if (baseClass.GetProperty(name, flags) is PropertyInfo portProperty)
-            {
-                isField = false;
-                return portProperty.PropertyType;
-            }
-            else
-            {
-                throw new Exception($"<color=red>{baseClass.GetType().Name}</color> {name}");
-            }
-        }
-
         void CreatePorts(BaseNode baseNode)
         {
             // create ports
@@ -90,7 +69,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 {
                     var portAttr = property.GetCustomAttribute<PortAttribute>();
                     VisualElement portContainer = portData.Direction == Direction.Input ? inputContainer : outputContainer;
-                    Port port = portAttr.CreatePort(property, this, portData,SerializedObject);
+                    Port port = portAttr.CreatePort(property, this, portData,SerializeObject);
 
                     portContainer.Add(port);
                 }
@@ -111,29 +90,15 @@ namespace BasDidon.Dialogue.VisualGraphView
             if (!fieldInfo.IsDefined(typeof(NodeFieldAttribute), inherit: true))
                 return;
 
-            var serializeProperty = SerializedObject.FindProperty(fieldInfo.Name);
-
-            if (serializeProperty == null)
-                throw new NullReferenceException($"can't find {fieldInfo.Name}");
-
-            Type fieldType = GetFieldOrPropertyType(baseNode.GetType(), fieldInfo.Name);
-
-            if (NodeFieldAttribute.supportedTypes.Contains(fieldType) || NodeFieldAttribute.supportedTypes.Any(t=>fieldType.IsSubclassOf(t)))
-            {
-                var propField = new PropertyField(serializeProperty);
-                extensionContainer.Add(propField);
-            }
-            else
-            {
-                throw new System.InvalidOperationException();
-            }
+            var nodeFieldAttr = fieldInfo.GetCustomAttribute<NodeFieldAttribute>();
+            extensionContainer.Add(nodeFieldAttr.CreatePropertyField(fieldInfo,SerializeObject));
         }
 
         void CreateListElement(FieldInfo fieldInfo)
         {
             if (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(ListElements<>))
             {
-                var newList = new GraphListView(SerializedObject.FindProperty(fieldInfo.Name), this, fieldInfo.FieldType.GetGenericArguments()[0]);
+                var newList = new GraphListView(SerializeObject.FindProperty(fieldInfo.Name), this, fieldInfo.FieldType.GetGenericArguments()[0]);
                 extensionContainer.Add(newList);
                 RefreshExpandedState();
             }

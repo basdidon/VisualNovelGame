@@ -85,17 +85,52 @@ namespace BasDidon.Dialogue.VisualGraphView
             }
         }
 
-        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string portName)
+        public Port CreateUnbindPort(Direction direction, NodeView nodeView, string propertyName, bool isHasBackingField)
         {
             Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
-            port.portName = StringHelper.ToCapitalCase(portName);
-            port.name = portName;
+            port.portName = StringHelper.ToCapitalCase(propertyName);
+            port.name = propertyName;
+
+            if (isHasBackingField)
+            {
+                var propertyField = new PropertyField()
+                {
+                    name = $"{propertyName}_BackingField",
+                    label = string.Empty
+                };
+
+
+                if (port.direction == Direction.Input)
+                {
+                    port.Add(propertyField);
+                    nodeView.GraphView.OnPortConnect += (onConnectPort) =>
+                    {
+                        if (port == onConnectPort)
+                        {
+                            propertyField.style.display = DisplayStyle.None;
+                        }
+                    };
+
+                    nodeView.GraphView.OnPortDisconnect += (onDisconnectPort) =>
+                    {
+                        if (port == onDisconnectPort)
+                        {
+                            propertyField.style.display = DisplayStyle.Flex;
+                        }
+                    };
+                }
+                else
+                {
+                    port.Add(propertyField);
+                }
+            }
+
 
             return port;
         }
-
+        /*
         public Port CreateUnbindPortWithField(Direction direction, NodeView nodeView, string propertyName)
         {
             var port = CreateUnbindPort(direction, nodeView, propertyName);
@@ -132,7 +167,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             return port;
         }
-
+        */
         public void BindPort(VisualElement e,string propertyName,string portGuid,PortAttribute portAttr, SerializedProperty serializedProperty = null)
         {
             var port = e.Q<Port>(propertyName);

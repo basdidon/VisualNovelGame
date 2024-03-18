@@ -59,16 +59,9 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new ArgumentNullException();
 
             Type type = propertyInfo.PropertyType;
-            IPortFactory portFactory = GetPortFactory(type);
+            IPortFactory portFactory = PortFactoryUtils.GetPortFactory(type);
 
-            if (HasBackingFieldName)
-            {
-                return portFactory.CreateUnbindPortWithField(Direction, nodeView, propertyInfo.Name);
-            }
-            else
-            {
-                return portFactory.CreateUnbindPort(Direction, nodeView, propertyInfo.Name );
-            }
+            return portFactory.CreateUnbindPort(Direction, nodeView, propertyInfo.Name, HasBackingFieldName);
         }
 
         public Port CreatePort(PropertyInfo propertyInfo, NodeView nodeView, PortData portData, SerializedObject serializedObject = null)
@@ -77,7 +70,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 throw new ArgumentNullException();
 
             Type type = propertyInfo.PropertyType;
-            IPortFactory portFactory = GetPortFactory(type);
+            IPortFactory portFactory = PortFactoryUtils.GetPortFactory(type);
 
             if (serializedObject != null && HasBackingFieldName)
             {
@@ -93,7 +86,7 @@ namespace BasDidon.Dialogue.VisualGraphView
                 return portFactory.CreatePort(portData.PortGuid, portData.Direction, nodeView, propertyInfo.Name);
             }
         }
-
+        /*
         // find match Factory class for specific type
         public static IPortFactory GetPortFactory(Type type)
         {
@@ -114,57 +107,6 @@ namespace BasDidon.Dialogue.VisualGraphView
             {
                 throw new InvalidOperationException();
             }
-        }
+        }*/
     }
-    /*
-    public static class AttributeExtensions
-    {
-
-        public static string GetDescription(this PortAttribute attribute)
-        {
-            return attribute != null ? "Happy x3" : string.Empty;
-        }
-
-        public static Port CreatePort(this PortAttribute portAttr, PropertyInfo propertyInfo, NodeView nodeView, PortData portData, SerializedObject serializedObject = null)
-        {
-            if (propertyInfo == null)
-                throw new ArgumentNullException();
-
-            Type type = propertyInfo.PropertyType;
-            IPortFactory portFactory = PortAttribute.GetPortFactory(type);
-
-            if (serializedObject != null && portAttr.HasBackingFieldName)
-            {
-                var serializeProperty = serializedObject.FindProperty(portAttr.BackingFieldName);
-
-                if (serializeProperty == null)
-                    throw new NullReferenceException();
-                else
-                    return portFactory.CreatePortWithField(serializeProperty, portData.PortGuid, portData.Direction, nodeView, propertyInfo.Name);
-            }
-            else
-            {
-                return portFactory.CreatePort(portData.PortGuid, portData.Direction, nodeView, propertyInfo.Name);
-            }
-        }
-
-        // View
-        public static Port CreateUnbindPort(this PortAttribute portAttr, PropertyInfo propertyInfo, NodeView nodeView)
-        {
-            if (propertyInfo == null)
-                throw new ArgumentNullException();
-
-            Type type = propertyInfo.PropertyType;
-            IPortFactory portFactory = PortAttribute.GetPortFactory(type);
-
-            if (portAttr.HasBackingFieldName)
-            {
-                return portFactory.CreateUnbindPortWithField(portAttr.Direction, nodeView, propertyInfo.Name);
-            }
-            else
-            {
-                return portFactory.CreateUnbindPort(portAttr.Direction, nodeView, propertyInfo.Name);
-            }
-        }
-    }*/
 }

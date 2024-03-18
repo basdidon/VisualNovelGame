@@ -1,10 +1,10 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 
 namespace BasDidon.Dialogue.VisualGraphView
 {

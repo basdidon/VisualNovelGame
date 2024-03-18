@@ -118,6 +118,7 @@ namespace BasDidon.Dialogue.VisualGraphView
 
             edges.Clear();
         }
+
         public static string GetCurrentProjectBrowserDirectory()
         {
             Type projectWindowUtilType = typeof(ProjectWindowUtil);

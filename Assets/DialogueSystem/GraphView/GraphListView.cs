@@ -15,6 +15,8 @@ namespace BasDidon.Dialogue.VisualGraphView
         public DialogueGraphView GraphView => NodeView.GraphView;
         public Type Type { get; }
 
+        int lastArraySize;
+
         public GraphListView(SerializedProperty serializedPropertyList, NodeView nodeView, Type type)
         {
             SerializedProperty = serializedPropertyList.FindPropertyRelative("listElements");
@@ -22,13 +24,18 @@ namespace BasDidon.Dialogue.VisualGraphView
             Type = type;
 
             MakeListContainer();
-
-            this.TrackPropertyValue(serializedPropertyList, OnPropertyValueChanged);
+            
+            lastArraySize = SerializedProperty.arraySize;// serializedPropertyList.FindPropertyRelative("listElements").arraySize;
+            this.TrackPropertyValue(SerializedProperty, OnPropertyValueChanged);
         }
 
         void OnPropertyValueChanged(SerializedProperty changed)
         {
-            RefreshItems();
+            if (changed.arraySize != lastArraySize)
+            {
+                lastArraySize = changed.arraySize;
+                RefreshItems();
+            }
         }
 
         VisualElement listElementsContainer;
@@ -85,7 +92,17 @@ namespace BasDidon.Dialogue.VisualGraphView
                     var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
                     Port port = portAttr.CreateUnbindPort(propertyInfo, NodeView);
                     listElement.AddPort(port);
-                    
+                }
+            }
+
+            var fieldsInfo = Type.GetFields();
+            foreach(var fieldInfo in fieldsInfo)
+            {
+                if (fieldInfo.IsDefined(typeof(NodeFieldAttribute), true))
+                {
+                    var portAttr = fieldInfo.GetCustomAttribute<NodeFieldAttribute>();
+                    PropertyField propertyField = portAttr.CreateUnbindPropertyField(fieldInfo);
+                    listElement.ContentContainer.Add(propertyField);
                 }
             }
 
@@ -97,13 +114,14 @@ namespace BasDidon.Dialogue.VisualGraphView
         public void BindItem(VisualElement e,int index)
         {
             var propertiesInfo = Type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var itemSP = SerializedProperty.GetArrayElementAtIndex(index);
+
             foreach (var propertyInfo in propertiesInfo)
             {
                 var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
 
                 if (propertyInfo.IsDefined(typeof(PortAttribute), true))
                 {
-                    var itemSP = SerializedProperty.GetArrayElementAtIndex(index);
                     var portsSP = itemSP.FindPropertyRelative("portCollection");
                     var portCollectionSP = portsSP.FindPropertyRelative("portList");
                     Debug.Log($"------[ {propertyInfo.Name} {portCollectionSP.isArray} ]-------");
@@ -135,6 +153,19 @@ namespace BasDidon.Dialogue.VisualGraphView
                         }
 
                     }
+                }
+            }
+
+            foreach(var fieldinfo in Type.GetFields())
+            {
+                if (fieldinfo.IsDefined(typeof(NodeFieldAttribute), inherit: true))
+                {
+                    var fieldSP = itemSP.FindPropertyRelative(fieldinfo.Name);
+                    if (fieldSP == null)
+                        throw new Exception();
+
+                    var propertyField = e.Q<PropertyField>(fieldinfo.Name);
+                    propertyField.BindProperty(fieldSP);
                 }
             }
         }

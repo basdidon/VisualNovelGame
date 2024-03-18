@@ -26,15 +26,6 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [NodeField]
         public CharacterData speaker;
-        public CharacterData Speaker
-        {
-            get
-            {
-                if (speaker == null)
-                    throw new System.NullReferenceException();
-                return speaker;
-            }
-        }
             
         [TextArea, NodeField]
         public string DialogueText  = string.Empty;
@@ -42,7 +33,7 @@ namespace BasDidon.Dialogue.NodeTemplate
         public void OnEnter()
         {
             Debug.Log("dialogue node executing");
-            GraphTreeContorller.Instance.FireEvent(new DialogueRecord(Speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
+            GraphTreeContorller.Instance.FireEvent(new DialogueRecord(speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
         public void OnExit(){}
