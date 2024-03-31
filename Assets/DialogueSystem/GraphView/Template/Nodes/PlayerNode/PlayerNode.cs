@@ -1,7 +1,5 @@
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
-    using VisualGraphView;
-
     [CreateNodeMenu(menuName = "Player/Player")]
     public class PlayerNode:BaseNode
     {

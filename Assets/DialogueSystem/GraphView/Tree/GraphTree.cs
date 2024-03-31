@@ -7,8 +7,10 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
+    using UiElements;
+
     public class GraphTree : ScriptableObject
     {
         [field: SerializeField] public List<BaseNode> Nodes { get; private set; } = new();

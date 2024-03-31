@@ -6,7 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
     public class PrimativeTypePortFactory : IPortFactory
     {

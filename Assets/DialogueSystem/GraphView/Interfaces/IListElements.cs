@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace BasDidon.Dialogue
+namespace H8.GraphView
 {
-    using VisualGraphView;
-
     public interface IListElements
     {
         IEnumerable<PortData> GetPorts();

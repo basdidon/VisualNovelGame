@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
     public interface IPortFactory
     {

@@ -6,9 +6,8 @@ using UnityEditor;
 using System;
 using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace BasDidon.GraphView.NodeTemplate
 {
-    using VisualGraphView;
     /*
     public class ChoicesGraphListView : GraphListView
     {

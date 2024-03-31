@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
     public static class NodeFactory
     {

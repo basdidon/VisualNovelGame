@@ -1,11 +1,12 @@
 #ChoicesNode -> #node-border -> #title
 {
-	background-color : var(--color-darkest-daisy);
+	background-color : gray;
+	color : white;
 }
 
 #ChoicesNode -> #node-border -> #title -> #title-label
 {
-	color : var(--color-white);
+	color : white;
 	font-size: 16px;
 	-unity-font-style: bold;
 }

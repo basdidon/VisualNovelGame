@@ -5,8 +5,10 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEditor;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
+    using H8.GraphView.UiElements;
+
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class PortAttribute : Attribute
     {

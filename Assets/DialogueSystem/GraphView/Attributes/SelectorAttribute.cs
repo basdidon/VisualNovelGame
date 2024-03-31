@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]

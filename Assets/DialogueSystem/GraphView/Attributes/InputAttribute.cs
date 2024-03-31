@@ -4,7 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     public class InputAttribute : PortAttribute
     {

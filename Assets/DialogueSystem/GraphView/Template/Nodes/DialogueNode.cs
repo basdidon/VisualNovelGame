@@ -1,9 +1,7 @@
 using UnityEngine;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
-    using VisualGraphView;
-
     public record DialogueRecord : ICustomEvent
     {
         public string SpeakerName { get; }
@@ -26,7 +24,7 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [NodeField]
         public CharacterData speaker;
-            
+        
         [TextArea, NodeField]
         public string DialogueText  = string.Empty;
 

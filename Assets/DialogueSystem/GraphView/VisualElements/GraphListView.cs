@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 using System;
 using System.Reflection;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
     public class GraphListView : VisualElement
     {
@@ -49,7 +49,7 @@ namespace BasDidon.Dialogue.VisualGraphView
             Button addElementBtn = new() { text = "Add Choice" };
             Add(addElementBtn);
 
-            //addElementBtn.clicked += () => OnAddItem();
+            addElementBtn.clicked += () => OnAddItem();
 
             RefreshItems();
         }
@@ -106,8 +106,10 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
             }
 
-            listElement.ContentContainer.Add(new Label() { text = $"{i}" });
+            Button removeElementBtn = new() { text = $"Remove ({i})" };
+            listElement.contentContainer.Add(removeElementBtn);
 
+            removeElementBtn.clicked += () => OnRemoveItem(i);
             return listElement;
         }
 
@@ -169,10 +171,22 @@ namespace BasDidon.Dialogue.VisualGraphView
                 }
             }
         }
-        /*
-        public abstract void BindItem(VisualElement e, int index);
-        public abstract void OnAddItem();
-        public abstract void OnRemoveItem(int index);*/
+        public void OnAddItem()
+        {
+            Debug.Log("OnAddItem");
+            Debug.Log(SerializedProperty.arraySize);
+            SerializedProperty.InsertArrayElementAtIndex(SerializedProperty.arraySize);
+            Debug.Log(SerializedProperty.arraySize);
+
+            SerializedProperty.serializedObject.ApplyModifiedProperties();
+            
+        }
+
+        public void OnRemoveItem(int index)
+        {
+            SerializedProperty.DeleteArrayElementAtIndex(index);
+            SerializedProperty.serializedObject.ApplyModifiedProperties();
+        }
 
     }
 }

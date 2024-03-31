@@ -1,9 +1,4 @@
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
-using System.Linq;
-using System;
-
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     public class StartNode : BaseNode,IExecutableNode
     {

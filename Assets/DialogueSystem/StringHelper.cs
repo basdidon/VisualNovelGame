@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace BasDidon.Dialogue
+namespace H8.GraphView
 {
     public static class StringHelper
     {

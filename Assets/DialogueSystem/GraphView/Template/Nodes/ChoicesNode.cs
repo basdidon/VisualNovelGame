@@ -3,12 +3,9 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
-    using VisualGraphView;
-
     public record ChoicesRecord : ICustomEvent
     {
         public DialogueRecord DialogueRecord { get; }
@@ -52,6 +49,7 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         public ChoiceRecord GetRecord(GraphTree dialogueTree)
         {
+            Debug.Log("GetRecord");
             return new ChoiceRecord(IsEnable, name);
         }
     }
@@ -87,7 +85,6 @@ namespace BasDidon.Dialogue.NodeTemplate
         {
             base.Initialize(position, dialogueTree);
 
-            //choices = new();
             choices = new(this);
             CreateChoice();
              
@@ -101,7 +98,7 @@ namespace BasDidon.Dialogue.NodeTemplate
             GraphTreeContorller.Instance.FireEvent(
                 new ChoicesRecord(
                     new(
-                        speaker.Name, 
+                        speaker?.Name, 
                         questionText),
                     choices.Select(c => c.GetRecord(GraphTree)).ToArray()
                 )

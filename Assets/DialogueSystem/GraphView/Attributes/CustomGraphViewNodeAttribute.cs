@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class CustomGraphViewNodeAttribute : Attribute

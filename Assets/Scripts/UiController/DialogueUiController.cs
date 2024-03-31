@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
 using DG.Tweening;
-using BasDidon.Dialogue;
-using BasDidon.Dialogue.NodeTemplate;
+using H8.GraphView;
+using H8.GraphView.NodeTemplate;
 
 public class DialogueUiController: IUiController
 {

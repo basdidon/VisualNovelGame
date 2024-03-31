@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     [Serializable]
     public class EdgeData

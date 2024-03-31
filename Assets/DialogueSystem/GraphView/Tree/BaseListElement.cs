@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System;
+using System.Reflection;
 
-namespace BasDidon.Dialogue
+namespace H8.GraphView
 {
-    using System;
-    using System.Reflection;
-    using VisualGraphView;
 
     [System.Serializable]
     public abstract class BaseListElement
@@ -16,7 +15,7 @@ namespace BasDidon.Dialogue
         public IEnumerable<PortData> Ports => portCollection.Ports;
         public IEnumerable<string> PortsGuid => portCollection.PortGuids;
 
-        public BaseNode BaseNode { get; private set; }
+        [SerializeField] public BaseNode BaseNode { get; private set; }
         GraphTree DialogueTree => BaseNode.GraphTree;
 
         public void Initialize(BaseNode baseNode)

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     [SerializeField]
     [AttributeUsage(AttributeTargets.Field)]

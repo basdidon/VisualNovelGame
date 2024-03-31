@@ -1,7 +1,6 @@
-using UnityEngine;
 using UnityEngine.UIElements;
-using BasDidon.Dialogue;
-using BasDidon.Dialogue.NodeTemplate;
+using H8.GraphView.NodeTemplate;
+using H8.GraphView;
 
 public interface IUiController
 {

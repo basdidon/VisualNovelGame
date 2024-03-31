@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.InputSystem;
-using BasDidon.Dialogue;
-using BasDidon.Dialogue.NodeTemplate;
-using BasDidon.Dialogue.VisualGraphView;
+using H8.GraphView;
+using H8.GraphView.NodeTemplate;
 
 public class UiDocumentController : MonoBehaviour
 {

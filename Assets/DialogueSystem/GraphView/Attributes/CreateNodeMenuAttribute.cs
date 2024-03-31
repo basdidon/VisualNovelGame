@@ -5,8 +5,9 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
+    using UiElements;
 
     [AttributeUsage(AttributeTargets.Class)]
     public class CreateNodeMenuAttribute : Attribute

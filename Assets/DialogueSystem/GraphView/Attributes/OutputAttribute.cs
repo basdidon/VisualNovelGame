@@ -1,7 +1,7 @@
 using System;
 using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class OutputAttribute : PortAttribute

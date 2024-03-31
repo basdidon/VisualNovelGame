@@ -1,12 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
-    using VisualGraphView;
-
     public enum CompareType
     {
         Equal,
@@ -41,11 +37,5 @@ namespace BasDidon.Dialogue.NodeTemplate
 
         [Selector]
         public CompareType compareType;
-
-        /*
-        public override object GetValue(string outputPortGuid)
-        {
-            return Result;
-        }*/
     }
 }

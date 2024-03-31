@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
     [CreateAssetMenu(menuName = "Dialogues/Character")]
     public class CharacterData : ScriptableObject

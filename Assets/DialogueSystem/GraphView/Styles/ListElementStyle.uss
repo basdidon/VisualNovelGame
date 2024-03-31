@@ -1,0 +1,13 @@
+BaseGraphList
+{
+	border-color : #ccc;
+	border-width : 1px;
+	border-radius : 8px;
+	margin:8px;
+	margin-bottom:4px;
+	margin-top:4px;
+}
+
+BaseGraphList -> Button{
+	background-color : #f00;
+}

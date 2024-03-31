@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
+    using UiElements;
+
     [AttributeUsage(AttributeTargets.Class)]
     public class CustomTypeAttribute : Attribute {
         public IPortFactory PortFactoryType { get; }

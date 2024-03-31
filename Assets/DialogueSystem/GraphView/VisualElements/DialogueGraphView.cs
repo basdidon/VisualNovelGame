@@ -6,9 +6,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
-    public class DialogueGraphView : GraphView
+    public class DialogueGraphView : UnityEditor.Experimental.GraphView.GraphView
     {
         
         public GraphTree Tree { get; private set; }

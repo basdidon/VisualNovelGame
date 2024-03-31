@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     public abstract class BaseNode : ScriptableObject
     {

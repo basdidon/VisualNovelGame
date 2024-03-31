@@ -1,4 +1,4 @@
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     public interface IExecutableNode
     {

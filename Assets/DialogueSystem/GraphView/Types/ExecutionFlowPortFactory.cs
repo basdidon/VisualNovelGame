@@ -1,13 +1,10 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView.UiElements
 {
-    [System.Serializable]
-    public class ExecutionFlow{}
-
     public class ExecutionFlowPortFactory : IPortFactory
     {
         public Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName)

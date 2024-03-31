@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace BasDidon.Dialogue
+namespace H8.GraphView
 {
     using System.Collections;
-    using VisualGraphView;
 
     [System.Serializable]
     public class ListElements<T> : IList<T>, IListElements where T : BaseListElement, new()

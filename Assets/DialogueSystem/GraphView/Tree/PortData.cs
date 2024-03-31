@@ -2,11 +2,9 @@ using System;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
-using System.Reflection;
 
-namespace BasDidon.Dialogue.VisualGraphView
+namespace H8.GraphView
 {
     [Serializable]
     public class PortData

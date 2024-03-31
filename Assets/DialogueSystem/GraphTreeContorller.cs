@@ -2,10 +2,8 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-namespace BasDidon.Dialogue
+namespace H8.GraphView
 {
-    using VisualGraphView;
-
     public class GraphTreeContorller : MonoBehaviour
     {
         public static GraphTreeContorller Instance { get; private set; }
@@ -44,7 +42,7 @@ namespace BasDidon.Dialogue
                 Instance = this;
             }
         }
-
+ 
         public void StartGraphTree(GraphTree dialogueTree)
         {
             if (dialogueTree == null)

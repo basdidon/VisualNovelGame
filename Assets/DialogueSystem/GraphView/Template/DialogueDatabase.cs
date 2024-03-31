@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using UnityEditor;
 
-namespace BasDidon.Dialogue.NodeTemplate
+namespace H8.GraphView.NodeTemplate
 {
     public class DialogueDatabase : MonoBehaviour
     {
