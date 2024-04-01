@@ -36,12 +36,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Nodes>k__BackingField:
   - {fileID: -2788251672574890584}
-  - {fileID: 8700434854570254944}
+  - {fileID: 2432134852304410278}
   edges:
-  - <EdgeGuid>k__BackingField: 9fac0a63-635f-483a-81cb-e041a9cf2a90
+  - <EdgeGuid>k__BackingField: ae8f7e1a-928b-486f-9cb4-8bb2db12b9a0
     <OutputPortGuid>k__BackingField: 9937102a-cd95-4c8d-a9ea-c7ab49fe8444
-    <InputPortGuid>k__BackingField: 05c09f12-6c11-402d-b5c1-5f4db10a303b
---- !u!114 &8700434854570254944
+    <InputPortGuid>k__BackingField: 8a12e1b3-341f-4132-8bd6-ab007aefe0ef
+--- !u!114 &2432134852304410278
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,29 +54,30 @@ MonoBehaviour:
   m_Name: ChoicesNode
   m_EditorClassIdentifier: 
   dialogueTree: {fileID: 11400000}
-  <Id>k__BackingField: 35861346-994b-496d-b983-00dd63e7e3ba
+  <Id>k__BackingField: 38f275c5-de40-42ce-8167-048919aa2ce7
   title: ChoicesNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 342, y: -97}
+  <GraphPosition>k__BackingField: {x: 384.78134, y: 17.49006}
   portCollection:
     portList:
     - <FieldName>k__BackingField: Input
-      <PortGuid>k__BackingField: 05c09f12-6c11-402d-b5c1-5f4db10a303b
+      <PortGuid>k__BackingField: 8a12e1b3-341f-4132-8bd6-ab007aefe0ef
       <Direction>k__BackingField: 0
-  speaker: {fileID: 0}
-  questionText: 
+  speaker: {fileID: 11400000, guid: 9b6a2179853c4a54e9fea78629c9fc27, type: 2}
+  questionText: sadjh
   choices:
     listElements:
     - portCollection:
         portList:
         - <FieldName>k__BackingField: IsEnable
-          <PortGuid>k__BackingField: 5e374b03-e1c7-45b4-8412-a3b34c269860
+          <PortGuid>k__BackingField: 20dfd3a8-fd5b-4952-a7ba-bca7d9e55d5f
           <Direction>k__BackingField: 0
         - <FieldName>k__BackingField: Output
-          <PortGuid>k__BackingField: b709eb31-86f9-4c69-b36a-f5899098eb3c
+          <PortGuid>k__BackingField: c880bb33-8989-4165-add0-1a33bc39ab22
           <Direction>k__BackingField: 1
         - <FieldName>k__BackingField: True
-          <PortGuid>k__BackingField: fac64180-3858-44ea-90de-84f9a37cc62c
+          <PortGuid>k__BackingField: 338d3cc9-f181-40f1-a921-18cd9aa9661b
           <Direction>k__BackingField: 1
+      <BaseNode>k__BackingField: {fileID: 2432134852304410278}
       isEnable: 1
       name: new choice

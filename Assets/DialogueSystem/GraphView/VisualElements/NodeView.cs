@@ -3,8 +3,6 @@ using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
-using System;
 using System.Reflection;
 
 namespace H8.GraphView.UiElements
