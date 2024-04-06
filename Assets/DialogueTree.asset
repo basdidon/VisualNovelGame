@@ -1,5 +1,91 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6635370391559234138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29152817604ef2841b064ea44ea5392f, type: 3}
+  m_Name: PlayerGainMoneyNode
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: eabd79bb-4518-4b91-b005-477a599fbbe8
+  title: PlayerGainMoneyNode
+  <NodeName>k__BackingField: 
+  <GraphPosition>k__BackingField: {x: 785, y: 408}
+  portCollection:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 682e6195-fade-4829-81c1-c324109f5bf0
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Output
+      <PortGuid>k__BackingField: af9460c4-660f-4821-b1f7-c9c598b8a521
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: MoneyToGain
+      <PortGuid>k__BackingField: e2f07a29-9012-439d-a90d-d5f8686e284b
+      <Direction>k__BackingField: 0
+  moneyToGain: 0
+--- !u!114 &-4711791779642855950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e1ab9a7669e814eadaf8e5862d79be, type: 3}
+  m_Name: IntComparer
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: 516405df-999f-4288-99b7-f6f053d6ca4b
+  title: IntComparer
+  <NodeName>k__BackingField: 
+  <GraphPosition>k__BackingField: {x: 771, y: -48}
+  portCollection:
+    portList:
+    - <FieldName>k__BackingField: A
+      <PortGuid>k__BackingField: 1a29bed6-59d1-4676-800b-d7aecb8993eb
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: B
+      <PortGuid>k__BackingField: 90caca03-76f5-47a6-9ede-0b2dc7604d90
+      <Direction>k__BackingField: 0
+    - <FieldName>k__BackingField: Result
+      <PortGuid>k__BackingField: fb8c1849-14e8-4e07-bf7f-dfad85c190e2
+      <Direction>k__BackingField: 1
+  lhs: 0
+  rhs: 0
+  compareType: 0
+--- !u!114 &-3076535152530300302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 525dc42cd814b044384f959fd7710f0d, type: 3}
+  m_Name: CharacterNode
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: 6d523ea9-f903-456d-90d4-25bb08566944
+  title: CharacterNode
+  <NodeName>k__BackingField: 
+  <GraphPosition>k__BackingField: {x: 959, y: 115}
+  portCollection:
+    portList:
+    - <FieldName>k__BackingField: Name
+      <PortGuid>k__BackingField: 572a0d8a-96e2-4705-a1b3-e49197109d77
+      <Direction>k__BackingField: 1
+    - <FieldName>k__BackingField: Money
+      <PortGuid>k__BackingField: 058ab5a0-9da2-4e99-aeeb-76ce5174d9a4
+      <Direction>k__BackingField: 1
+  characterData: {fileID: 0}
 --- !u!114 &-2788251672574890584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37,6 +123,9 @@ MonoBehaviour:
   <Nodes>k__BackingField:
   - {fileID: -2788251672574890584}
   - {fileID: 2432134852304410278}
+  - {fileID: -3076535152530300302}
+  - {fileID: -4711791779642855950}
+  - {fileID: -6635370391559234138}
   edges:
   - <EdgeGuid>k__BackingField: ae8f7e1a-928b-486f-9cb4-8bb2db12b9a0
     <OutputPortGuid>k__BackingField: 9937102a-cd95-4c8d-a9ea-c7ab49fe8444

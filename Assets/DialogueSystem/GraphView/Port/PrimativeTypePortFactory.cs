@@ -90,7 +90,7 @@ namespace H8.GraphView.UiElements
             Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
-            port.portName = StringHelper.ToCapitalCase(propertyName);
+            port.portName = StringHelper.FieldNameToTextLabel(propertyName);
             port.name = propertyName;
 
             if (isHasBackingField)

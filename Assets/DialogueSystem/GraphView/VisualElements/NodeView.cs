@@ -22,8 +22,7 @@ namespace H8.GraphView.UiElements
             name = nodeData.GetType().Name;
             title = name;
 
-            Label titleLabel = (Label) titleContainer.ElementAt(0);
-            titleLabel.bindingPath = "title";
+            SetupTitle();
 
             SerializeObject = new(nodeData);
             mainContainer.Bind(SerializeObject);
@@ -35,6 +34,25 @@ namespace H8.GraphView.UiElements
         {
             base.OnSelected();
             Selection.activeObject = baseNode;
+        }
+
+        public virtual Color? TitleBackgroundColor { get; }
+        public virtual Color? TitleTextColor { get; }
+        public void SetupTitle()
+        {
+            var titleLabel = titleContainer.Q<Label>("title-label");
+            titleLabel.bindingPath = "title";
+
+            if (TitleBackgroundColor is Color _titleBackgroundColor)
+            {
+                var titleVE = titleContainer.Q("title");
+                titleVE.style.backgroundColor = _titleBackgroundColor;
+            }
+
+            if(TitleTextColor is Color _titleTextColor)
+            {
+                titleLabel.style.color = _titleTextColor;
+            }
         }
 
         public virtual void OnDrawNodeView(BaseNode baseNode)
@@ -79,7 +97,7 @@ namespace H8.GraphView.UiElements
             if (!fieldInfo.IsDefined(typeof(SelectorAttribute), inherit: true))
                 return;
 
-            EnumField enumField = new(StringHelper.ToCapitalCase(fieldInfo.Name)) { bindingPath = fieldInfo.Name };
+            EnumField enumField = new(StringHelper.FieldNameToTextLabel(fieldInfo.Name)) { bindingPath = fieldInfo.Name };
             extensionContainer.Add(enumField);
         }
         

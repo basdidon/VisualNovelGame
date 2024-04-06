@@ -1,15 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
-using UnityEngine;
 
 namespace H8.GraphView
 {
     public static class StringHelper
     {
-        public static string ToCapitalCase(string text)
+        public static string FieldNameToTextLabel(string text)
         {
-            return string.IsNullOrEmpty(text) ? string.Empty : char.ToUpper(text[0]) + text[1..];
+            StringBuilder builder = new();
+
+            if (string.IsNullOrEmpty(text))
+                return builder.ToString();
+
+            for(int i = 0; i < text.Length; i++)
+            {
+                if (i == 0)
+                {
+                    builder.Append(char.ToUpper(text[0]));
+                    continue;
+                }
+
+                if (char.IsUpper(text[i]))
+                    builder.Append(" ");
+
+                builder.Append(text[i]);
+            }
+
+            return builder.ToString();
+        }
+
+        public static string ToPascalCase(string text)
+        {
+            StringBuilder builder = new();
+
+            if (string.IsNullOrEmpty(text))
+                return builder.ToString();
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (i == 0 || char.IsWhiteSpace(text[i - 1]))
+                {
+                    builder.Append(char.ToUpper(text[i]));
+                }
+                else
+                {
+                    builder.Append(char.ToLower(text[i]));
+                }
+            }
+
+            return builder.ToString();
         }
 
         public static string GetBackingFieldName(string syntax)
@@ -21,23 +60,6 @@ namespace H8.GraphView
             return match.Success ? match.Groups["FieldName"].Value : syntax;
         }
 
-        public static string GetFieldName(string syntax)
-        {
-            Regex regex = new(@"m_(\w+)");
-
-            Match match = regex.Match(syntax);
-
-            
-
-            return ToCapitalCase(match.Success ? match.Groups[1].Value : syntax);
-        }
-
-        /*
-        public static string GetProperyNameByBackingFieldName(string backingFieldName)
-        {
-
-        }
-        */
         public static string GetValueFromSyntax(string syntax)
         {
             // Define a regular expression pattern to extract the character ID

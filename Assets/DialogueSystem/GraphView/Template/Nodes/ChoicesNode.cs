@@ -54,7 +54,7 @@ namespace H8.GraphView.NodeTemplate
         }
     }
 
-    [CreateNodeMenu(menuName = nameof(ChoicesNode))]
+    [CreateNodeMenu(nameof(ChoicesNode))]
     public class ChoicesNode :BaseNode,IExecutableNode
     {
         [Input]

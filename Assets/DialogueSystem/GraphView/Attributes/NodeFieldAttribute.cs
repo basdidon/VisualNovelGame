@@ -18,7 +18,9 @@ namespace H8.GraphView
             var serializeProperty = serializeObject.FindProperty(fieldInfo.Name);
 
             if (serializeProperty == null)
-                throw new NullReferenceException($"can't find {fieldInfo.Name}");
+                throw new NullReferenceException(
+                    $"can't find {fieldInfo.Name} make sure field is <color=blue>public</color> or defined <color=cyan>serializeField</color>."
+                );
 
             bool isSupportedType = supportedTypes.Contains(fieldInfo.FieldType);
             bool isSubClassOfSupportType = supportedTypes.Any(t => fieldInfo.FieldType.IsSubclassOf(t));

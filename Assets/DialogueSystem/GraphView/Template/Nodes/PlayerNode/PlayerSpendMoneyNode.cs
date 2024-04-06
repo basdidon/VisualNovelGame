@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace H8.GraphView.NodeTemplate
 {
-    [CreateNodeMenu(menuName = "Player/SpendMoney")]
+    [CreateNodeMenu("Player/SpendMoney")]
     public class PlayerSpendMoneyNode : BaseNode, IExecutableNode
     {
         [Input]

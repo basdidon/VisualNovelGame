@@ -27,15 +27,13 @@ namespace H8.GraphView.UiElements
 
         public static NodeView GetNodeView<T>(T nodeData, DialogueGraphView graphView) where T : BaseNode
         {
-            var customGraphViewNodeType = CustomGraphViewNodeAttribute.GetGraphViewNodeType(nodeData.GetType());
-
             NodeView nodeView;
 
-            if (customGraphViewNodeType != null)
+            if(CustomNodeViewAttribute.TryGetCustomGraphViewNodeType(nodeData.GetType(),out Type customNodeViewType))
             {
-                var nodeType = customGraphViewNodeType;
+                var nodeType = customNodeViewType;
                 nodeView = Activator.CreateInstance(nodeType) as NodeView;
-                Debug.Log($"GetNodeView {nodeType.Name}");
+                Debug.Log($"CreateNodeView {nodeType.Name}");
             }
             else
             {

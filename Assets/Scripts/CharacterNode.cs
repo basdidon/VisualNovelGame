@@ -2,7 +2,7 @@ using UnityEditor;
 
 namespace H8.GraphView.NodeTemplate
 {
-    [CreateNodeMenu(menuName = "Character")]
+    [CreateNodeMenu("Character")]
     public class CharacterNode : BaseNode
     {
         [NodeField]

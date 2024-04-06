@@ -12,7 +12,7 @@ namespace H8.GraphView.NodeTemplate
         LessThanOrEqual
     }
 
-    [CreateNodeMenu(menuName = "Logic/Comparer (int)")]
+    [CreateNodeMenu("Logic/Comparer (int)")]
     public class IntComparer : BaseNode
     {
         // backing field

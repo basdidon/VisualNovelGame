@@ -4,7 +4,7 @@
 	color : white;
 }
 
-#ChoicesNode -> #node-border -> #title -> #title-label
+#title -> #title-label
 {
 	color : white;
 	font-size: 16px;
