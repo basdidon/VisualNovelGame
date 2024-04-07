@@ -28,6 +28,8 @@ namespace H8.GraphView.UiElements
             mainContainer.Bind(SerializeObject);
 
             baseNode = nodeData;
+
+            LoadStyleSheets();
         }
 
         public override void OnSelected()
@@ -36,9 +38,26 @@ namespace H8.GraphView.UiElements
             Selection.activeObject = baseNode;
         }
 
+        public virtual string[] StyleSheetsPath { get; }
+        void LoadStyleSheets()
+        {
+            if (StyleSheetsPath == null)
+                return;
+
+            for(int i = 0; i < StyleSheetsPath.Length; i++)
+            {
+                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(StyleSheetsPath[i]);
+
+                if (styleSheet == null)
+                    Debug.Log($"Can't find StyleSheet at : {StyleSheetsPath[i]}");
+
+                styleSheets.Add(styleSheet);
+            }
+        }
+
         public virtual Color? TitleBackgroundColor { get; }
         public virtual Color? TitleTextColor { get; }
-        public void SetupTitle()
+        void SetupTitle()
         {
             var titleLabel = titleContainer.Q<Label>("title-label");
             titleLabel.bindingPath = "title";

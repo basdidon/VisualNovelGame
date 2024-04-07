@@ -1,0 +1,55 @@
+:root {
+  --fontsize-header1: 16px;
+}
+
+#node-border
+{
+	min-width : 250px;
+}
+
+#title -> #title-label
+{
+	font-size: 16px;
+	-unity-font-style: bold;
+}
+
+#extension
+{
+	padding : 4px;
+	background-color: rgba(0.1,0.1,0.1,0.5);
+}
+
+TextField.speaker-name-input > Label
+{
+	min-width : 60px;
+}
+
+.divider
+{
+	margin-top : 4px;
+	margin-bottom : 4px;
+
+	border-top-width : 4px;
+	border-top-color : white;
+}
+
+.unity-foldout__input {
+	padding : 8px;
+}
+
+.line-container {
+	flex-direction : row;
+}
+
+Toggle -> VisualElement -> .unity-text-element {
+	-unity-font-style: bold;
+}
+
+.line-container -> .unity-text-element {
+	-unity-font-style: bold;
+	min-width : 20px;
+}
+
+.line-container -> TextField {
+	flex-grow : 1;
+}

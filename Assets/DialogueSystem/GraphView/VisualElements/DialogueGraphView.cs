@@ -229,7 +229,6 @@ namespace H8.GraphView.UiElements
                 "t:StyleSheet", 
                 new[] { 
                     "Assets/DialogueSystem/GraphView/Styles",
-                    "Assets/DialogueSystem/GraphView/Styles/Nodes",
                 });
 
             foreach(var stylesPath in nodeStylesPath)

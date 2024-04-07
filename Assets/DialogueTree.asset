@@ -16,7 +16,7 @@ MonoBehaviour:
   <Id>k__BackingField: eabd79bb-4518-4b91-b005-477a599fbbe8
   title: PlayerGainMoneyNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 785, y: 408}
+  <GraphPosition>k__BackingField: {x: 828, y: 330}
   portCollection:
     portList:
     - <FieldName>k__BackingField: Input
@@ -45,7 +45,7 @@ MonoBehaviour:
   <Id>k__BackingField: 516405df-999f-4288-99b7-f6f053d6ca4b
   title: IntComparer
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 771, y: -48}
+  <GraphPosition>k__BackingField: {x: 864, y: -164}
   portCollection:
     portList:
     - <FieldName>k__BackingField: A
@@ -76,7 +76,7 @@ MonoBehaviour:
   <Id>k__BackingField: 6d523ea9-f903-456d-90d4-25bb08566944
   title: CharacterNode
   <NodeName>k__BackingField: 
-  <GraphPosition>k__BackingField: {x: 959, y: 115}
+  <GraphPosition>k__BackingField: {x: 1188, y: 142}
   portCollection:
     portList:
     - <FieldName>k__BackingField: Name
@@ -130,6 +130,9 @@ MonoBehaviour:
   - <EdgeGuid>k__BackingField: ae8f7e1a-928b-486f-9cb4-8bb2db12b9a0
     <OutputPortGuid>k__BackingField: 9937102a-cd95-4c8d-a9ea-c7ab49fe8444
     <InputPortGuid>k__BackingField: 8a12e1b3-341f-4132-8bd6-ab007aefe0ef
+  - <EdgeGuid>k__BackingField: 9c1098fd-3fff-4df1-8771-238c97419080
+    <OutputPortGuid>k__BackingField: c880bb33-8989-4165-add0-1a33bc39ab22
+    <InputPortGuid>k__BackingField: 682e6195-fade-4829-81c1-c324109f5bf0
 --- !u!114 &2432134852304410278
 MonoBehaviour:
   m_ObjectHideFlags: 0

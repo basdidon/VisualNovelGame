@@ -31,4 +31,5 @@ public class PlayerGainMoneyNode : BaseNode, IExecutableNode
 public class PlayerGainMoneyNodeView : NodeView
 {
     public override Color? TitleBackgroundColor => new Color32(64, 128, 64, 255);
+    public override Color? TitleTextColor => new Color(.8f,.8f,.8f);
 }
