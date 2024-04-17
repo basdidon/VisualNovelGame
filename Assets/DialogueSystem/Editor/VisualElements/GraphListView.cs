@@ -90,7 +90,7 @@ namespace H8.GraphView.UiElements
                 if (propertyInfo.IsDefined(typeof(PortAttribute), true))
                 {
                     var portAttr = propertyInfo.GetCustomAttribute<PortAttribute>();
-                    Port port = portAttr.CreateUnbindPort(propertyInfo, NodeView);
+                    Port port = PortFactory.CreateUnbindPort(portAttr,propertyInfo, NodeView);
                     listElement.AddPort(port);
                 }
             }

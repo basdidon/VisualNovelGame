@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace H8.GraphView
+namespace H8.GraphView.UiElements
 {
-    using UiElements;
-
     [AttributeUsage(AttributeTargets.Class)]
     public class CustomTypeAttribute : Attribute {
         public IPortFactory PortFactoryType { get; }

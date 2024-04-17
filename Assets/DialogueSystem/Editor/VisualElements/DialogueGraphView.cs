@@ -5,6 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace H8.GraphView.UiElements
 {
@@ -38,7 +39,7 @@ namespace H8.GraphView.UiElements
 
                 if (obj is BaseNode nodeData)
                 {
-                    var node = NodeFactory.GetNodeView(nodeData, this);
+                    var node = NodeViewFactory.GetNodeView(nodeData, this);
                     AddElement(node);
                     continue;
                 }
@@ -99,7 +100,38 @@ namespace H8.GraphView.UiElements
 
             this.AddManipulator(SaveContextualMenu());
 
-            CreateNodeMenuAttribute.PopulateCreateContextualMenu(this);
+           PopulateCreateContextualMenu(this);
+        }
+
+        public static void PopulateCreateContextualMenu(DialogueGraphView graphView)
+        {
+            var baseNodesType = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(BaseNode)) && type.IsDefined(typeof(CreateNodeMenuAttribute)));
+
+            foreach (var type in baseNodesType)
+            {
+                var attr = type.GetCustomAttribute<CreateNodeMenuAttribute>();
+
+                graphView.AddManipulator(new ContextualMenuManipulator(ev =>
+                {
+                    ev.menu.AppendAction(attr.MenuName, actionEvent =>
+                    {
+                        VisualElement contentViewContainer = graphView.ElementAt(1);
+                        Vector3 screenMousePosition = actionEvent.eventInfo.localMousePosition;
+                        Vector2 worldMousePosition = screenMousePosition - contentViewContainer.transform.position;
+                        worldMousePosition *= 1 / contentViewContainer.transform.scale.x;
+                        // create baseNode
+                        BaseNode baseNode = NodeFactory.CreateNode(type, worldMousePosition, graphView.Tree);
+                        // get nodeView by baseNode
+                        NodeView nodeView = NodeViewFactory.GetNodeView(baseNode, graphView);
+
+                        // add nodeView to graph
+                        graphView.AddElement(nodeView);
+                    });
+                }));
+
+            }
         }
 
         void CreateActionEvent<T>(DropdownMenuAction actionEvent) where T : BaseNode
@@ -107,7 +139,7 @@ namespace H8.GraphView.UiElements
             // create baseNode
             BaseNode baseNode = NodeFactory.CreateNode<T>(actionEvent.eventInfo.localMousePosition, Tree);
             // get nodeView by baseNode
-            NodeView nodeView = NodeFactory.GetNodeView(baseNode, this);
+            NodeView nodeView = NodeViewFactory.GetNodeView(baseNode, this);
             // add nodeView to graph
             AddElement(nodeView);
         }

@@ -104,7 +104,7 @@ namespace H8.GraphView.UiElements
                 {
                     var portAttr = property.GetCustomAttribute<PortAttribute>();
                     VisualElement portContainer = portData.Direction == Direction.Input ? inputContainer : outputContainer;
-                    Port port = portAttr.CreatePort(property, this, portData,SerializeObject);
+                    Port port =PortFactory.CreatePort(portAttr,property, this, portData,SerializeObject);
 
                     portContainer.Add(port);
                 }

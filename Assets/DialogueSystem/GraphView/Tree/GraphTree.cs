@@ -145,7 +145,7 @@ namespace H8.GraphView
             EditorUtility.SetDirty(tree);
             AssetDatabase.SaveAssetIfDirty(tree);
         }
-
+        /*
         [OnOpenAsset(0)]
         public static bool OpenDialogueEditorWindow(int instanceID, int line)
         {
@@ -161,7 +161,7 @@ namespace H8.GraphView
 
             // Window should now be open, proceed to next step to open file
             return false;
-        }
+        }*/
 #endif
     }
 
