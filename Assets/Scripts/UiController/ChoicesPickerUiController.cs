@@ -11,12 +11,15 @@ public interface IUiController
 
 public class ChoicesPickerUiController : IUiController
 {
+    GraphTreeController GraphTreeController { get; }
+
     VisualElement Root { get; set; }
 
     public bool IsDisplay => Root.style.display == DisplayStyle.Flex;
 
-    public ChoicesPickerUiController(VisualElement root)
+    public ChoicesPickerUiController(GraphTreeController graphTreeController, VisualElement root)
     {
+        GraphTreeController = graphTreeController;
         Root = root;
     }
 
@@ -41,7 +44,7 @@ public class ChoicesPickerUiController : IUiController
             btn.text = choiceRecords[i].ChoiceText;
             btn.clicked += () => 
             {
-                GraphTreeContorller.Instance.ExecuteAction(new SelectChoiceAction(btn.parent.IndexOf(btn)));
+                GraphTreeController.ExecuteAction(new SelectChoiceAction(btn.parent.IndexOf(btn)));
             };
 
             if (choiceRecords[i].IsEnable == false)

@@ -28,19 +28,19 @@ namespace H8.GraphView.NodeTemplate
         [TextArea, NodeField]
         public string DialogueText  = string.Empty;
 
-        public void OnEnter()
+        public void OnEnter(GraphTreeController controller)
         {
             Debug.Log("dialogue node executing");
-            GraphTreeContorller.Instance.FireEvent(new DialogueRecord(speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
+            controller.FireEvent(new DialogueRecord(speaker.Name, StringHelper.GetValueFromSyntax(DialogueText)));
         }
 
-        public void OnExit(){}
+        public void OnExit(GraphTreeController controller) { }
 
-        public void Action(IBaseAction action)
+        public void Action(GraphTreeController controller, IBaseAction action)
         {
             if(action is NextDialogueAction)
             {
-                GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
+                controller.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
             }
         }
     }

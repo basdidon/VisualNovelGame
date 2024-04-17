@@ -8,6 +8,8 @@ public class UiDocumentController : MonoBehaviour
 {
     public static UiDocumentController Instance { get; private set; }
 
+    GraphTreeController GraphTreeController { get; set; }
+
     VisualElement root;
 
     // VisualElements
@@ -37,6 +39,8 @@ public class UiDocumentController : MonoBehaviour
             Instance = this;
         }
 
+        GraphTreeController = new();
+
         if (TryGetComponent(out UIDocument uiDoc))
         {
             root = uiDoc.rootVisualElement;
@@ -44,17 +48,17 @@ public class UiDocumentController : MonoBehaviour
             ChatButton = root.Q<Button>("chat-btn");
             DialogueBox = root.Q("DialogueBox");
 
-            DialogueUiController = new DialogueUiController(DialogueBox);
+            DialogueUiController = new DialogueUiController(GraphTreeController,DialogueBox);
             DialogueBox.userData = DialogueUiController;
 
             ChatButton.clicked += delegate {
                 Debug.Log("chat-btn was clicked");
-                GraphTreeContorller.Instance.StartGraphTree(DialogueTree);
+                GraphTreeController.StartGraphTree(DialogueTree);
             };
 
             // ChoicesPicker
             ChoicesPicker = root.Q("ChoicesPicker");
-            ChoicesPickerUiController = new ChoicesPickerUiController(ChoicesPicker);
+            ChoicesPickerUiController = new ChoicesPickerUiController(GraphTreeController,ChoicesPicker);
             ChoicesPicker.userData = ChoicesPickerUiController;
             ChoicesPickerUiController.Hide();
 
@@ -66,7 +70,7 @@ public class UiDocumentController : MonoBehaviour
             };
 
             // Dialogue Event
-            GraphTreeContorller.Instance.OnCustomEvent += (ctx) =>
+            GraphTreeController.OnCustomEvent += (ctx) =>
             {
                 if (ctx is DialogueRecord dialogue)
                 {

@@ -7,6 +7,8 @@ using H8.GraphView.NodeTemplate;
 
 public class DialogueUiController: IUiController
 {
+    GraphTreeController GraphTreeController { get; }
+
     VisualElement Root { get; set; }
     
     Label SpeakerNameLabel { get; set; }
@@ -20,8 +22,10 @@ public class DialogueUiController: IUiController
     Sequence mySequence;
     float TextInputSpeed => .1f;
 
-    public DialogueUiController(VisualElement panel)
+    public DialogueUiController(GraphTreeController graphTreeController, VisualElement panel)
     {
+        GraphTreeController = graphTreeController;
+
         Root = panel;
 
         SpeakerNameLabel = Root.Q<Label>("speaker-name-txt");
@@ -49,7 +53,7 @@ public class DialogueUiController: IUiController
         }
         else
         {
-            GraphTreeContorller.Instance.ExecuteAction(new NextDialogueAction());
+            GraphTreeController.ExecuteAction(new NextDialogueAction());
         }
     }
 

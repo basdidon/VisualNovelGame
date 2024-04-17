@@ -14,17 +14,17 @@ namespace H8.GraphView.NodeTemplate
         public int Cost => GetInputValue(nameof(Cost), cost);
         public int cost;
 
-        public void OnEnter()
+        public void OnEnter(GraphTreeController controller)
         {
             Debug.Log($"spend money : {Cost}");
             DialogueDatabase.Instance.Player.SpendMoney(Cost);
 
-            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
+            controller.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
         }
 
-        public void OnExit() { }
+        public void OnExit(GraphTreeController controller) { }
 
-        public void Action(IBaseAction action){}
+        public void Action(GraphTreeController controller, IBaseAction action) { }
     }
 
 }

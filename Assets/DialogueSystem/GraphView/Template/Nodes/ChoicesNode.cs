@@ -92,10 +92,10 @@ namespace H8.GraphView.NodeTemplate
         }
 
         // Execute Logic
-        public void OnEnter()
+        public void OnEnter(GraphTreeController controller)
         {
             Debug.Log("choices node executing");
-            GraphTreeContorller.Instance.FireEvent(
+            controller.FireEvent(
                 new ChoicesRecord(
                     new(
                         speaker?.Name, 
@@ -105,23 +105,20 @@ namespace H8.GraphView.NodeTemplate
             );
         }
 
-        public void OnExit(){}
+        public void OnExit(GraphTreeController controller) { }
 
-        public void Action(IBaseAction action)
+        public void Action(GraphTreeController controller, IBaseAction action)
         {
             if(action is SelectChoiceAction select)
             {
-                SelectChoice(select.ChoiceIndex);
+                var idx = select.ChoiceIndex;
+
+                if (idx < 0 || idx >= choices.Count)
+                    throw new ArgumentOutOfRangeException();
+
+                var selectedOutputPort = choices.ElementAt(idx).GetPortData("Output");
+                controller.ToNextExecutableNode(selectedOutputPort, GraphTree);
             }
-        }
-
-        void SelectChoice(int idx)
-        {
-            if (idx < 0 || idx >= choices.Count)
-                throw new ArgumentOutOfRangeException();
-
-            var selectedOutputPort = choices.ElementAt(idx).GetPortData("Output");
-            GraphTreeContorller.Instance.ToNextExecutableNode(selectedOutputPort, GraphTree);
         }
     }
 

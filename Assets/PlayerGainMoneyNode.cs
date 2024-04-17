@@ -16,15 +16,15 @@ public class PlayerGainMoneyNode : BaseNode, IExecutableNode
     [Input(nameof(moneyToGain))]
     public int MoneyToGain => GetInputValue(nameof(MoneyToGain), moneyToGain);
 
-    public void Action(IBaseAction action) { }
+    public void Action(GraphTreeController controller, IBaseAction action) { }
 
-    public void OnEnter()
+    public void OnEnter(GraphTreeController controller)
     {
         DialogueDatabase.Instance.Player.GainMoney(MoneyToGain);
-        GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
+        controller.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
     }
 
-    public void OnExit() { }
+    public void OnExit(GraphTreeController controller) { }
 }
 
 [CustomNodeView(typeof(PlayerGainMoneyNode))]

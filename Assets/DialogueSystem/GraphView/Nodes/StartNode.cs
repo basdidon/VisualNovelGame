@@ -5,13 +5,13 @@ namespace H8.GraphView
         [Output]
         public ExecutionFlow Output { get; }
 
-        public void OnEnter()
+        public void OnEnter(GraphTreeController controller)
         {
-            GraphTreeContorller.Instance.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
+            controller.ToNextExecutableNode(GetPortData(nameof(Output)), GraphTree);
         }
 
-        public void OnExit(){}
+        public void OnExit(GraphTreeController controller) { }
 
-        public void Action(IBaseAction action){}
+        public void Action(GraphTreeController controller, IBaseAction action) { }
     }
 }
