@@ -1,6 +1,6 @@
 using UnityEngine.UIElements;
-using H8.GraphView.NodeTemplate;
-using H8.GraphView;
+using H8.FlowGraph.NodeTemplate;
+using H8.FlowGraph;
 
 public interface IUiController
 {

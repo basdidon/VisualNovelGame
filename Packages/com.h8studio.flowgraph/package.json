@@ -1,4 +1,6 @@
 {
-  "name":"com.h8studio.flowgraph",
-  "version":"1.0.0"
+  "name": "com.h8studio.flowgraph",
+  "version": "1.0.0",
+  "displayName": "H8 FlowGraph",
+  "description": "a"
 }

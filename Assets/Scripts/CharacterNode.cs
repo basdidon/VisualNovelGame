@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace H8.GraphView.NodeTemplate
+namespace H8.FlowGraph.NodeTemplate
 {
     [CreateNodeMenu("Character")]
     public class CharacterNode : BaseNode

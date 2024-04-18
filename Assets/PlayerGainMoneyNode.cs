@@ -1,7 +1,7 @@
 using UnityEngine;
-using H8.GraphView;
-using H8.GraphView.NodeTemplate;
-using H8.GraphView.UiElements;
+using H8.FlowGraph;
+using H8.FlowGraph.NodeTemplate;
+using H8.FlowGraph.UiElements;
 
 [CreateNodeMenu("Player/GainMoney")]
 public class PlayerGainMoneyNode : BaseNode, IExecutableNode
