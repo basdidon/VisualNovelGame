@@ -9,7 +9,6 @@ namespace H8.FlowGraph.UiElements
     {
         public Port CreatePort(string portGuid, Direction direction, NodeView nodeView, string portName)
         {
-            Debug.Log($"Create Port ({GetType().Name}) : [{portName}] {portGuid}");
             var port = nodeView.InstantiatePort(
                 Orientation.Horizontal,
                 direction,

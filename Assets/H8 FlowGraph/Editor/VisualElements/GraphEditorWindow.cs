@@ -76,7 +76,7 @@ namespace H8.FlowGraph.UiElements
         {
             if (EditorUtility.InstanceIDToObject(instanceID).GetType() == typeof(GraphTree))
             {
-                Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(GraphTree)}");
+                //Debug.Log($"{EditorUtility.InstanceIDToObject(instanceID).GetType()} : {typeof(GraphTree)}");
 
                 string assetPath = AssetDatabase.GetAssetPath(instanceID);
 

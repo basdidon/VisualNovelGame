@@ -37,7 +37,7 @@ namespace H8.FlowGraph.UiElements
             Port.Capacity capacity = direction == Direction.Input ? Port.Capacity.Single : Port.Capacity.Multi;
 
             var port = nodeView.InstantiatePort(Orientation.Horizontal, direction, capacity, Type);
-            Debug.Log($"@ {portName} {portGuid}");
+
             port.viewDataKey = portGuid;
             port.portName = portName;
 

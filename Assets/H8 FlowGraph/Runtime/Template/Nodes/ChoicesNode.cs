@@ -6,12 +6,21 @@ using UnityEditor;
 
 namespace H8.FlowGraph.NodeTemplate
 {
-    public record ChoicesRecord : ICustomEvent
+    public class SelectChoiceAction : IBaseAction
     {
-        public DialogueRecord DialogueRecord { get; }
+        public int ChoiceIndex { get; }
+
+        public SelectChoiceAction(int choiceAction)
+        {
+            ChoiceIndex = choiceAction;
+        }
+    }
+    public record ChoicesEvent : ICustomEvent
+    {
+        public DialogueEvent DialogueRecord { get; }
         public ChoiceRecord[] ChoiceRecords { get; }
 
-        public ChoicesRecord(DialogueRecord dialogueRecord, ChoiceRecord[] choiceRecords)
+        public ChoicesEvent(DialogueEvent dialogueRecord, ChoiceRecord[] choiceRecords)
         {
             DialogueRecord = dialogueRecord;
             ChoiceRecords = choiceRecords;
@@ -23,7 +32,7 @@ namespace H8.FlowGraph.NodeTemplate
         public bool IsEnable { get; }
         public string ChoiceText { get; }
 
-        public ChoiceRecord(bool isEnable,string choiceText)
+        public ChoiceRecord(bool isEnable, string choiceText)
         {
             IsEnable = isEnable;
             ChoiceText = choiceText;
@@ -34,7 +43,7 @@ namespace H8.FlowGraph.NodeTemplate
     public class Choice : BaseListElement
     {
         [Input(nameof(isEnable))]
-        public bool IsEnable => GetInputValue(nameof(IsEnable),isEnable);
+        public bool IsEnable => GetInputValue(nameof(IsEnable), isEnable);
         public bool isEnable = true;
 
         [Output]
@@ -54,7 +63,7 @@ namespace H8.FlowGraph.NodeTemplate
         }
     }
 
-    [CreateNodeMenu(nameof(ChoicesNode))]
+    [CreateNodeMenu("Dialogue/Choice")]
     public class ChoicesNode :BaseNode,IExecutableNode
     {
         [Input]
@@ -96,7 +105,7 @@ namespace H8.FlowGraph.NodeTemplate
         {
             Debug.Log("choices node executing");
             controller.FireEvent(
-                new ChoicesRecord(
+                new ChoicesEvent(
                     new(
                         speaker?.Name, 
                         questionText),
@@ -122,13 +131,5 @@ namespace H8.FlowGraph.NodeTemplate
         }
     }
 
-    public class SelectChoiceAction:IBaseAction
-    {
-        public int ChoiceIndex { get; }
 
-        public SelectChoiceAction(int choiceAction)
-        {
-            ChoiceIndex = choiceAction;
-        }
-    }
 }

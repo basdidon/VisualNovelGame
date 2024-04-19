@@ -2,12 +2,13 @@ using UnityEngine;
 
 namespace H8.FlowGraph.NodeTemplate
 {
-    public record DialogueRecord : ICustomEvent
+    public class NextDialogueAction : IBaseAction { }
+    public record DialogueEvent : ICustomEvent
     {
         public string SpeakerName { get; }
         public string DialogueText { get; }
 
-        public DialogueRecord(string speakerName,string dialogueText)
+        public DialogueEvent(string speakerName,string dialogueText)
         {
             SpeakerName = speakerName;
             DialogueText = dialogueText ?? string.Empty;
@@ -31,7 +32,7 @@ namespace H8.FlowGraph.NodeTemplate
         public void OnEnter(GraphTreeController controller)
         {
             Debug.Log("dialogue node executing");
-            controller.FireEvent(new DialogueRecord(speaker?.Name, DialogueText));
+            controller.FireEvent(new DialogueEvent(speaker?.Name, DialogueText));
         }
 
         public void OnExit(GraphTreeController controller) { }
@@ -45,7 +46,6 @@ namespace H8.FlowGraph.NodeTemplate
         }
     }
 
-
-    public class NextDialogueAction : IBaseAction{}
+    
 
 }

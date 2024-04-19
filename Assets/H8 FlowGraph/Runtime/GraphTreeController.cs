@@ -22,10 +22,14 @@ namespace H8.FlowGraph
                 else
                 {
                     Debug.Log("GraphTree ended.");
+                    isPlaying = false;
                     OnCustomEvent?.Invoke(new DialogueEndEvent());
                 }
             }
         }
+
+        bool isPlaying = false;
+        public bool IsPlaying => isPlaying; 
 
         public event Action<ICustomEvent> OnCustomEvent;
  
@@ -37,6 +41,7 @@ namespace H8.FlowGraph
             }
             else
             {
+                isPlaying = true;
                 CurrentNode = dialogueTree.StartNode;
             }
         }

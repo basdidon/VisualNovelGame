@@ -15,6 +15,7 @@ MonoBehaviour:
   <Nodes>k__BackingField:
   - {fileID: 2655474022751189524}
   - {fileID: 885491246901824625}
+  - {fileID: 967130851975104594}
   edges:
   - <EdgeGuid>k__BackingField: 3b689a36-a8ed-4561-a7fe-544d014400b3
     <OutputPortGuid>k__BackingField: 91c96a8e-6d86-4d59-908d-7fcbc9fe6be9
@@ -46,6 +47,46 @@ MonoBehaviour:
       <Direction>k__BackingField: 1
   speaker: {fileID: 0}
   DialogueText: a
+--- !u!114 &967130851975104594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065ad2888c59c36489778e02a384a102, type: 3}
+  m_Name: ChoicesNode
+  m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 11400000}
+  <Id>k__BackingField: db9dd304-c8d0-4121-ab51-8e395c0126c8
+  title: ChoicesNode
+  <NodeName>k__BackingField: 
+  <GraphPosition>k__BackingField: {x: 899, y: 94}
+  portCollection:
+    portList:
+    - <FieldName>k__BackingField: Input
+      <PortGuid>k__BackingField: 3aeaa221-fa40-4e51-bd26-3b5a45fc4a4d
+      <Direction>k__BackingField: 0
+  speaker: {fileID: 0}
+  questionText: 
+  choices:
+    listElements:
+    - portCollection:
+        portList:
+        - <FieldName>k__BackingField: IsEnable
+          <PortGuid>k__BackingField: 32dc8541-f2c6-43e0-9eef-3566fb14d766
+          <Direction>k__BackingField: 0
+        - <FieldName>k__BackingField: Output
+          <PortGuid>k__BackingField: b2aa1244-1045-4571-a387-ff05117b25a8
+          <Direction>k__BackingField: 1
+        - <FieldName>k__BackingField: True
+          <PortGuid>k__BackingField: 79df2959-b256-4df4-8640-f98c9e0c31c3
+          <Direction>k__BackingField: 1
+      <BaseNode>k__BackingField: {fileID: 967130851975104594}
+      isEnable: 1
+      name: new choice
 --- !u!114 &2655474022751189524
 MonoBehaviour:
   m_ObjectHideFlags: 0

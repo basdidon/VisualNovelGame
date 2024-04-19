@@ -72,14 +72,14 @@ public class UiDocumentController : MonoBehaviour
             // Dialogue Event
             GraphTreeController.OnCustomEvent += (ctx) =>
             {
-                if (ctx is DialogueRecord dialogue)
+                if (ctx is DialogueEvent dialogue)
                 {
                     TapAction.Enable();
 
                     DialogueUiController.SetDialogue(dialogue.SpeakerName, dialogue.DialogueText);
                     ChoicesPickerUiController.Hide();
                 }
-                else if(ctx is ChoicesRecord choice)
+                else if(ctx is ChoicesEvent choice)
                 {
                     TapAction.Disable();
 

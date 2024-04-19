@@ -126,16 +126,13 @@ namespace H8.FlowGraph.UiElements
                 {
                     var portsSP = itemSP.FindPropertyRelative("portCollection");
                     var portCollectionSP = portsSP.FindPropertyRelative("portList");
-                    Debug.Log($"------[ {propertyInfo.Name} {portCollectionSP.isArray} ]-------");
 
                     if (portCollectionSP.isArray)
                     {
-                        Debug.Log(portCollectionSP.arraySize);
                         for (int i = 0; i < portCollectionSP.arraySize; i++)
                         {
                             var portData = portCollectionSP.GetArrayElementAtIndex(i);
                             var fieldName = portData.FindPropertyRelative("<FieldName>k__BackingField").stringValue;
-                            Debug.Log(fieldName);
                             if (fieldName == propertyInfo.Name)
                             {
                                 var portGuid= portData.FindPropertyRelative("<PortGuid>k__BackingField").stringValue;
